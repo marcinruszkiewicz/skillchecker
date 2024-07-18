@@ -8,6 +8,7 @@ defmodule Skillchecker.Accounts.Admin do
     field :hashed_password, :string, redact: true
     field :current_password, :string, virtual: true, redact: true
     field :confirmed_at, :naive_datetime
+    field :accepted, :boolean
 
     timestamps()
   end

@@ -26,7 +26,7 @@ erl_crash.dump
 skillchecker-*.tar
 
 # Ignore assets that are produced by build tools.
-/priv/static/assets/
+/priv/static/assets/*
 !/priv/static/assets/init-alpine.js
 
 # Ignore digested assets cache.

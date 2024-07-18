@@ -1,0 +1,29 @@
+<.header>
+  Listing Admins
+</.header>
+
+<.table
+  id="admins"
+  rows={@streams.admins}
+  row_click={fn {_id, admin} -> JS.navigate(~p"/admin/admins/#{admin}") end}
+>
+  <:col :let={{_id, admin}} label="Email"><%= admin.email %></:col>
+  <:col :let={{_id, admin}} label="Accepted"><%= admin.accepted %></:col>
+  <:action :let={{_id, admin}}>
+    <div class="sr-only">
+      <.link navigate={~p"/admin/admins/#{admin}"}>Show</.link>
+    </div>
+    <.link patch={~p"/admin/admins/#{admin}/edit"}>Edit</.link>
+  </:action>
+</.table>
+
+<.modal :if={@live_action in [:new, :edit]} id="admin-modal" show on_cancel={JS.patch(~p"/admin/admins")}>
+  <.live_component
+    module={SkillcheckerWeb.AdminLive.FormComponent}
+    id={@admin.id || :new}
+    title={@page_title}
+    action={@live_action}
+    admin={@admin}
+    patch={~p"/admins"}
+  />
+</.modal>
