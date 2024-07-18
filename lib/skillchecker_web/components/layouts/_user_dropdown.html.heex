@@ -1,0 +1,68 @@
+<div class="relative inline-block">
+  <!-- Dropdown Toggle Button -->
+  <button
+    x-on:click="userDropdownOpen = !userDropdownOpen"
+    x-bind:aria-expanded="userDropdownOpen"
+    type="button"
+    id="dropdown-user"
+    class="inline-flex items-center justify-center gap-1 rounded-lg border border-neutral-200 bg-white px-3 py-2 text-sm font-semibold leading-5 text-neutral-800 hover:border-neutral-300 hover:text-neutral-950 active:border-neutral-200"
+    aria-haspopup="true"
+  >
+    <svg
+      class="hi-mini hi-user-circle inline-block h-5 w-5 sm:hidden"
+      xmlns="http://www.w3.org/2000/svg"
+      viewBox="0 0 20 20"
+      fill="currentColor"
+      aria-hidden="true"
+    >
+      <path
+        fill-rule="evenodd"
+        d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-5.5-2.5a2.5 2.5 0 11-5 0 2.5 2.5 0 015 0zM10 12a5.99 5.99 0 00-4.793 2.39A6.483 6.483 0 0010 16.5a6.483 6.483 0 004.793-2.11A5.99 5.99 0 0010 12z"
+        clip-rule="evenodd"
+      />
+    </svg>
+    <span class="hidden sm:inline">User</span>
+    <svg
+      class="hi-mini hi-chevron-down hidden h-5 w-5 opacity-40 sm:inline-block"
+      xmlns="http://www.w3.org/2000/svg"
+      viewBox="0 0 20 20"
+      fill="currentColor"
+      aria-hidden="true"
+    >
+      <path
+        fill-rule="evenodd"
+        d="M5.23 7.21a.75.75 0 011.06.02L10 11.168l3.71-3.938a.75.75 0 111.08 1.04l-4.25 4.5a.75.75 0 01-1.08 0l-4.25-4.5a.75.75 0 01.02-1.06z"
+        clip-rule="evenodd"
+      />
+    </svg>
+  </button>
+  <!-- END Dropdown Toggle Button -->
+
+  <!-- Dropdown -->
+  <div
+    x-cloak
+    x-show="userDropdownOpen"
+    x-transition:enter="transition ease-out duration-100"
+    x-transition:enter-start="opacity-0"
+    x-transition:enter-end="opacity-100"
+    x-transition:leave="transition ease-in duration-100"
+    x-transition:leave-start="opacity-100"
+    x-transition:leave-end="opacity-0"
+    x-on:click.outside="userDropdownOpen = false"
+    role="menu"
+    aria-labelledby="dropdown-user"
+    class="absolute end-0 z-10 mt-2 w-40 rounded-lg shadow-xl ltr:origin-top-right rtl:origin-top-left"
+  >
+    <div class="rounded-lg bg-white py-2.5 ring-1 ring-black/5">
+      <.link href={~p"/admin/settings"} role="menuitem" class="group flex items-center justify-between gap-1.5 px-4 py-1.5 text-sm font-medium text-neutral-700 hover:bg-neutral-100 hover:text-neutral-950">
+        <span class="grow">Settings</span>
+      </.link>
+      <hr class="my-2.5 border-neutral-100" />
+
+      <.link href={~p"/admin/log_out"} method="delete" role="menuitem" class="group flex w-full items-center justify-between gap-1.5 px-4 py-1.5 text-start text-sm font-medium text-neutral-700 hover:bg-neutral-100 hover:text-neutral-950">
+        <span class="grow">Sign out</span>
+      </.link>
+    </div>
+  </div>
+  <!-- END Dropdown -->
+</div>

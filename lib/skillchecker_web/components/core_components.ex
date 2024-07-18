@@ -434,6 +434,35 @@ defmodule SkillcheckerWeb.CoreComponents do
     """
   end
 
+  @doc """
+  Renders a header with title.
+  """
+  attr :class, :string, default: nil
+
+  slot :inner_block, required: true
+  slot :subtitle
+  slot :actions
+
+  def admin_header(assigns) do
+    ~H"""
+    <div class="container mx-auto px-4 pt-6 lg:px-8 lg:pt-8 xl:max-w-7xl">
+      <div class="flex flex-col gap-2 text-center sm:flex-row sm:items-center sm:justify-between sm:text-start">
+        <div class="grow">
+          <h1 class="mb-1 text-xl font-bold"><%= render_slot(@inner_block) %></h1>
+          <h2 :if={@subtitle != []} class="text-sm font-medium text-neutral-500">
+            <%= render_slot(@subtitle) %>
+          </h2>
+        </div>
+        <div class="flex flex-none items-center justify-center gap-2 rounded sm:justify-end">
+          <div class="relative">
+            <%= render_slot(@actions) %>
+          </div>
+        </div>
+      </div>
+    </div>
+    """
+  end
+
   @doc ~S"""
   Renders a table with generic styling.
 

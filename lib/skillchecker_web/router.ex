@@ -36,7 +36,7 @@ defmodule SkillcheckerWeb.Router do
   end
 
   scope "/admin", SkillcheckerWeb do
-    pipe_through :unlogged
+    pipe_through [:unlogged, :redirect_if_admin_is_authenticated]
 
     get "/", PageController, :admin_landing
   end
@@ -70,9 +70,9 @@ defmodule SkillcheckerWeb.Router do
 
     live_session :redirect_if_admin_is_authenticated,
       on_mount: [{SkillcheckerWeb.AdminAuth, :redirect_if_admin_is_authenticated}] do
-      live "/admin/register", AdminRegistrationLive, :new
-      live "/admin/log_in", AdminLoginLive, :new
-      live "/admin/reset_password", AdminForgotPasswordLive, :new
+      live "/admin/register", AdminUnloggedLive.Register, :new
+      live "/admin/log_in", AdminUnloggedLive.Login, :new
+      live "/admin/reset_password", AdminUnloggedLive.Forgot, :new
       live "/admin/reset_password/:token", AdminResetPasswordLive, :edit
     end
 
@@ -86,8 +86,8 @@ defmodule SkillcheckerWeb.Router do
 
     live_session :require_authenticated_admin,
       on_mount: [{SkillcheckerWeb.AdminAuth, :ensure_authenticated}] do
-      live "/settings", AdminSettingsLive, :edit
-      live "/settings/confirm_email/:token", AdminSettingsLive, :confirm_email
+      live "/settings", AdminLive.Settings, :edit
+      live "/settings/confirm_email/:token", AdminLive.Settings, :confirm_email
 
       live "/admins", AdminLive.Index, :index
       live "/admins/new", AdminLive.Index, :new
