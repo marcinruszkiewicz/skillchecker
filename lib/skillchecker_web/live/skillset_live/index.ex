@@ -16,9 +16,6 @@ defmodule SkillcheckerWeb.SkillsetLive.Index do
 
   defp apply_action(socket, :edit, %{"id" => id}) do
     skillset = Skillsets.get_skillset!(id)
-    skills = Skillset.export_skill_list(skillset.skills)
-
-    changeset = Skillsets.change_skillset(skillset, %{skill_list: skills})
 
     socket
     |> assign(:page_title, "Edit Skillset")

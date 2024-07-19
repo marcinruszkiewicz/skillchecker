@@ -17,19 +17,19 @@ defmodule SkillcheckerWeb.SkillsetLiveTest do
     setup [:create_skillset]
 
     test "lists all skillsets", %{conn: conn, skillset: skillset} do
-      {:ok, _index_live, html} = live(conn, ~p"/skillsets")
+      {:ok, _index_live, html} = live(conn, ~p"/admin/skillsets")
 
       assert html =~ "Listing Skillsets"
       assert html =~ skillset.name
     end
 
     test "saves new skillset", %{conn: conn} do
-      {:ok, index_live, _html} = live(conn, ~p"/skillsets")
+      {:ok, index_live, _html} = live(conn, ~p"/admin/skillsets")
 
       assert index_live |> element("a", "New Skillset") |> render_click() =~
                "New Skillset"
 
-      assert_patch(index_live, ~p"/skillsets/new")
+      assert_patch(index_live, ~p"/admin/skillsets/new")
 
       assert index_live
              |> form("#skillset-form", skillset: @invalid_attrs)
@@ -39,7 +39,7 @@ defmodule SkillcheckerWeb.SkillsetLiveTest do
              |> form("#skillset-form", skillset: @create_attrs)
              |> render_submit()
 
-      assert_patch(index_live, ~p"/skillsets")
+      assert_patch(index_live, ~p"/admin/skillsets")
 
       html = render(index_live)
       assert html =~ "Skillset created successfully"
@@ -47,12 +47,12 @@ defmodule SkillcheckerWeb.SkillsetLiveTest do
     end
 
     test "updates skillset in listing", %{conn: conn, skillset: skillset} do
-      {:ok, index_live, _html} = live(conn, ~p"/skillsets")
+      {:ok, index_live, _html} = live(conn, ~p"/admin/skillsets")
 
       assert index_live |> element("#skillsets-#{skillset.id} a", "Edit") |> render_click() =~
                "Edit Skillset"
 
-      assert_patch(index_live, ~p"/skillsets/#{skillset}/edit")
+      assert_patch(index_live, ~p"/admin/skillsets/#{skillset}/edit")
 
       assert index_live
              |> form("#skillset-form", skillset: @invalid_attrs)
@@ -62,7 +62,7 @@ defmodule SkillcheckerWeb.SkillsetLiveTest do
              |> form("#skillset-form", skillset: @update_attrs)
              |> render_submit()
 
-      assert_patch(index_live, ~p"/skillsets")
+      assert_patch(index_live, ~p"/admin/skillsets")
 
       html = render(index_live)
       assert html =~ "Skillset updated successfully"
@@ -70,7 +70,7 @@ defmodule SkillcheckerWeb.SkillsetLiveTest do
     end
 
     test "deletes skillset in listing", %{conn: conn, skillset: skillset} do
-      {:ok, index_live, _html} = live(conn, ~p"/skillsets")
+      {:ok, index_live, _html} = live(conn, ~p"/admin/skillsets")
 
       assert index_live |> element("#skillsets-#{skillset.id} a", "Delete") |> render_click()
       refute has_element?(index_live, "#skillsets-#{skillset.id}")
@@ -81,19 +81,19 @@ defmodule SkillcheckerWeb.SkillsetLiveTest do
     setup [:create_skillset]
 
     test "displays skillset", %{conn: conn, skillset: skillset} do
-      {:ok, _show_live, html} = live(conn, ~p"/skillsets/#{skillset}")
+      {:ok, _show_live, html} = live(conn, ~p"/admin/skillsets/#{skillset}")
 
       assert html =~ "Show Skillset"
       assert html =~ skillset.name
     end
 
     test "updates skillset within modal", %{conn: conn, skillset: skillset} do
-      {:ok, show_live, _html} = live(conn, ~p"/skillsets/#{skillset}")
+      {:ok, show_live, _html} = live(conn, ~p"/admin/skillsets/#{skillset}")
 
       assert show_live |> element("a", "Edit") |> render_click() =~
                "Edit Skillset"
 
-      assert_patch(show_live, ~p"/skillsets/#{skillset}/show/edit")
+      assert_patch(show_live, ~p"/admin/skillsets/#{skillset}/show/edit")
 
       assert show_live
              |> form("#skillset-form", skillset: @invalid_attrs)
@@ -103,7 +103,7 @@ defmodule SkillcheckerWeb.SkillsetLiveTest do
              |> form("#skillset-form", skillset: @update_attrs)
              |> render_submit()
 
-      assert_patch(show_live, ~p"/skillsets/#{skillset}")
+      assert_patch(show_live, ~p"/admin/skillsets/#{skillset}")
 
       html = render(show_live)
       assert html =~ "Skillset updated successfully"

@@ -505,4 +505,33 @@ defmodule Skillchecker.AccountsTest do
       refute inspect(%Admin{password: "123456"}) =~ "password: \"123456\""
     end
   end
+
+  describe "admins" do
+    @invalid_attrs %{name: nil}
+
+    test "list_admins/0 returns all admins" do
+      admin = admin_fixture()
+      assert Accounts.list_admins() == [admin]
+    end
+
+    test "change_admin/1 returns a admin changeset" do
+      admin = admin_fixture()
+      assert %Ecto.Changeset{} = Accounts.change_admin(admin)
+    end
+
+    test "update_admin/2 with valid data updates the admin" do
+      admin = admin_fixture()
+      update_attrs = %{name: "some updated name", accepted: true}
+
+      assert {:ok, %Admin{} = admin} = Accounts.update_admin(admin, update_attrs)
+      assert admin.name == "some updated name"
+      assert admin.accepted == true
+    end
+
+    test "update_admin/2 with invalid data returns error changeset" do
+      admin = admin_fixture()
+      assert {:error, %Ecto.Changeset{}} = Accounts.update_admin(admin, @invalid_attrs)
+      assert admin == Accounts.get_admin!(admin.id)
+    end
+  end
 end

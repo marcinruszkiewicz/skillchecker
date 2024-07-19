@@ -1,7 +1,7 @@
 defmodule SkillcheckerWeb.AdminLive.Show do
   use SkillcheckerWeb, :live_view
 
-  alias Skillchecker.Admins
+  alias Skillchecker.Accounts
 
   @impl true
   def mount(_params, _session, socket) do
@@ -13,7 +13,7 @@ defmodule SkillcheckerWeb.AdminLive.Show do
     {:noreply,
      socket
      |> assign(:page_title, page_title(socket.assigns.live_action))
-     |> assign(:admin, Admins.get_admin!(id))}
+     |> assign(:admin, Accounts.get_admin!(id))}
   end
 
   defp page_title(:show), do: "Show Admin"

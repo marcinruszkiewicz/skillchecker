@@ -4,6 +4,7 @@ defmodule Skillchecker.Accounts.Admin do
 
   schema "admins" do
     field :email, :string
+    field :name, :string
     field :password, :string, virtual: true, redact: true
     field :hashed_password, :string, redact: true
     field :current_password, :string, virtual: true, redact: true
@@ -11,6 +12,13 @@ defmodule Skillchecker.Accounts.Admin do
     field :accepted, :boolean
 
     timestamps()
+  end
+
+  @doc false
+  def changeset(admin, attrs) do
+    admin
+    |> cast(attrs, [:name, :accepted])
+    |> validate_required([:name, :accepted])
   end
 
   @doc """
@@ -38,7 +46,7 @@ defmodule Skillchecker.Accounts.Admin do
   """
   def registration_changeset(admin, attrs, opts \\ []) do
     admin
-    |> cast(attrs, [:email, :password])
+    |> cast(attrs, [:email, :password, :name])
     |> validate_email(opts)
     |> validate_password(opts)
   end

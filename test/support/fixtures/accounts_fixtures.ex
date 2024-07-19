@@ -5,12 +5,15 @@ defmodule Skillchecker.AccountsFixtures do
   """
 
   def unique_admin_email, do: "admin#{System.unique_integer()}@example.com"
+  def unique_admin_name, do: "admin#{System.unique_integer()}"
   def valid_admin_password, do: "hello world!"
 
   def valid_admin_attributes(attrs \\ %{}) do
     Enum.into(attrs, %{
+      name: unique_admin_name(),
       email: unique_admin_email(),
-      password: valid_admin_password()
+      password: valid_admin_password(),
+      accepted: false
     })
   end
 

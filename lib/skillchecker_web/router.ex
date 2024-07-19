@@ -102,6 +102,13 @@ defmodule SkillcheckerWeb.Router do
 
       live "/skillsets/:id", SkillsetLive.Show, :show
       live "/skillsets/:id/show/edit", SkillsetLive.Show, :edit
+
+      live "/characters", CharacterLive.Index, :index
+      live "/characters/new", CharacterLive.Index, :new
+      live "/characters/:id/edit", CharacterLive.Index, :edit
+
+      live "/characters/:id", CharacterLive.Show, :show
+      live "/characters/:id/show/edit", CharacterLive.Show, :edit
     end
 
   end

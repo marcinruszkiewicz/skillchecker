@@ -72,7 +72,7 @@ defmodule Skillchecker.Skillsets.Skillset do
 
   defp decode_level(nil), do: nil
   defp decode_level(string) do
-    case num = Integer.parse(string) do
+    case Integer.parse(string) do
       :error ->
         RomanNumerals.to_num(string)
       {num, _} ->

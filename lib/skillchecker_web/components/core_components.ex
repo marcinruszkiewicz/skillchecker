@@ -506,7 +506,7 @@ defmodule SkillcheckerWeb.CoreComponents do
         <tbody id={@id} phx-update={match?(%Phoenix.LiveView.LiveStream{}, @rows) && "stream"} >
           <tr :for={row <- @rows} id={@row_id && @row_id.(row)} class="border-b border-neutral-100 hover:bg-neutral-50">
             <td
-              :for={{col, i} <- Enum.with_index(@col)}
+              :for={col <- @col}
               phx-click={@row_click && @row_click.(row)}
               class={["p-3 text-start font-semibold text-neutral-600", @row_click && "hover:cursor-pointer"]}
             >

@@ -60,6 +60,50 @@ defmodule Skillchecker.Accounts do
   """
   def get_admin!(id), do: Repo.get!(Admin, id)
 
+  @doc """
+  Returns the list of admins.
+
+  ## Examples
+
+      iex> list_admins()
+      [%Admin{}, ...]
+
+  """
+  def list_admins do
+    Repo.all(Admin)
+  end
+
+  @doc """
+  Updates a admin.
+
+  ## Examples
+
+      iex> update_admin(admin, %{field: new_value})
+      {:ok, %Admin{}}
+
+      iex> update_admin(admin, %{field: bad_value})
+      {:error, %Ecto.Changeset{}}
+
+  """
+  def update_admin(%Admin{} = admin, attrs) do
+    admin
+    |> Admin.changeset(attrs)
+    |> Repo.update()
+  end
+
+  @doc """
+  Returns an `%Ecto.Changeset{}` for tracking admin changes.
+
+  ## Examples
+
+      iex> change_admin(admin)
+      %Ecto.Changeset{data: %Admin{}}
+
+  """
+  def change_admin(%Admin{} = admin, attrs \\ %{}) do
+    Admin.changeset(admin, attrs)
+  end
+
   ## Admin registration
 
   @doc """

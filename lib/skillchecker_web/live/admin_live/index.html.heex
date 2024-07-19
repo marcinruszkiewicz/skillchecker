@@ -10,7 +10,7 @@
         rows={@streams.admins}
         row_click={fn {_id, admin} -> JS.navigate(~p"/admin/admins/#{admin}") end}
       >
-        <:col :let={{_id, admin}} label="Email"><%= admin.email %></:col>
+        <:col :let={{_id, admin}} label="Name"><%= admin.name %></:col>
         <:col :let={{_id, admin}} label="Accepted"><%= admin.accepted %></:col>
         <:action :let={{_id, admin}}>
           <div class="sr-only">
@@ -27,7 +27,7 @@
           title={@page_title}
           action={@live_action}
           admin={@admin}
-          patch={~p"/admins"}
+          patch={~p"/admin/admins"}
         />
       </.modal>
     </div>
