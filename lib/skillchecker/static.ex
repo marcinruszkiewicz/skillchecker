@@ -21,7 +21,13 @@ defmodule Skillchecker.Static do
   end
 
   def find_item_eveid(name) do
-    if result = Repo.get_by(Item, name: name) do
+    result =
+      Item
+      |> where(name: ^name)
+      |> where(fragment("skill_multiplier IS NOT NULL"))
+      |> Repo.one
+
+    if result do
       result.eveid
     end
   end

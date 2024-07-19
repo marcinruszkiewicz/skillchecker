@@ -1,0 +1,36 @@
+<.admin_header>
+  Skillset <%= @skillset.id %>
+  <:subtitle>This is a skillset record from your database.</:subtitle>
+  <:actions>
+    <.link patch={~p"/admin/skillsets/#{@skillset}/show/edit"} phx-click={JS.push_focus()}>
+      <.button>Edit skillset</.button>
+    </.link>
+  </:actions>
+</.admin_header>
+
+<div class="container mx-auto p-4 lg:p-8 xl:max-w-7xl">
+  <.list>
+    <:item title="Name"><%= @skillset.name %></:item>
+  </.list>
+
+  <ul class="list-group">
+    <%= for skill <- @skillset.skills do %>
+      <li class="list-group-item">
+        <%= display_skillset_skill_name(skill) %>
+      </li>
+    <% end %>
+  </ul>
+
+  <.back navigate={~p"/admin/skillsets"}>Back to skillsets</.back>
+
+  <.modal :if={@live_action == :edit} id="skillset-modal" show on_cancel={JS.patch(~p"/admin/skillsets/#{@skillset}")}>
+    <.live_component
+      module={SkillcheckerWeb.SkillsetLive.FormComponent}
+      id={@skillset.id}
+      title={@page_title}
+      action={@live_action}
+      skillset={@skillset}
+      patch={~p"/admin/skillsets/#{@skillset}"}
+    />
+  </.modal>
+</div>

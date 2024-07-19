@@ -1,0 +1,47 @@
+<.admin_header>
+  Listing Skillsets
+  <:actions>
+    <.link patch={~p"/admin/skillsets/new"}>
+      <.button>New Skillset</.button>
+    </.link>
+  </:actions>
+</.admin_header>
+
+<div class="container mx-auto p-4 lg:p-8 xl:max-w-7xl">
+  <div class="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-4 lg:gap-8">
+    <div class="flex flex-col rounded-lg border bg-white sm:col-span-2 lg:col-span-4">
+      <.table
+        id="skillsets"
+        rows={@streams.skillsets}
+        row_click={fn {_id, skillset} -> JS.navigate(~p"/admin/skillsets/#{skillset}") end}
+      >
+        <:col :let={{_id, skillset}} label="Name"><%= skillset.name %></:col>
+        <:action :let={{_id, skillset}}>
+          <div class="sr-only">
+            <.link navigate={~p"/admin/skillsets/#{skillset}"}>Show</.link>
+          </div>
+          <.link patch={~p"/admin/skillsets/#{skillset}/edit"}>Edit</.link>
+        </:action>
+        <:action :let={{id, skillset}}>
+          <.link
+            phx-click={JS.push("delete", value: %{id: skillset.id}) |> hide("##{id}")}
+            data-confirm="Are you sure?"
+          >
+            Delete
+          </.link>
+        </:action>
+      </.table>
+
+      <.modal :if={@live_action in [:new, :edit]} id="skillset-modal" show on_cancel={JS.patch(~p"/admin/skillsets")}>
+        <.live_component
+          module={SkillcheckerWeb.SkillsetLive.FormComponent}
+          id={@skillset.id || :new}
+          title={@page_title}
+          action={@live_action}
+          skillset={@skillset}
+          patch={~p"/admin/skillsets"}
+        />
+      </.modal>
+    </div>
+  </div>
+</div>
