@@ -19,8 +19,6 @@ defmodule SkillcheckerWeb.CharacterLive.FormComponent do
         phx-change="validate"
         phx-submit="save"
       >
-        <.input field={@form[:eveid]} type="number" label="Eveid" />
-        <.input field={@form[:name]} type="text" label="Name" />
         <.input field={@form[:accepted]} type="checkbox" label="Accepted" />
         <:actions>
           <.button phx-disable-with="Saving...">Save Character</.button>
@@ -58,21 +56,6 @@ defmodule SkillcheckerWeb.CharacterLive.FormComponent do
         {:noreply,
          socket
          |> put_flash(:info, "Character updated successfully")
-         |> push_patch(to: socket.assigns.patch)}
-
-      {:error, %Ecto.Changeset{} = changeset} ->
-        {:noreply, assign(socket, form: to_form(changeset))}
-    end
-  end
-
-  defp save_character(socket, :new, character_params) do
-    case Characters.create_character(character_params) do
-      {:ok, character} ->
-        notify_parent({:saved, character})
-
-        {:noreply,
-         socket
-         |> put_flash(:info, "Character created successfully")
          |> push_patch(to: socket.assigns.patch)}
 
       {:error, %Ecto.Changeset{} = changeset} ->

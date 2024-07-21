@@ -38,21 +38,45 @@ defmodule Skillchecker.Characters do
   def get_character!(id), do: Repo.get!(Character, id)
 
   @doc """
-  Creates a character.
+  Returns an `%Ecto.Changeset{}` for tracking character changes.
 
   ## Examples
 
-      iex> create_character(%{field: value})
-      {:ok, %Character{}}
-
-      iex> create_character(%{field: bad_value})
-      {:error, %Ecto.Changeset{}}
+      iex> change_character(character)
+      %Ecto.Changeset{data: %Character{}}
 
   """
-  def create_character(attrs \\ %{}) do
-    %Character{}
-    |> Character.changeset(attrs)
-    |> Repo.insert()
+  def change_character(%Character{} = character, attrs \\ %{}) do
+    Character.changeset(character, attrs)
+  end
+
+  def add_character(%{owner_hash: owner_hash} = attrs \\ %{}) do
+    existing = get_character_by_owner_hash(owner_hash)
+
+    case existing do
+      nil ->
+        insert_character(attrs)
+      %Character{} ->
+        existing
+    end
+  end
+
+  defp get_character_by_owner_hash(owner_hash) do
+    Repo.get_by(Character, owner_hash: owner_hash)
+  end
+
+  defp insert_character(attrs) do
+    character =
+      %Character{}
+      |> Character.changeset(attrs)
+      |> Repo.insert()
+
+    case character do
+      {:ok, character} ->
+        character
+      {:error, reason} ->
+        raise reason
+    end
   end
 
   @doc """
@@ -65,7 +89,6 @@ defmodule Skillchecker.Characters do
 
       iex> update_character(character, %{field: bad_value})
       {:error, %Ecto.Changeset{}}
-
   """
   def update_character(%Character{} = character, attrs) do
     character
@@ -87,18 +110,5 @@ defmodule Skillchecker.Characters do
   """
   def delete_character(%Character{} = character) do
     Repo.delete(character)
-  end
-
-  @doc """
-  Returns an `%Ecto.Changeset{}` for tracking character changes.
-
-  ## Examples
-
-      iex> change_character(character)
-      %Ecto.Changeset{data: %Character{}}
-
-  """
-  def change_character(%Character{} = character, attrs \\ %{}) do
-    Character.changeset(character, attrs)
   end
 end

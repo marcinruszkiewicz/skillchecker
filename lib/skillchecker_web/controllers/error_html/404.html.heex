@@ -4,8 +4,8 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <meta name="csrf-token" content={get_csrf_token()} />
-    <.live_title suffix=" · Phoenix Framework">
-      <%= assigns[:page_title] || "Skillchecker" %>
+    <.live_title suffix=" · SkillChecker">
+      404
     </.live_title>
     <script src="https://cdn.jsdelivr.net/gh/alpinejs/alpine@v2.x.x/dist/alpine.min.js" defer ></script>
     <link rel="preconnect" href="https://fonts.bunny.net" />
@@ -17,29 +17,12 @@
   <body>
     <div x-data="{ userDropdownOpen: false, notificationsDropdownOpen: false, mobileNavOpen: false }">
       <div id="page-container" class="mx-auto flex min-h-screen w-full min-w-[320px] flex-col bg-white">
-        <header id="page-header" class="z-50 flex flex-none items-center border-b border-neutral-200/75 bg-white/90 backdrop-blur-sm h-20">
-          <div class="container mx-auto px-4 lg:px-8 xl:max-w-7xl ">
-            <div class="flex justify-between py-5 lg:py-0">
-              <div class="flex items-center gap-2 lg:gap-6">
-                <._desktop_nav />
-              </div>
-              <div class="flex items-center gap-2">
-                <._user_dropdown current_admin={@current_admin} />
-                <._mobile_nav_toggle />
-              </div>
-            </div>
-
-            <._mobile_nav />
-          </div>
-        </header>
-
         <main id="page-content" class="flex max-w-full flex-auto flex-col">
-          <.flash_group flash={@flash} />
-
-          <%= @inner_content %>
+          <.admin_header class="text-center">
+            Record Not Found
+            <:subtitle>Something that you were looking for is not here. Try looking for something that is here instead.</:subtitle>
+          </.admin_header>
         </main>
-
-        <._footer />
       </div>
     </div>
   </body>

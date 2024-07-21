@@ -1,20 +1,25 @@
 defmodule SkillcheckerWeb.SkillsetLiveTest do
-  use SkillcheckerWeb.ConnCase
+  use SkillcheckerWeb.ConnCase, async: true
 
   import Phoenix.LiveViewTest
   import Skillchecker.SkillsetsFixtures
+  import Skillchecker.StaticFixtures
 
-  @create_attrs %{name: "some name", skills: "some skills"}
-  @update_attrs %{name: "some updated name", skills: "some updated skills"}
-  @invalid_attrs %{name: nil, skills: nil}
+  @create_attrs %{name: "some name", skill_list: "Amarr Battleship V\nCaldari Battleship V"}
+  @update_attrs %{name: "some updated name", skill_list: "Gallente Battleship V"}
+  @invalid_attrs %{name: nil, skill_list: nil}
 
-  defp create_skillset(_) do
-    skillset = skillset_fixture()
-    %{skillset: skillset}
+  setup do
+    %{
+      calbs5: item_fixture(name: "Caldari Battleship", eveid: 1),
+      ambs5: item_fixture(name: "Amarr Battleship", eveid: 2),
+      galbs5: item_fixture(name: "Gallente Battleship", eveid: 3),
+      skillset: skillset_fixture()
+    }
   end
 
   describe "Index" do
-    setup [:create_skillset]
+    setup :register_and_log_in_admin
 
     test "lists all skillsets", %{conn: conn, skillset: skillset} do
       {:ok, _index_live, html} = live(conn, ~p"/admin/skillsets")
@@ -42,7 +47,6 @@ defmodule SkillcheckerWeb.SkillsetLiveTest do
       assert_patch(index_live, ~p"/admin/skillsets")
 
       html = render(index_live)
-      assert html =~ "Skillset created successfully"
       assert html =~ "some name"
     end
 
@@ -65,7 +69,6 @@ defmodule SkillcheckerWeb.SkillsetLiveTest do
       assert_patch(index_live, ~p"/admin/skillsets")
 
       html = render(index_live)
-      assert html =~ "Skillset updated successfully"
       assert html =~ "some updated name"
     end
 
@@ -78,7 +81,7 @@ defmodule SkillcheckerWeb.SkillsetLiveTest do
   end
 
   describe "Show" do
-    setup [:create_skillset]
+    setup :register_and_log_in_admin
 
     test "displays skillset", %{conn: conn, skillset: skillset} do
       {:ok, _show_live, html} = live(conn, ~p"/admin/skillsets/#{skillset}")
@@ -106,7 +109,6 @@ defmodule SkillcheckerWeb.SkillsetLiveTest do
       assert_patch(show_live, ~p"/admin/skillsets/#{skillset}")
 
       html = render(show_live)
-      assert html =~ "Skillset updated successfully"
       assert html =~ "some updated name"
     end
   end

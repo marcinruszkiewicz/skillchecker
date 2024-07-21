@@ -2,18 +2,15 @@ defmodule Skillchecker.Repo.Migrations.CreateAdminsAuthTables do
   use Ecto.Migration
 
   def change do
-    execute "CREATE EXTENSION IF NOT EXISTS citext", ""
-
     create table(:admins) do
-      add :email, :citext, null: false
+      add :name, :string, null: false
       add :hashed_password, :string, null: false
-      add :confirmed_at, :naive_datetime
       add :accepted, :boolean, null: false, default: false
 
       timestamps()
     end
 
-    create unique_index(:admins, [:email])
+    create unique_index(:admins, [:name])
 
     create table(:admins_tokens) do
       add :admin_id, references(:admins, on_delete: :delete_all), null: false

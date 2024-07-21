@@ -6,6 +6,7 @@ defmodule Skillchecker.Skillsets do
   import Ecto.Query, warn: false
   alias Skillchecker.Repo
 
+  alias Skillchecker.Characters
   alias Skillchecker.Skillsets.Skillset
 
   @doc """
@@ -18,7 +19,9 @@ defmodule Skillchecker.Skillsets do
 
   """
   def list_skillsets do
-    Repo.all(Skillset)
+    Skillset
+    |> order_by([asc: :name])
+    |> Repo.all()
   end
 
   @doc """
@@ -50,7 +53,8 @@ defmodule Skillchecker.Skillsets do
 
   """
   def create_skillset(attrs \\ %{}) do
-    skills = Skillset.prepare_skill_list(attrs["skill_list"]) |> IO.inspect
+    attrs = ExUtils.Map.symbolize_keys(attrs)
+    skills = Skillset.prepare_skill_list(attrs.skill_list)
 
     %Skillset{}
     |> Skillset.changeset(attrs)
@@ -71,7 +75,8 @@ defmodule Skillchecker.Skillsets do
 
   """
   def update_skillset(%Skillset{} = skillset, attrs) do
-    skills = Skillset.prepare_skill_list(attrs["skill_list"])
+    attrs = ExUtils.Map.symbolize_keys(attrs)
+    skills = Skillset.prepare_skill_list(attrs.skill_list)
 
     skillset
     |> Skillset.changeset(attrs)
@@ -106,5 +111,42 @@ defmodule Skillchecker.Skillsets do
   """
   def change_skillset(%Skillset{} = skillset, attrs \\ %{}) do
     Skillset.changeset(skillset, attrs)
+  end
+
+  def compare_with_character(id, character_id) do
+    character = Characters.get_character!(character_id)
+
+    {trained_skills, required_skills} =
+      if id do
+        get_trained_skills(character.skills, id)
+      else
+        {[], []}
+      end
+  end
+
+  defp get_trained_skills(trained_skills, skillset_id) do
+    skillset = get_skillset!(skillset_id)
+
+    trained =
+      skillset.skills
+      |> Enum.filter(fn s -> trained_enough?(trained_skills, s) end)
+
+    required =
+      skillset.skills
+      |> Enum.reject(fn s -> trained_enough?(trained_skills, s) end)
+
+    {trained, required}
+  end
+
+  defp trained_enough?(trained_skills, skill) do
+    trained_skill =
+      trained_skills
+      |> Enum.find(fn m -> m.skill_id == skill.skill_id end)
+
+    if trained_skill do
+      trained_skill.trained_level >= skill.required_level
+    else
+      false
+    end
   end
 end

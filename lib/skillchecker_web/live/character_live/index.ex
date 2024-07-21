@@ -2,7 +2,6 @@ defmodule SkillcheckerWeb.CharacterLive.Index do
   use SkillcheckerWeb, :live_view
 
   alias Skillchecker.Characters
-  alias Skillchecker.Characters.Character
 
   @impl true
   def mount(_params, _session, socket) do
@@ -18,12 +17,6 @@ defmodule SkillcheckerWeb.CharacterLive.Index do
     socket
     |> assign(:page_title, "Edit Character")
     |> assign(:character, Characters.get_character!(id))
-  end
-
-  defp apply_action(socket, :new, _params) do
-    socket
-    |> assign(:page_title, "New Character")
-    |> assign(:character, %Character{})
   end
 
   defp apply_action(socket, :index, _params) do

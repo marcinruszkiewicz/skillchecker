@@ -19,7 +19,6 @@ defmodule SkillcheckerWeb.AdminLive.FormComponent do
         phx-change="validate"
         phx-submit="save"
       >
-        <.input field={@form[:name]} type="text" label="Name" />
         <.input field={@form[:accepted]} type="checkbox" label="Accepted" />
         <:actions>
           <.button phx-disable-with="Saving...">Save Admin</.button>

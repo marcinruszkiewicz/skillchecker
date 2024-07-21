@@ -14,7 +14,7 @@ defmodule SkillcheckerWeb.AdminAuthTest do
       |> Map.replace!(:secret_key_base, SkillcheckerWeb.Endpoint.config(:secret_key_base))
       |> init_test_session(%{})
 
-    %{admin: admin_fixture(), conn: conn}
+    %{accepted: accepted_admin_fixture(), admin: admin_fixture(), conn: conn}
   end
 
   describe "log_in_admin/3" do
@@ -22,7 +22,7 @@ defmodule SkillcheckerWeb.AdminAuthTest do
       conn = AdminAuth.log_in_admin(conn, admin)
       assert token = get_session(conn, :admin_token)
       assert get_session(conn, :live_socket_id) == "admins_sessions:#{Base.url_encode64(token)}"
-      assert redirected_to(conn) == ~p"/"
+      assert redirected_to(conn) == ~p"/admin/dashboard"
       assert Accounts.get_admin_by_session_token(token)
     end
 
@@ -60,7 +60,7 @@ defmodule SkillcheckerWeb.AdminAuthTest do
       refute get_session(conn, :admin_token)
       refute conn.cookies[@remember_me_cookie]
       assert %{max_age: 0} = conn.resp_cookies[@remember_me_cookie]
-      assert redirected_to(conn) == ~p"/"
+      assert redirected_to(conn) == ~p"/admin"
       refute Accounts.get_admin_by_session_token(admin_token)
     end
 
@@ -79,7 +79,7 @@ defmodule SkillcheckerWeb.AdminAuthTest do
       conn = conn |> fetch_cookies() |> AdminAuth.log_out_admin()
       refute get_session(conn, :admin_token)
       assert %{max_age: 0} = conn.resp_cookies[@remember_me_cookie]
-      assert redirected_to(conn) == ~p"/"
+      assert redirected_to(conn) == ~p"/admin"
     end
   end
 
@@ -213,10 +213,10 @@ defmodule SkillcheckerWeb.AdminAuthTest do
   end
 
   describe "redirect_if_admin_is_authenticated/2" do
-    test "redirects if admin is authenticated", %{conn: conn, admin: admin} do
-      conn = conn |> assign(:current_admin, admin) |> AdminAuth.redirect_if_admin_is_authenticated([])
+    test "redirects if admin is authenticated", %{conn: conn, accepted: accepted} do
+      conn = conn |> assign(:current_admin, accepted) |> AdminAuth.redirect_if_admin_is_authenticated([])
       assert conn.halted
-      assert redirected_to(conn) == ~p"/"
+      assert redirected_to(conn) == ~p"/admin/dashboard"
     end
 
     test "does not redirect if admin is not authenticated", %{conn: conn} do
@@ -231,7 +231,7 @@ defmodule SkillcheckerWeb.AdminAuthTest do
       conn = conn |> fetch_flash() |> AdminAuth.require_authenticated_admin([])
       assert conn.halted
 
-      assert redirected_to(conn) == ~p"/admins/log_in"
+      assert redirected_to(conn) == ~p"/admin/log_in"
 
       assert Phoenix.Flash.get(conn.assigns.flash, :error) ==
                "You must log in to access this page."

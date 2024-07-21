@@ -17,14 +17,11 @@
 
           <div class="mt-4">
             <.simple_form for={@form} id="login_form" action={~p"/admin/log_in"} phx-update="ignore">
-              <.input field={@form[:email]} type="email" label="Email" required />
+              <.input field={@form[:name]} type="text" label="Name" required />
               <.input field={@form[:password]} type="password" label="Password" required />
 
               <:actions>
                 <.input field={@form[:remember_me]} type="checkbox" label="Keep me logged in" />
-                <.link href={~p"/admin/reset_password"} class="text-sm font-semibold">
-                  Forgot your password?
-                </.link>
               </:actions>
               <:actions>
                 <.button phx-disable-with="Logging in..." class="w-full">

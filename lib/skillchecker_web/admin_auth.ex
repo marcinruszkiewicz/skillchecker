@@ -186,7 +186,7 @@ defmodule SkillcheckerWeb.AdminAuth do
   Used for routes that require the admin to not be authenticated.
   """
   def redirect_if_admin_is_authenticated(conn, _opts) do
-    if conn.assigns[:current_admin] do
+    if conn.assigns[:current_admin] && conn.assigns[:current_admin].accepted == true do
       conn
       |> redirect(to: signed_in_path(conn))
       |> halt()

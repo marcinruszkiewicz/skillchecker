@@ -2,7 +2,6 @@ defmodule SkillcheckerWeb.AdminLive.Index do
   use SkillcheckerWeb, :live_view
 
   alias Skillchecker.Accounts
-  alias Skillchecker.Accounts.Admin
 
   @impl true
   def mount(_params, _session, socket) do
@@ -18,12 +17,6 @@ defmodule SkillcheckerWeb.AdminLive.Index do
     socket
     |> assign(:page_title, "Edit Admin")
     |> assign(:admin, Accounts.get_admin!(id))
-  end
-
-  defp apply_action(socket, :new, _params) do
-    socket
-    |> assign(:page_title, "New Admin")
-    |> assign(:admin, %Admin{})
   end
 
   defp apply_action(socket, :index, _params) do

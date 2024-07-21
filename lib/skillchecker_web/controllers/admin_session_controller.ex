@@ -19,17 +19,17 @@ defmodule SkillcheckerWeb.AdminSessionController do
   end
 
   defp create(conn, %{"admin" => admin_params}, info) do
-    %{"email" => email, "password" => password} = admin_params
+    %{"name" => name, "password" => password} = admin_params
 
-    if admin = Accounts.get_admin_by_email_and_password(email, password) do
+    if admin = Accounts.get_admin_by_name_and_password(name, password) do
       conn
       |> put_flash(:info, info)
       |> AdminAuth.log_in_admin(admin, admin_params)
     else
-      # In order to prevent user enumeration attacks, don't disclose whether the email is registered.
+      # In order to prevent user enumeration attacks, don't disclose whether the name is registered.
       conn
-      |> put_flash(:error, "Invalid email or password")
-      |> put_flash(:email, String.slice(email, 0, 160))
+      |> put_flash(:error, "Invalid name or password")
+      |> put_flash(:name, String.slice(name, 0, 160))
       |> redirect(to: ~p"/admin/log_in")
     end
   end

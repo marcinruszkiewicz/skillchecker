@@ -3,12 +3,10 @@ defmodule Skillchecker.Accounts.Admin do
   import Ecto.Changeset
 
   schema "admins" do
-    field :email, :string
     field :name, :string
     field :password, :string, virtual: true, redact: true
     field :hashed_password, :string, redact: true
     field :current_password, :string, virtual: true, redact: true
-    field :confirmed_at, :naive_datetime
     field :accepted, :boolean
 
     timestamps()
@@ -17,8 +15,8 @@ defmodule Skillchecker.Accounts.Admin do
   @doc false
   def changeset(admin, attrs) do
     admin
-    |> cast(attrs, [:name, :accepted])
-    |> validate_required([:name, :accepted])
+    |> cast(attrs, [:accepted])
+    |> validate_required([:accepted])
   end
 
   @doc """
@@ -37,32 +35,18 @@ defmodule Skillchecker.Accounts.Admin do
       password field is not desired (like when using this changeset for
       validations on a LiveView form), this option can be set to `false`.
       Defaults to `true`.
-
-    * `:validate_email` - Validates the uniqueness of the email, in case
-      you don't want to validate the uniqueness of the email (like when
-      using this changeset for validations on a LiveView form before
-      submitting the form), this option can be set to `false`.
-      Defaults to `true`.
   """
   def registration_changeset(admin, attrs, opts \\ []) do
     admin
-    |> cast(attrs, [:email, :password, :name])
-    |> validate_email(opts)
+    |> cast(attrs, [:password, :name, :accepted])
+    |> validate_required(:name)
     |> validate_password(opts)
-  end
-
-  defp validate_email(changeset, opts) do
-    changeset
-    |> validate_required([:email])
-    |> validate_format(:email, ~r/^[^\s]+@[^\s]+$/, message: "must have the @ sign and no spaces")
-    |> validate_length(:email, max: 160)
-    |> maybe_validate_unique_email(opts)
   end
 
   defp validate_password(changeset, opts) do
     changeset
     |> validate_required([:password])
-    |> validate_length(:password, min: 12, max: 72)
+    |> validate_length(:password, min: 6, max: 72)
     # Examples of additional password validation:
     # |> validate_format(:password, ~r/[a-z]/, message: "at least one lower case character")
     # |> validate_format(:password, ~r/[A-Z]/, message: "at least one upper case character")
@@ -87,31 +71,6 @@ defmodule Skillchecker.Accounts.Admin do
     end
   end
 
-  defp maybe_validate_unique_email(changeset, opts) do
-    if Keyword.get(opts, :validate_email, true) do
-      changeset
-      |> unsafe_validate_unique(:email, Skillchecker.Repo)
-      |> unique_constraint(:email)
-    else
-      changeset
-    end
-  end
-
-  @doc """
-  A admin changeset for changing the email.
-
-  It requires the email to change otherwise an error is added.
-  """
-  def email_changeset(admin, attrs, opts \\ []) do
-    admin
-    |> cast(attrs, [:email])
-    |> validate_email(opts)
-    |> case do
-      %{changes: %{email: _}} = changeset -> changeset
-      %{} = changeset -> add_error(changeset, :email, "did not change")
-    end
-  end
-
   @doc """
   A admin changeset for changing the password.
 
@@ -129,14 +88,6 @@ defmodule Skillchecker.Accounts.Admin do
     |> cast(attrs, [:password])
     |> validate_confirmation(:password, message: "does not match password")
     |> validate_password(opts)
-  end
-
-  @doc """
-  Confirms the account by setting `confirmed_at`.
-  """
-  def confirm_changeset(admin) do
-    now = NaiveDateTime.utc_now() |> NaiveDateTime.truncate(:second)
-    change(admin, confirmed_at: now)
   end
 
   @doc """

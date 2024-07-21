@@ -12,7 +12,7 @@ defmodule Skillchecker.SkillsetsFixtures do
       attrs
       |> Enum.into(%{
         name: "some name",
-        skills: "some skills"
+        skill_list: "Amarr Battleship V\nCaldari Battleship V"
       })
       |> Skillchecker.Skillsets.create_skillset()
 

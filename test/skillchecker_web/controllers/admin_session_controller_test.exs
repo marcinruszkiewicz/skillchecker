@@ -4,14 +4,17 @@ defmodule SkillcheckerWeb.AdminSessionControllerTest do
   import Skillchecker.AccountsFixtures
 
   setup do
-    %{admin: admin_fixture()}
+    %{
+      admin: admin_fixture(),
+      accepted: accepted_admin_fixture()
+    }
   end
 
   describe "POST /admins/log_in" do
-    test "logs the admin in", %{conn: conn, admin: admin} do
+    test "logs the admin in if accepted", %{conn: conn, accepted: accepted} do
       conn =
         post(conn, ~p"/admin/log_in", %{
-          "admin" => %{"email" => admin.email, "password" => valid_admin_password()}
+          "admin" => %{"name" => accepted.name, "password" => valid_admin_password()}
         })
 
       assert get_session(conn, :admin_token)
@@ -20,7 +23,7 @@ defmodule SkillcheckerWeb.AdminSessionControllerTest do
       # Now do a logged in request and assert on the menu
       conn = get(conn, ~p"/admin/dashboard")
       response = html_response(conn, 200)
-      # assert response =~ admin.email
+      # assert response =~ admin.name
       assert response =~ ~p"/admin/settings"
       assert response =~ ~p"/admin/log_out"
     end
@@ -29,7 +32,7 @@ defmodule SkillcheckerWeb.AdminSessionControllerTest do
       conn =
         post(conn, ~p"/admin/log_in", %{
           "admin" => %{
-            "email" => admin.email,
+            "name" => admin.name,
             "password" => valid_admin_password(),
             "remember_me" => "true"
           }
@@ -45,7 +48,7 @@ defmodule SkillcheckerWeb.AdminSessionControllerTest do
         |> init_test_session(admin_return_to: "/foo/bar")
         |> post(~p"/admin/log_in", %{
           "admin" => %{
-            "email" => admin.email,
+            "name" => admin.name,
             "password" => valid_admin_password()
           }
         })
@@ -60,7 +63,7 @@ defmodule SkillcheckerWeb.AdminSessionControllerTest do
         |> post(~p"/admin/log_in", %{
           "_action" => "registered",
           "admin" => %{
-            "email" => admin.email,
+            "name" => admin.name,
             "password" => valid_admin_password()
           }
         })
@@ -75,7 +78,7 @@ defmodule SkillcheckerWeb.AdminSessionControllerTest do
         |> post(~p"/admin/log_in", %{
           "_action" => "password_updated",
           "admin" => %{
-            "email" => admin.email,
+            "name" => admin.name,
             "password" => valid_admin_password()
           }
         })
@@ -87,10 +90,10 @@ defmodule SkillcheckerWeb.AdminSessionControllerTest do
     test "redirects to login page with invalid credentials", %{conn: conn} do
       conn =
         post(conn, ~p"/admin/log_in", %{
-          "admin" => %{"email" => "invalid@email.com", "password" => "invalid_password"}
+          "admin" => %{"name" => "invalid@name.com", "password" => "invalid_password"}
         })
 
-      assert Phoenix.Flash.get(conn.assigns.flash, :error) == "Invalid email or password"
+      assert Phoenix.Flash.get(conn.assigns.flash, :error) == "Invalid name or password"
       assert redirected_to(conn) == ~p"/admin/log_in"
     end
   end

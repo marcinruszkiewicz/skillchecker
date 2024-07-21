@@ -2,6 +2,7 @@ defmodule SkillcheckerWeb.Router do
   use SkillcheckerWeb, :router
 
   import SkillcheckerWeb.AdminAuth
+  alias SkillcheckerWeb.RequireAcceptedAdmin
 
   pipeline :browser do
     plug :accepts, ["html"]
@@ -25,20 +26,36 @@ defmodule SkillcheckerWeb.Router do
     plug PlugClacks
   end
 
+  pipeline :character do
+    plug :accepts, ["html"]
+    plug :fetch_session
+    plug :fetch_live_flash
+    plug :put_root_layout, html: {SkillcheckerWeb.Layouts, :character}
+    plug :protect_from_forgery
+    plug :put_secure_browser_headers
+    plug PlugClacks
+  end
+
   pipeline :api do
     plug :accepts, ["json"]
+  end
+
+  pipeline :require_accepted_admin do
+    plug RequireAcceptedAdmin
   end
 
   scope "/", SkillcheckerWeb do
     pipe_through :unlogged
 
     get "/", PageController, :user_landing
+    get "/waiting", PageController, :user_waiting
   end
 
   scope "/admin", SkillcheckerWeb do
     pipe_through [:unlogged, :redirect_if_admin_is_authenticated]
 
     get "/", PageController, :admin_landing
+    get "/waiting", PageController, :admin_waiting
   end
 
   # Other scopes may use custom stacks.
@@ -72,22 +89,19 @@ defmodule SkillcheckerWeb.Router do
       on_mount: [{SkillcheckerWeb.AdminAuth, :redirect_if_admin_is_authenticated}] do
       live "/admin/register", AdminUnloggedLive.Register, :new
       live "/admin/log_in", AdminUnloggedLive.Login, :new
-      live "/admin/reset_password", AdminUnloggedLive.Forgot, :new
-      live "/admin/reset_password/:token", AdminResetPasswordLive, :edit
     end
 
     post "/admin/log_in", AdminSessionController, :create
   end
 
   scope "/admin/", SkillcheckerWeb do
-    pipe_through [:browser, :require_authenticated_admin]
+    pipe_through [:browser, :require_authenticated_admin, :require_accepted_admin]
 
     get "/dashboard", PageController, :admin_dashboard
 
     live_session :require_authenticated_admin,
       on_mount: [{SkillcheckerWeb.AdminAuth, :ensure_authenticated}] do
       live "/settings", AdminLive.Settings, :edit
-      live "/settings/confirm_email/:token", AdminLive.Settings, :confirm_email
 
       live "/admins", AdminLive.Index, :index
       live "/admins/new", AdminLive.Index, :new
@@ -114,14 +128,22 @@ defmodule SkillcheckerWeb.Router do
   end
 
   scope "/", SkillcheckerWeb do
-    pipe_through [:browser]
+    pipe_through :browser
 
     delete "/admin/log_out", AdminSessionController, :delete
+  end
 
-    live_session :current_admin,
-      on_mount: [{SkillcheckerWeb.AdminAuth, :mount_current_admin}] do
-      live "/admin/confirm/:token", AdminConfirmationLive, :edit
-      live "/admin/confirm", AdminConfirmationInstructionsLive, :new
-    end
+  scope "/auth", SkillcheckerWeb do
+    pipe_through :browser
+
+    # sso methods
+    get "/:provider", AuthController, :request
+    get "/:provider/callback", AuthController, :callback
+  end
+
+  scope "/", SkillcheckerWeb do
+    pipe_through :character
+
+    get "/characters/:id", CharacterController, :show
   end
 end

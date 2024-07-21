@@ -45,7 +45,7 @@ defmodule SkillcheckerWeb.ConnCase do
   test context.
   """
   def register_and_log_in_admin(%{conn: conn}) do
-    admin = Skillchecker.AccountsFixtures.admin_fixture()
+    admin = Skillchecker.AccountsFixtures.accepted_admin_fixture()
     %{conn: log_in_admin(conn, admin), admin: admin}
   end
 

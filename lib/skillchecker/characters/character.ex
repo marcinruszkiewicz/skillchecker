@@ -3,6 +3,7 @@ defmodule Skillchecker.Characters.Character do
   import Ecto.Changeset
 
   schema "characters" do
+    field :accepted, :boolean
     field :eveid, :integer
     field :owner_hash, :string
     field :name, :string
@@ -52,9 +53,9 @@ defmodule Skillchecker.Characters.Character do
   @doc false
   def changeset(character, attrs) do
     character
-    |> cast(attrs, [:accepted, :name, :thumbnail_url, :picture_url, :owner_hash, :eveid, :user_id, :expires_at, :token, :refresh_token])
+    |> cast(attrs, [:accepted, :name, :thumbnail_url, :picture_url, :owner_hash, :eveid, :expires_at, :token, :refresh_token])
     |> cast_embed(:data)
-    |> validate_required([:accepted, :name, :owner_hash, :eveid])
+    |> validate_required([:name, :owner_hash, :eveid])
   end
 
   def token_expired?(character) do

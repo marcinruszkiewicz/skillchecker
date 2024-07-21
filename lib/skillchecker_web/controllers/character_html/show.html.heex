@@ -1,11 +1,6 @@
 <.admin_header>
   <%= @character.name %>
   <:subtitle><%= @character.data.corporation %> <br /> <%= @character.data.alliance %></:subtitle>
-  <:actions>
-    <.link patch={~p"/admin/characters/#{@character}/show/edit"} phx-click={JS.push_focus()}>
-      <.button>Edit character</.button>
-    </.link>
-  </:actions>
 </.admin_header>
 
 <div class="container mx-auto p-4 lg:p-8 xl:max-w-7xl">
@@ -113,17 +108,4 @@
       </div>
     </div>
   <% end %>
-
-  <.back navigate={~p"/admin/characters"}>Back to characters</.back>
-
-  <.modal :if={@live_action == :edit} id="character-modal" show on_cancel={JS.patch(~p"/admin/characters/#{@character}")}>
-    <.live_component
-      module={SkillcheckerWeb.CharacterLive.FormComponent}
-      id={@character.id}
-      title={@page_title}
-      action={@live_action}
-      character={@character}
-      patch={~p"/admin/characters/#{@character}"}
-    />
-  </.modal>
 </div>

@@ -18,12 +18,6 @@ defmodule SkillcheckerWeb.AdminUnloggedLive.Register do
   def handle_event("save", %{"admin" => admin_params}, socket) do
     case Accounts.register_admin(admin_params) do
       {:ok, admin} ->
-        {:ok, _} =
-          Accounts.deliver_admin_confirmation_instructions(
-            admin,
-            &url(~p"/admin/confirm/#{&1}")
-          )
-
         changeset = Accounts.change_admin_registration(admin)
         {:noreply, socket |> assign(trigger_submit: true) |> assign_form(changeset)}
 

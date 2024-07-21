@@ -59,7 +59,8 @@ defmodule Skillchecker.MixProject do
       {:httpoison, "~> 1.6"},
       {:yaml_elixir, "~> 2.9"},
       {:ex_cldr_units, "~> 3.16"},
-      {:number, "~> 1.0"}
+      {:number, "~> 1.0"},
+      {:ex_utils, "~> 0.1.7"}
     ]
   end
 

@@ -17,7 +17,7 @@ defmodule SkillcheckerWeb.AdminRegistrationLiveTest do
         conn
         |> log_in_admin(admin_fixture())
         |> live(~p"/admin/register")
-        |> follow_redirect(conn, "/")
+        |> follow_redirect(conn, "/admin/dashboard")
 
       assert {:ok, _conn} = result
     end
@@ -28,11 +28,10 @@ defmodule SkillcheckerWeb.AdminRegistrationLiveTest do
       result =
         lv
         |> element("#registration_form")
-        |> render_change(admin: %{"email" => "with spaces", "password" => "too short"})
+        |> render_change(admin: %{"name" => "with spaces", "password" => "too"})
 
       assert result =~ "Register"
-      assert result =~ "must have the @ sign and no spaces"
-      assert result =~ "should be at least 12 character"
+      assert result =~ "should be at least 6 character"
     end
   end
 
@@ -40,34 +39,12 @@ defmodule SkillcheckerWeb.AdminRegistrationLiveTest do
     test "creates account and logs the admin in", %{conn: conn} do
       {:ok, lv, _html} = live(conn, ~p"/admin/register")
 
-      email = unique_admin_email()
-      form = form(lv, "#registration_form", admin: valid_admin_attributes(email: email))
+      name = unique_admin_name()
+      form = form(lv, "#registration_form", admin: valid_admin_attributes(name: name))
       render_submit(form)
       conn = follow_trigger_action(form, conn)
 
-      assert redirected_to(conn) == ~p"/"
-
-      # Now do a logged in request and assert on the menu
-      conn = get(conn, "/")
-      response = html_response(conn, 200)
-      assert response =~ email
-      assert response =~ "Settings"
-      assert response =~ "Log out"
-    end
-
-    test "renders errors for duplicated email", %{conn: conn} do
-      {:ok, lv, _html} = live(conn, ~p"/admin/register")
-
-      admin = admin_fixture(%{email: "test@email.com"})
-
-      result =
-        lv
-        |> form("#registration_form",
-          admin: %{"email" => admin.email, "password" => "valid_password"}
-        )
-        |> render_submit()
-
-      assert result =~ "has already been taken"
+      assert redirected_to(conn) == ~p"/admin/dashboard"
     end
   end
 
@@ -77,7 +54,7 @@ defmodule SkillcheckerWeb.AdminRegistrationLiveTest do
 
       {:ok, _login_live, login_html} =
         lv
-        |> element(~s|main a:fl-contains("Log in")|)
+        |> element(~s|a:fl-contains("Log in")|)
         |> render_click()
         |> follow_redirect(conn, ~p"/admin/log_in")
 

@@ -8,14 +8,10 @@
       <.table
         id="admins"
         rows={@streams.admins}
-        row_click={fn {_id, admin} -> JS.navigate(~p"/admin/admins/#{admin}") end}
       >
         <:col :let={{_id, admin}} label="Name"><%= admin.name %></:col>
         <:col :let={{_id, admin}} label="Accepted"><%= admin.accepted %></:col>
         <:action :let={{_id, admin}}>
-          <div class="sr-only">
-            <.link navigate={~p"/admin/admins/#{admin}"}>Show</.link>
-          </div>
           <.link patch={~p"/admin/admins/#{admin}/edit"}>Edit</.link>
         </:action>
       </.table>

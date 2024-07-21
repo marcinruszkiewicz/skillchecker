@@ -202,7 +202,7 @@ Rockets 5
 Small Artillery Specialization 4
 Small Autocannon Specialization 4
 Small Beam Laser Specialization 4
-Small Blaster Specialization
+Small Blaster Specialization 4
 Small Disintegrator Specialization 4
 Small Energy Turret 5
 Small Hybrid Turret 5
