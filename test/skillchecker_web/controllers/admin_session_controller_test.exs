@@ -101,6 +101,7 @@ defmodule SkillcheckerWeb.AdminSessionControllerTest do
   describe "DELETE /admins/log_out" do
     test "logs the admin out", %{conn: conn, admin: admin} do
       conn = conn |> log_in_admin(admin) |> delete(~p"/admin/log_out")
+
       assert redirected_to(conn) == ~p"/admin"
       refute get_session(conn, :admin_token)
       assert Phoenix.Flash.get(conn.assigns.flash, :info) =~ "Logged out successfully"
@@ -108,6 +109,7 @@ defmodule SkillcheckerWeb.AdminSessionControllerTest do
 
     test "succeeds even if the admin is not logged in", %{conn: conn} do
       conn = delete(conn, ~p"/admin/log_out")
+
       assert redirected_to(conn) == ~p"/admin"
       refute get_session(conn, :admin_token)
       assert Phoenix.Flash.get(conn.assigns.flash, :info) =~ "Logged out successfully"

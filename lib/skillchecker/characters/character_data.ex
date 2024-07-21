@@ -1,4 +1,8 @@
 defmodule Skillchecker.Characters.CharacterData do
+  @moduledoc """
+  Wrapper for getting character data from EVE API.
+  """
+
   alias Skillchecker.Repo
   alias Skillchecker.Characters.Character
 

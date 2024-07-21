@@ -20,6 +20,7 @@ defmodule SkillcheckerWeb.AdminAuthTest do
   describe "log_in_admin/3" do
     test "stores the admin token in the session", %{conn: conn, admin: admin} do
       conn = AdminAuth.log_in_admin(conn, admin)
+
       assert token = get_session(conn, :admin_token)
       assert get_session(conn, :live_socket_id) == "admins_sessions:#{Base.url_encode64(token)}"
       assert redirected_to(conn) == ~p"/admin/dashboard"
@@ -27,19 +28,30 @@ defmodule SkillcheckerWeb.AdminAuthTest do
     end
 
     test "clears everything previously stored in the session", %{conn: conn, admin: admin} do
-      conn = conn |> put_session(:to_be_removed, "value") |> AdminAuth.log_in_admin(admin)
+      conn =
+        conn
+        |> put_session(:to_be_removed, "value")
+        |> AdminAuth.log_in_admin(admin)
+
       refute get_session(conn, :to_be_removed)
     end
 
     test "redirects to the configured path", %{conn: conn, admin: admin} do
-      conn = conn |> put_session(:admin_return_to, "/hello") |> AdminAuth.log_in_admin(admin)
+      conn =
+        conn
+        |> put_session(:admin_return_to, "/hello")
+        |> AdminAuth.log_in_admin(admin)
+
       assert redirected_to(conn) == "/hello"
     end
 
     test "writes a cookie if remember_me is configured", %{conn: conn, admin: admin} do
-      conn = conn |> fetch_cookies() |> AdminAuth.log_in_admin(admin, %{"remember_me" => "true"})
-      assert get_session(conn, :admin_token) == conn.cookies[@remember_me_cookie]
+      conn =
+        conn
+        |> fetch_cookies()
+        |> AdminAuth.log_in_admin(admin, %{"remember_me" => "true"})
 
+      assert get_session(conn, :admin_token) == conn.cookies[@remember_me_cookie]
       assert %{value: signed_token, max_age: max_age} = conn.resp_cookies[@remember_me_cookie]
       assert signed_token != get_session(conn, :admin_token)
       assert max_age == 5_184_000
@@ -76,7 +88,11 @@ defmodule SkillcheckerWeb.AdminAuthTest do
     end
 
     test "works even if admin is already logged out", %{conn: conn} do
-      conn = conn |> fetch_cookies() |> AdminAuth.log_out_admin()
+      conn =
+        conn
+        |> fetch_cookies()
+        |> AdminAuth.log_out_admin()
+
       refute get_session(conn, :admin_token)
       assert %{max_age: 0} = conn.resp_cookies[@remember_me_cookie]
       assert redirected_to(conn) == ~p"/admin"
@@ -105,8 +121,7 @@ defmodule SkillcheckerWeb.AdminAuthTest do
       assert conn.assigns.current_admin.id == admin.id
       assert get_session(conn, :admin_token) == admin_token
 
-      assert get_session(conn, :live_socket_id) ==
-               "admins_sessions:#{Base.url_encode64(admin_token)}"
+      assert get_session(conn, :live_socket_id) == "admins_sessions:#{Base.url_encode64(admin_token)}"
     end
 
     test "does not authenticate if data is missing", %{conn: conn, admin: admin} do
@@ -191,36 +206,41 @@ defmodule SkillcheckerWeb.AdminAuthTest do
       session = conn |> put_session(:admin_token, admin_token) |> get_session()
 
       assert {:halt, _updated_socket} =
-               AdminAuth.on_mount(
-                 :redirect_if_admin_is_authenticated,
-                 %{},
-                 session,
-                 %LiveView.Socket{}
-               )
+        AdminAuth.on_mount(
+          :redirect_if_admin_is_authenticated,
+          %{},
+          session,
+          %LiveView.Socket{}
+        )
     end
 
     test "doesn't redirect if there is no authenticated admin", %{conn: conn} do
       session = conn |> get_session()
 
       assert {:cont, _updated_socket} =
-               AdminAuth.on_mount(
-                 :redirect_if_admin_is_authenticated,
-                 %{},
-                 session,
-                 %LiveView.Socket{}
-               )
+        AdminAuth.on_mount(
+          :redirect_if_admin_is_authenticated,
+          %{},
+          session,
+          %LiveView.Socket{}
+        )
     end
   end
 
   describe "redirect_if_admin_is_authenticated/2" do
     test "redirects if admin is authenticated", %{conn: conn, accepted: accepted} do
-      conn = conn |> assign(:current_admin, accepted) |> AdminAuth.redirect_if_admin_is_authenticated([])
+      conn =
+        conn
+        |> assign(:current_admin, accepted)
+        |> AdminAuth.redirect_if_admin_is_authenticated([])
+
       assert conn.halted
       assert redirected_to(conn) == ~p"/admin/dashboard"
     end
 
     test "does not redirect if admin is not authenticated", %{conn: conn} do
       conn = AdminAuth.redirect_if_admin_is_authenticated(conn, [])
+
       refute conn.halted
       refute conn.status
     end
@@ -228,13 +248,14 @@ defmodule SkillcheckerWeb.AdminAuthTest do
 
   describe "require_authenticated_admin/2" do
     test "redirects if admin is not authenticated", %{conn: conn} do
-      conn = conn |> fetch_flash() |> AdminAuth.require_authenticated_admin([])
+      conn =
+        conn
+        |> fetch_flash()
+        |> AdminAuth.require_authenticated_admin([])
+
       assert conn.halted
-
       assert redirected_to(conn) == ~p"/admin/log_in"
-
-      assert Phoenix.Flash.get(conn.assigns.flash, :error) ==
-               "You must log in to access this page."
+      assert Phoenix.Flash.get(conn.assigns.flash, :error) == "You must log in to access this page."
     end
 
     test "stores the path to redirect to on GET", %{conn: conn} do
@@ -264,7 +285,11 @@ defmodule SkillcheckerWeb.AdminAuthTest do
     end
 
     test "does not redirect if admin is authenticated", %{conn: conn, admin: admin} do
-      conn = conn |> assign(:current_admin, admin) |> AdminAuth.require_authenticated_admin([])
+      conn =
+        conn
+        |> assign(:current_admin, admin)
+        |> AdminAuth.require_authenticated_admin([])
+
       refute conn.halted
       refute conn.status
     end

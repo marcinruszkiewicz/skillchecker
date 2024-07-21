@@ -44,7 +44,6 @@ defmodule Skillchecker.MixProject do
       {:phoenix_live_dashboard, "~> 0.8.0"},
       {:esbuild, "~> 0.7", runtime: Mix.env() == :dev},
       {:tailwind, "~> 0.2.0", runtime: Mix.env() == :dev},
-      {:swoosh, "~> 1.3"},
       {:finch, "~> 0.13"},
       {:telemetry_metrics, "~> 0.6"},
       {:telemetry_poller, "~> 1.0"},
@@ -60,7 +59,8 @@ defmodule Skillchecker.MixProject do
       {:yaml_elixir, "~> 2.9"},
       {:ex_cldr_units, "~> 3.16"},
       {:number, "~> 1.0"},
-      {:ex_utils, "~> 0.1.7"}
+      {:ex_utils, "~> 0.1.7"},
+      {:credo, "~> 1.7", only: [:dev, :test], runtime: false}
     ]
   end
 

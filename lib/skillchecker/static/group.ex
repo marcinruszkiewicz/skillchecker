@@ -1,4 +1,7 @@
 defmodule Skillchecker.Static.Group do
+  @moduledoc """
+  Groups of items from EVE SDE
+  """
   use Ecto.Schema
   import Ecto.Changeset
 

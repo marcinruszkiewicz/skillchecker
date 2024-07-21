@@ -1,4 +1,7 @@
 defmodule Mix.Tasks.Sde.Import do
+  @moduledoc """
+  Console task for importing the EVE SDE.
+  """
   use Mix.Task
 
   @shortdoc "import EVE SDE yaml files from priv/"

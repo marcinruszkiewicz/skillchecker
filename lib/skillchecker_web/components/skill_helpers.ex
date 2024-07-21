@@ -1,4 +1,7 @@
 defmodule SkillcheckerWeb.SkillHelpers do
+  @moduledoc """
+  Display helpers for skills and skill points.
+  """
   alias Skillchecker.Cldr
   alias Skillchecker.Static
 

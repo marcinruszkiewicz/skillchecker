@@ -1,4 +1,9 @@
 defmodule Skillchecker.Static.Item do
+  @moduledoc """
+  Items from EVE SDE.
+
+  We're only interested in skills here but those are all possible items.
+  """
   use Ecto.Schema
   import Ecto.Changeset
 

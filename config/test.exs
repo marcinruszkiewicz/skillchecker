@@ -23,12 +23,6 @@ config :skillchecker, SkillcheckerWeb.Endpoint,
   secret_key_base: "7BVtHS4hdNH4B8N2wXUTE2ezErOVe+CwCJq2arCbD3Umf6BDPBqEPypx635Vzs6q",
   server: false
 
-# In test we don't send emails.
-config :skillchecker, Skillchecker.Mailer, adapter: Swoosh.Adapters.Test
-
-# Disable swoosh api client as it is only required for production adapters.
-config :swoosh, :api_client, false
-
 # Print only warnings and errors during test
 config :logger, level: :warning
 

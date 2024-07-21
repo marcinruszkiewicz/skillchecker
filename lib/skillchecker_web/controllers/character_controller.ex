@@ -3,7 +3,7 @@ defmodule SkillcheckerWeb.CharacterController do
 
   alias Skillchecker.{Characters, Skillsets}
 
-  def show(conn, %{"id" => id} = params) do
+  def show(conn, %{"id" => id} = _params) do
     character = Characters.get_character!(id)
     skillsets = Skillsets.list_skillsets()
 
@@ -12,7 +12,7 @@ defmodule SkillcheckerWeb.CharacterController do
         conn
         |> redirect(to: ~p"/waiting")
       true ->
-        render conn, :show, layout: false, character: character, skillsets: skillsets
+        render conn, :show, character: character, skillsets: skillsets
     end
   end
 end

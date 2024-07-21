@@ -1,4 +1,8 @@
 defmodule Skillchecker.Accounts.AdminToken do
+  @moduledoc """
+  Admin session token
+  """
+
   use Ecto.Schema
   import Ecto.Query
   alias Skillchecker.Accounts.AdminToken

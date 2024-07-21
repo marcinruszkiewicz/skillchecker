@@ -1,4 +1,7 @@
 defmodule Skillchecker.Characters.Character do
+  @moduledoc """
+  Character imported from EVE API
+  """
   use Ecto.Schema
   import Ecto.Changeset
 

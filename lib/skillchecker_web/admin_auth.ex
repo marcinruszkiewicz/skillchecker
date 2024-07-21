@@ -1,4 +1,8 @@
 defmodule SkillcheckerWeb.AdminAuth do
+  @moduledoc """
+  Used in the router to make sure admins are logged in.
+  """
+
   use SkillcheckerWeb, :verified_routes
 
   import Plug.Conn

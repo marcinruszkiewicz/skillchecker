@@ -1,4 +1,7 @@
 defmodule Skillchecker.Characters.RefreshToken do
+  @moduledoc """
+  Handling of automatic refresh token from EVE API.
+  """
   alias Skillchecker.Characters.Character
   alias Skillchecker.Repo
 
@@ -38,7 +41,7 @@ defmodule Skillchecker.Characters.RefreshToken do
       "expires_in" => expiry_seconds
       } = Poison.decode!(body)
 
-    expires_at =DateTime.utc_now |> DateTime.add(expiry_seconds, :second)
+    expires_at = DateTime.utc_now |> DateTime.add(expiry_seconds, :second)
 
     %{token: token, expires_at: expires_at}
   end

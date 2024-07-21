@@ -1,4 +1,8 @@
 defmodule Skillchecker.Skillsets.Skillset do
+  @moduledoc """
+  List of required skills to compare characters with.
+  """
+
   use Ecto.Schema
   import Ecto.Changeset
 
@@ -43,7 +47,7 @@ defmodule Skillchecker.Skillsets.Skillset do
     |> String.replace("\r", "")
     |> String.split("\n")
     |> Enum.uniq
-    |> Enum.filter(fn x -> if(x != "") do x end end)
+    |> Enum.filter(fn x -> if x != "" do x end end)
     |> Enum.map(&prepare_skill_struct/1)
   end
 
@@ -82,8 +86,7 @@ defmodule Skillchecker.Skillsets.Skillset do
 
   def export_skill_list(skills_map) do
     skills_map
-    |> Enum.map(&join_skill_name/1)
-    |> Enum.join("\r\n")
+    |> Enum.map_join("\r\n", &join_skill_name/1)
   end
 
   defp join_skill_name(skill) do
