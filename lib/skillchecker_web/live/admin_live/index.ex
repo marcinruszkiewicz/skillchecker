@@ -21,7 +21,7 @@ defmodule SkillcheckerWeb.AdminLive.Index do
 
   defp apply_action(socket, :index, _params) do
     socket
-    |> assign(:page_title, "Listing Admins")
+    |> assign(:page_title, "Admins")
     |> assign(:admin, nil)
   end
 

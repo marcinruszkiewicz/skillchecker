@@ -96,10 +96,13 @@ defmodule SkillcheckerWeb.Router do
   scope "/admin/", SkillcheckerWeb do
     pipe_through [:browser, :require_authenticated_admin, :require_accepted_admin]
 
-    get "/dashboard", PageController, :admin_dashboard
-
     live_session :require_authenticated_admin,
       on_mount: [{SkillcheckerWeb.AdminAuth, :ensure_authenticated}] do
+
+      live "/dashboard", DashboardLive.Dashboard, :dashboard
+      live "/dashboard/characters/:id/edit", DashboardLive.Dashboard, :edit_character
+      live "/dashboard/admins/:id/edit", DashboardLive.Dashboard, :edit_admin
+
       live "/settings", AdminLive.Settings, :edit
 
       live "/admins", AdminLive.Index, :index

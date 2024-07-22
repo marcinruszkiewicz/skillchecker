@@ -30,7 +30,7 @@ defmodule SkillcheckerWeb.SkillsetLive.Index do
 
   defp apply_action(socket, :index, _params) do
     socket
-    |> assign(:page_title, "Listing Skillsets")
+    |> assign(:page_title, "Skillsets")
     |> assign(:skillset, nil)
   end
 

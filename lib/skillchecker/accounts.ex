@@ -73,6 +73,21 @@ defmodule Skillchecker.Accounts do
   end
 
   @doc """
+  Returns the list of admins.
+
+  ## Examples
+
+      iex> list_pending_admins()
+      [%Admin{}, ...]
+
+  """
+  def list_pending_admins do
+    Admin
+    |> where(accepted: false)
+    |> Repo.all()
+  end
+
+  @doc """
   Updates a admin.
 
   ## Examples

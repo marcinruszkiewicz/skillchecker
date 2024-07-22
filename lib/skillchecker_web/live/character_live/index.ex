@@ -22,7 +22,7 @@ defmodule SkillcheckerWeb.CharacterLive.Index do
 
   defp apply_action(socket, :index, _params) do
     socket
-    |> assign(:page_title, "Listing Characters")
+    |> assign(:page_title, "Characters")
     |> assign(:character, nil)
   end
 

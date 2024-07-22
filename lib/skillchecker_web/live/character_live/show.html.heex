@@ -58,7 +58,7 @@
   </div>
 
   <%= for skillset <- @skillsets do %>
-    <h2><%= skillset.name %></h2>
+    <h2 class="font-semibold"><%= skillset.name %></h2>
     <div class="grid grid-cols-2">
       <div class="my-6 w-full max-w-lg overflow-hidden rounded-lg shadow-lg sm:flex p-4">
         <% {trained_skills, required_skills} = Skillchecker.Skillsets.compare_with_character(skillset.id, @character.id) %>
@@ -66,7 +66,7 @@
         <%= if length(required_skills) > 0 || length(trained_skills) > 0 do %>
           <div class="card character-skills-card mt-2">
             <div class="card-body">
-              <h6>Required skills:</h6>
+              <h3 class="mb-6">Required skills:</h3>
 
               <ul class="w-full">
                 <%= for skill <- required_skills do %>
@@ -85,7 +85,7 @@
                 <.button @click="isExpanded = ! isExpanded" class="my-6">Toggle Completed Skills</.button>
 
                 <div x-show="isExpanded" x-collapse x-cloak>
-                  <h6 class="mt-2">Completed skills:</h6>
+                  <h3 class="mb-2">Completed skills:</h3>
 
                   <ul class="w-full">
                     <%= for skill <- trained_skills do %>
@@ -109,7 +109,7 @@
       </div>
 
       <div class="my-6 w-full max-w-lg overflow-hidden rounded-lg shadow-lg p-4">
-        <h6 class="w-full">Missing skills:</h6>
+        <h3 class="w-full">Missing skills:</h3>
 
         <pre class="w-full my-6">
           <%= Skillchecker.Skillsets.Skillset.export_skill_list(required_skills) %>

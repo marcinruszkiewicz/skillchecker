@@ -36,6 +36,6 @@ defmodule SkillcheckerWeb.CharacterLive.Refresh do
 
   defp do_token_refresh(character) do
     character
-    |> Skillchecker.Characters.RefreshToken.refresh_token
+    |> RefreshToken.refresh_token
   end
 end

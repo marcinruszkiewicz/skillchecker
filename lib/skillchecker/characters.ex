@@ -22,6 +22,21 @@ defmodule Skillchecker.Characters do
   end
 
   @doc """
+  Returns the list of characters.
+
+  ## Examples
+
+      iex> list_pending_characters()
+      [%Character{}, ...]
+
+  """
+  def list_pending_characters do
+    Character
+    |> where(accepted: false)
+    |> Repo.all()
+  end
+
+  @doc """
   Gets a single character.
 
   Raises `Ecto.NoResultsError` if the Character does not exist.

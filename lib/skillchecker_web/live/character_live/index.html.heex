@@ -1,35 +1,39 @@
 <.admin_header>
-  Listing Characters
+  Characters
 </.admin_header>
 
 <div class="container mx-auto p-4 lg:p-8 xl:max-w-7xl">
-  <.table
-    id="characters"
-    rows={@streams.characters}
-    row_click={fn {_id, character} -> JS.navigate(~p"/admin/characters/#{character}") end}
-    row_class={fn {_id, character} -> non_gsf?(character) end}
-  >
-    <:col :let={{_id, character}} label="Name"><%= character.name %></:col>
-    <:col :let={{_id, character}} label="Corp/Alliance">
-      <%= character.data.corporation %> <br /> <%= character.data.alliance %>
-    </:col>
-    <:col :let={{_id, character}} label="Accepted"><%= character.accepted %></:col>
-    <:action :let={{_id, character}}>
-      <.link patch={~p"/admin/characters/#{character}/edit"}>Edit</.link>
-    </:action>
-    <:action :let={{id, character}}>
-      <.link phx-click={JS.push("delete", value: %{id: character.id}) |> hide("##{id}")} data-confirm="Are you sure?">Delete</.link>
-    </:action>
-  </.table>
+  <div class="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-4 lg:gap-8">
+    <div class="flex flex-col rounded-lg border bg-white sm:col-span-2 lg:col-span-4">
+      <.table
+        id="characters"
+        rows={@streams.characters}
+        row_click={fn {_id, character} -> JS.navigate(~p"/admin/characters/#{character}") end}
+        row_class={fn {_id, character} -> non_gsf?(character) end}
+      >
+        <:col :let={{_id, character}} label="Name"><%= character.name %></:col>
+        <:col :let={{_id, character}} label="Corp/Alliance">
+          <%= character.data.corporation %> <br /> <%= character.data.alliance %>
+        </:col>
+        <:col :let={{_id, character}} label="Accepted"><%= character.accepted %></:col>
+        <:action :let={{_id, character}}>
+          <.link patch={~p"/admin/characters/#{character}/edit"}>Edit</.link>
+        </:action>
+        <:action :let={{id, character}}>
+          <.link phx-click={JS.push("delete", value: %{id: character.id}) |> hide("##{id}")} data-confirm="Are you sure?">Delete</.link>
+        </:action>
+      </.table>
 
-  <.modal :if={@live_action in [:new, :edit]} id="character-modal" show on_cancel={JS.patch(~p"/admin/characters")}>
-    <.live_component
-      module={SkillcheckerWeb.CharacterLive.FormComponent}
-      id={@character.id || :new}
-      title={@page_title}
-      action={@live_action}
-      character={@character}
-      patch={~p"/admin/characters"}
-    />
-  </.modal>
+      <.modal :if={@live_action in [:new, :edit]} id="character-modal" show on_cancel={JS.patch(~p"/admin/characters")}>
+        <.live_component
+          module={SkillcheckerWeb.CharacterLive.FormComponent}
+          id={@character.id || :new}
+          title={@page_title}
+          action={@live_action}
+          character={@character}
+          patch={~p"/admin/characters"}
+        />
+      </.modal>
+    </div>
+  </div>
 </div>

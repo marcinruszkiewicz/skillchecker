@@ -1,4 +1,4 @@
-defmodule SkillcheckerWeb.CharacterLive.FormComponent do
+defmodule SkillcheckerWeb.DashboardLive.CharacterFormComponent do
   use SkillcheckerWeb, :live_component
 
   alias Skillchecker.Characters
@@ -48,7 +48,7 @@ defmodule SkillcheckerWeb.CharacterLive.FormComponent do
     save_character(socket, socket.assigns.action, character_params)
   end
 
-  defp save_character(socket, :edit, character_params) do
+  defp save_character(socket, :edit_character, character_params) do
     case Characters.update_character(socket.assigns.character, character_params) do
       {:ok, character} ->
         notify_parent({:saved, character})
