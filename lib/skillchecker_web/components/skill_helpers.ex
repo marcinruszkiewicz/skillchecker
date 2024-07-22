@@ -6,7 +6,8 @@ defmodule SkillcheckerWeb.SkillHelpers do
   alias Skillchecker.Static
 
   def non_gsf?(character) do
-    character.data.alliance_id != 1354830081
+    # magic number of GSF in the ESI data
+    character.data.alliance_id != 1_354_830_081
   end
 
   def display_skill_points(num) do

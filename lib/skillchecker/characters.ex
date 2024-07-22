@@ -76,7 +76,7 @@ defmodule Skillchecker.Characters do
     end
   end
 
-  defp get_character_by_owner_hash(owner_hash) do
+  def get_character_by_owner_hash(owner_hash) do
     Repo.get_by(Character, owner_hash: owner_hash)
   end
 

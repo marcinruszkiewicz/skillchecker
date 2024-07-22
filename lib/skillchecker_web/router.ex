@@ -36,10 +36,6 @@ defmodule SkillcheckerWeb.Router do
     plug PlugClacks
   end
 
-  pipeline :api do
-    plug :accepts, ["json"]
-  end
-
   pipeline :require_accepted_admin do
     plug RequireAcceptedAdmin
   end
@@ -48,7 +44,7 @@ defmodule SkillcheckerWeb.Router do
     pipe_through :unlogged
 
     get "/", PageController, :user_landing
-    get "/waiting", PageController, :user_waiting
+    get "/waiting/:id", PageController, :user_waiting
   end
 
   scope "/admin", SkillcheckerWeb do
@@ -57,11 +53,6 @@ defmodule SkillcheckerWeb.Router do
     get "/", PageController, :admin_landing
     get "/waiting", PageController, :admin_waiting
   end
-
-  # Other scopes may use custom stacks.
-  # scope "/api", SkillcheckerWeb do
-  #   pipe_through :api
-  # end
 
   # Enable LiveDashboard and Swoosh mailbox preview in development
   if Application.compile_env(:skillchecker, :dev_routes) do

@@ -26,9 +26,11 @@ defmodule SkillcheckerWeb.AuthController do
     case character.accepted do
       false ->
         conn
-        |> redirect(to: ~p"/waiting")
+        |> put_session(:owner_hash, conn.assigns.ueberauth_auth.extra.raw_info.user.owner_hash)
+        |> redirect(to: ~p"/waiting/#{character}")
       true ->
         conn
+        |> put_session(:owner_hash, conn.assigns.ueberauth_auth.extra.raw_info.user.owner_hash)
         |> redirect(to: ~p"/characters/#{character}")
     end
   end

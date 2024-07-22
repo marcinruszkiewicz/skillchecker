@@ -16,7 +16,7 @@ defmodule SkillcheckerWeb.AdminLiveTest do
     test "lists all admins", %{conn: conn, admin: admin} do
       {:ok, _index_live, html} = live(conn, ~p"/admin/admins")
 
-      assert html =~ "Listing Admins"
+      assert html =~ "Administrators"
       assert html =~ admin.name
     end
 

@@ -24,7 +24,7 @@ defmodule SkillcheckerWeb.SkillsetLiveTest do
     test "lists all skillsets", %{conn: conn, skillset: skillset} do
       {:ok, _index_live, html} = live(conn, ~p"/admin/skillsets")
 
-      assert html =~ "Listing Skillsets"
+      assert html =~ "Skillsets"
       assert html =~ skillset.name
     end
 

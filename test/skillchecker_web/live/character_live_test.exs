@@ -16,7 +16,7 @@ defmodule SkillcheckerWeb.CharacterLiveTest do
     test "lists all characters", %{conn: conn, character: character} do
       {:ok, _index_live, html} = live(conn, ~p"/admin/characters")
 
-      assert html =~ "Listing Characters"
+      assert html =~ "Characters"
       assert html =~ character.name
     end
 
