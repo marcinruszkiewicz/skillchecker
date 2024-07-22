@@ -5,6 +5,10 @@
     <.link patch={~p"/admin/characters/#{@character}/show/edit"} phx-click={JS.push_focus()}>
       <.button>Edit character</.button>
     </.link>
+
+    <.link patch={~p"/admin/characters/#{@character}/refresh"} phx-click={JS.push_focus()}>
+      <.button phx-disable-with="Refreshing...">Refresh</.button>
+    </.link>
   </:actions>
 </.admin_header>
 

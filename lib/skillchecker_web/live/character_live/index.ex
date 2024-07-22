@@ -1,5 +1,6 @@
 defmodule SkillcheckerWeb.CharacterLive.Index do
   use SkillcheckerWeb, :live_view
+  import SkillcheckerWeb.SkillHelpers
 
   alias Skillchecker.Characters
 

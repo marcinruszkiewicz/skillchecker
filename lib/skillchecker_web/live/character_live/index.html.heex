@@ -7,6 +7,7 @@
     id="characters"
     rows={@streams.characters}
     row_click={fn {_id, character} -> JS.navigate(~p"/admin/characters/#{character}") end}
+    row_class={fn {_id, character} -> non_gsf?(character) end}
   >
     <:col :let={{_id, character}} label="Name"><%= character.name %></:col>
     <:col :let={{_id, character}} label="Corp/Alliance">

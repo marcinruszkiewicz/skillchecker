@@ -5,6 +5,10 @@ defmodule SkillcheckerWeb.SkillHelpers do
   alias Skillchecker.Cldr
   alias Skillchecker.Static
 
+  def non_gsf?(character) do
+    character.data.alliance_id != 1354830081
+  end
+
   def display_skill_points(num) do
     Number.Human.number_to_human(num)
   end
@@ -50,7 +54,7 @@ defmodule SkillcheckerWeb.SkillHelpers do
       ""
     else
       skill.finish_date
-      |> DateTime.diff(skill.start_date, :microsecond)
+      |> DateTime.diff(DateTime.utc_now(), :microsecond)
       |> Cldr.Unit.new!(:microsecond)
       |> Cldr.Unit.decompose([:day, :hour, :minute])
       |> Cldr.Unit.to_string()

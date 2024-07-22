@@ -477,6 +477,7 @@ defmodule SkillcheckerWeb.CoreComponents do
   attr :rows, :list, required: true
   attr :row_id, :any, default: nil, doc: "the function for generating the row id"
   attr :row_click, :any, default: nil, doc: "the function for handling phx-click on each row"
+  attr :row_class, :any, default: false
 
   attr :row_item, :any,
     default: &Function.identity/1,
@@ -504,7 +505,7 @@ defmodule SkillcheckerWeb.CoreComponents do
           </tr>
         </thead>
         <tbody id={@id} phx-update={match?(%Phoenix.LiveView.LiveStream{}, @rows) && "stream"} >
-          <tr :for={row <- @rows} id={@row_id && @row_id.(row)} class="border-b border-neutral-100 hover:bg-neutral-50">
+          <tr :for={row <- @rows} id={@row_id && @row_id.(row)} class={["border-b border-neutral-100 hover:bg-neutral-50", @row_class && @row_class.(row) && "bg-rose-50"]}>
             <td
               :for={col <- @col}
               phx-click={@row_click && @row_click.(row)}
