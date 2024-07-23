@@ -1,9 +1,8 @@
 defmodule Skillchecker.AccountsTest do
   use Skillchecker.DataCase
+  import Skillchecker.AccountsFixtures
 
   alias Skillchecker.Accounts
-
-  import Skillchecker.AccountsFixtures
   alias Skillchecker.Accounts.{Admin, AdminToken}
 
   describe "get_admin_by_name/1" do
@@ -30,8 +29,7 @@ defmodule Skillchecker.AccountsTest do
     test "returns the admin if the name and password are valid" do
       %{id: id} = admin = admin_fixture()
 
-      assert %Admin{id: ^id} =
-               Accounts.get_admin_by_name_and_password(admin.name, valid_admin_password())
+      assert %Admin{id: ^id} = Accounts.get_admin_by_name_and_password(admin.name, valid_admin_password())
     end
   end
 
@@ -53,28 +51,30 @@ defmodule Skillchecker.AccountsTest do
       {:error, changeset} = Accounts.register_admin(%{})
 
       assert %{
-               password: ["can't be blank"],
-               name: ["can't be blank"]
-             } = errors_on(changeset)
+        password: ["can't be blank"],
+        name: ["can't be blank"]
+      } = errors_on(changeset)
     end
 
     test "validates name and password when given" do
       {:error, changeset} = Accounts.register_admin(%{name: "no", password: "not"})
 
       assert %{
-               password: ["should be at least 6 character(s)"]
-             } = errors_on(changeset)
+        password: ["should be at least 6 character(s)"]
+      } = errors_on(changeset)
     end
 
     test "validates maximum values for name and password for security" do
       too_long = String.duplicate("db", 100)
       {:error, changeset} = Accounts.register_admin(%{name: too_long, password: too_long})
+
       assert "should be at most 72 character(s)" in errors_on(changeset).password
     end
 
     test "registers admins with a hashed password" do
       name = unique_admin_name()
       {:ok, admin} = Accounts.register_admin(valid_admin_attributes(name: name))
+
       assert admin.name == name
       assert is_binary(admin.hashed_password)
       assert is_nil(admin.password)
@@ -135,9 +135,9 @@ defmodule Skillchecker.AccountsTest do
         })
 
       assert %{
-               password: ["should be at least 6 character(s)"],
-               password_confirmation: ["does not match password"]
-             } = errors_on(changeset)
+        password: ["should be at least 6 character(s)"],
+        password_confirmation: ["does not match password"]
+      } = errors_on(changeset)
     end
 
     test "validates maximum values for password for security", %{admin: admin} do
@@ -203,6 +203,7 @@ defmodule Skillchecker.AccountsTest do
     setup do
       admin = admin_fixture()
       token = Accounts.generate_admin_session_token(admin)
+
       %{admin: admin, token: token}
     end
 
@@ -217,6 +218,7 @@ defmodule Skillchecker.AccountsTest do
 
     test "does not return admin for expired token", %{token: token} do
       {1, nil} = Repo.update_all(AdminToken, set: [inserted_at: ~N[2020-01-01 00:00:00]])
+
       refute Accounts.get_admin_by_session_token(token)
     end
   end
@@ -225,6 +227,7 @@ defmodule Skillchecker.AccountsTest do
     test "deletes the token" do
       admin = admin_fixture()
       token = Accounts.generate_admin_session_token(admin)
+
       assert Accounts.delete_admin_session_token(token) == :ok
       refute Accounts.get_admin_by_session_token(token)
     end
@@ -243,9 +246,8 @@ defmodule Skillchecker.AccountsTest do
 
     @invalid_attrs %{name: nil}
 
-    @tag :skip
     test "list_admins/0 returns all admins", %{admin: admin} do
-      assert Accounts.list_admins() == [admin]
+      assert_struct_in_list admin, Accounts.list_admins(), [:id, :name]
     end
 
     test "change_admin/1 returns a admin changeset" do
@@ -261,11 +263,11 @@ defmodule Skillchecker.AccountsTest do
       assert admin.accepted == true
     end
 
-    @tag :skip
     test "update_admin/2 with invalid data returns error changeset" do
       admin = admin_fixture()
       assert {:error, %Ecto.Changeset{}} = Accounts.update_admin(admin, @invalid_attrs)
-      assert admin == Accounts.get_admin!(admin.id)
+
+      assert_structs_equal admin, Accounts.get_admin!(admin.id), [:id, :name]
     end
   end
 end

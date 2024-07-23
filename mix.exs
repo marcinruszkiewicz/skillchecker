@@ -60,7 +60,8 @@ defmodule Skillchecker.MixProject do
       {:ex_cldr_units, "~> 3.16"},
       {:number, "~> 1.0"},
       {:ex_utils, "~> 0.1.7"},
-      {:credo, "~> 1.7", only: [:dev, :test], runtime: false}
+      {:credo, "~> 1.7", only: [:dev, :test], runtime: false},
+      {:assertions, "~> 0.20.1", only: :test}
     ]
   end
 

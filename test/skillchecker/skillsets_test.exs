@@ -16,16 +16,16 @@ defmodule Skillchecker.SkillsetsTest do
   end
 
   describe "skillsets" do
-    @invalid_attrs %{name: nil, skill_list: nil}
+    @invalid_attrs %{name: nil, skill_list: "Amarr Battleship V\nCaldari Battleship V"}
 
     test "list_skillsets/0 returns all skillsets" do
       skillset = skillset_fixture()
-      assert Skillsets.list_skillsets() == [skillset]
+      assert_struct_in_list skillset, Skillsets.list_skillsets(), [:name, :skills]
     end
 
     test "get_skillset!/1 returns the skillset with given id" do
       skillset = skillset_fixture()
-      assert Skillsets.get_skillset!(skillset.id) == skillset
+      assert_structs_equal skillset, Skillsets.get_skillset!(skillset.id), [:name, :skills]
     end
 
     test "create_skillset/1 with valid data creates a skillset" do
@@ -40,7 +40,6 @@ defmodule Skillchecker.SkillsetsTest do
 
     end
 
-    @tag :skip
     test "create_skillset/1 with invalid data returns error changeset" do
       assert {:error, %Ecto.Changeset{}} = Skillsets.create_skillset(@invalid_attrs)
     end
@@ -54,7 +53,6 @@ defmodule Skillchecker.SkillsetsTest do
       assert [%Skill{name: "Gallente Battleship", required_level: 5}] = skillset.skills
     end
 
-    @tag :skip
     test "update_skillset/2 with invalid data returns error changeset" do
       skillset = skillset_fixture()
       assert {:error, %Ecto.Changeset{}} = Skillsets.update_skillset(skillset, @invalid_attrs)

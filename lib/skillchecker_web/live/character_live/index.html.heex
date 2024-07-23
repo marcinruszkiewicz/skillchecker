@@ -15,7 +15,18 @@
         <:col :let={{_id, character}} label="Corp/Alliance">
           <%= character.data.corporation %> <br /> <%= character.data.alliance %>
         </:col>
-        <:col :let={{_id, character}} label="Accepted"><%= character.accepted %></:col>
+        <:col :let={{_id, character}} label="Primary">
+          <%= display_skillset_name(character.primary) %>
+          <br /> <%= display_skillset_completion(character.primary, character.id) %>
+        </:col>
+        <:col :let={{_id, character}} label="Secondary">
+          <%= display_skillset_name(character.secondary) %>
+          <br /> <%= display_skillset_completion(character.secondary, character.id) %>
+        </:col>
+        <:col :let={{_id, character}} label="Tertiary">
+          <%= display_skillset_name(character.tertiary) %>
+          <br /> <%= display_skillset_completion(character.tertiary, character.id) %>
+        </:col>
         <:action :let={{_id, character}}>
           <.link patch={~p"/admin/characters/#{character}/edit"}>Edit</.link>
         </:action>

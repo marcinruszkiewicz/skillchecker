@@ -20,8 +20,15 @@ defmodule Skillchecker.Skillsets do
   """
   def list_skillsets do
     Skillset
-    |> order_by([asc: :name])
+    |> order_by(asc: :name)
     |> Repo.all()
+  end
+
+  def list_skillsets_for_select do
+    Skillset
+    |> order_by(asc: :name)
+    |> Repo.all()
+    |> Enum.map(&{&1.name, &1.id})
   end
 
   @doc """
@@ -122,6 +129,8 @@ defmodule Skillchecker.Skillsets do
       else
         {[], []}
       end
+
+    {trained_skills, required_skills}
   end
 
   defp get_trained_skills(trained_skills, skillset_id) do

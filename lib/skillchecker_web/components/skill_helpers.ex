@@ -2,12 +2,23 @@ defmodule SkillcheckerWeb.SkillHelpers do
   @moduledoc """
   Display helpers for skills and skill points.
   """
-  alias Skillchecker.Cldr
-  alias Skillchecker.Static
+  alias Skillchecker.{Cldr, Skillsets, Static}
 
   def non_gsf?(character) do
     # magic number of GSF in the ESI data
     character.data.alliance_id != 1_354_830_081
+  end
+
+  def display_skillset_name(nil), do: ""
+  def display_skillset_name(skillset), do: skillset.name
+
+  def display_skillset_completion(nil, character_id), do: ""
+  def display_skillset_completion(skillset, character_id) do
+    {trained_skills, _} = Skillsets.compare_with_character(skillset.id, character_id)
+    max_skills = Enum.count(skillset.skills)
+    completed_skills = Enum.count(trained_skills)
+
+    "#{completed_skills} / #{max_skills}"
   end
 
   def display_skill_points(num) do

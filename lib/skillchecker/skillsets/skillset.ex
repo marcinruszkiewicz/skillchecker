@@ -9,6 +9,8 @@ defmodule Skillchecker.Skillsets.Skillset do
   schema "skillsets" do
     field :name, :string
 
+    has_many :characters, Skillchecker.Characters.Character
+
     embeds_many :skills, Skill, on_replace: :delete do
       field :skill_id, :integer
       field :name, :string

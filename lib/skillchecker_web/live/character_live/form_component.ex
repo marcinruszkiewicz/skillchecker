@@ -1,7 +1,7 @@
 defmodule SkillcheckerWeb.CharacterLive.FormComponent do
   use SkillcheckerWeb, :live_component
 
-  alias Skillchecker.Characters
+  alias Skillchecker.{Characters, Skillsets}
 
   @impl true
   def render(assigns) do
@@ -20,6 +20,11 @@ defmodule SkillcheckerWeb.CharacterLive.FormComponent do
         phx-submit="save"
       >
         <.input field={@form[:accepted]} type="checkbox" label="Accepted" />
+
+        <.input field={@form[:primary_id]} type="select" label="Primary" options={@skillsets} />
+        <.input field={@form[:secondary_id]} type="select" label="Secondary" options={@skillsets} />
+        <.input field={@form[:tertiary_id]} type="select" label="Tertiary" options={@skillsets} />
+
         <:actions>
           <.button phx-disable-with="Saving...">Save Character</.button>
         </:actions>
@@ -33,6 +38,7 @@ defmodule SkillcheckerWeb.CharacterLive.FormComponent do
     {:ok,
      socket
      |> assign(assigns)
+     |> assign(:skillsets, Skillsets.list_skillsets_for_select())
      |> assign_new(:form, fn ->
        to_form(Characters.change_character(character))
      end)}

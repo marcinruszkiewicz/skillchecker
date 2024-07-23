@@ -24,6 +24,7 @@ defmodule Skillchecker.DataCase do
       import Ecto.Changeset
       import Ecto.Query
       import Skillchecker.DataCase
+      import Assertions
     end
   end
 

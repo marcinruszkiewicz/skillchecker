@@ -18,7 +18,10 @@ defmodule Skillchecker.Characters do
 
   """
   def list_characters do
-    Repo.all(Character)
+    Character
+    |> order_by(asc: :name)
+    |> Repo.all()
+    |> Repo.preload([:primary, :secondary, :tertiary])
   end
 
   @doc """

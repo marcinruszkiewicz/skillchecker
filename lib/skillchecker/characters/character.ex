@@ -17,6 +17,10 @@ defmodule Skillchecker.Characters.Character do
     field :refresh_token, :string
     field :expires_at, :utc_datetime
 
+    belongs_to :primary, Skillchecker.Skillsets.Skillset
+    belongs_to :secondary, Skillchecker.Skillsets.Skillset
+    belongs_to :tertiary, Skillchecker.Skillsets.Skillset
+
     embeds_one :data, Data, on_replace: :update do
       field :bio, :string
       field :corporation, :string
@@ -56,7 +60,7 @@ defmodule Skillchecker.Characters.Character do
   @doc false
   def changeset(character, attrs) do
     character
-    |> cast(attrs, [:accepted, :name, :thumbnail_url, :picture_url, :owner_hash, :eveid, :expires_at, :token, :refresh_token])
+    |> cast(attrs, [:accepted, :name, :thumbnail_url, :picture_url, :owner_hash, :eveid, :expires_at, :token, :refresh_token, :primary_id, :secondary_id, :tertiary_id])
     |> cast_embed(:data)
     |> validate_required([:name, :owner_hash, :eveid])
   end

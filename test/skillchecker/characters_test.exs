@@ -2,22 +2,20 @@ defmodule Skillchecker.CharactersTest do
   use Skillchecker.DataCase
 
   alias Skillchecker.Characters
+  alias Skillchecker.Characters.Character
+  import Skillchecker.CharactersFixtures
 
   describe "characters" do
-    alias Skillchecker.Characters.Character
-
-    import Skillchecker.CharactersFixtures
-
     @invalid_attrs %{name: nil, eveid: nil, accepted: nil, owner_hash: nil}
 
     test "list_characters/0 returns all characters" do
       character = character_fixture()
-      assert [character] = Characters.list_characters()
+      assert_struct_in_list character, Characters.list_characters, [:eveid, :name, :owner_hash]
     end
 
     test "get_character!/1 returns the character with given id" do
       character = character_fixture()
-      assert character = Characters.get_character!(character.id)
+      assert_structs_equal character, Characters.get_character!(character.id), [:eveid, :name, :owner_hash]
     end
 
     test "update_character/2 with valid data updates the character" do
@@ -33,7 +31,7 @@ defmodule Skillchecker.CharactersTest do
     test "update_character/2 with invalid data returns error changeset" do
       character = character_fixture()
       assert {:error, %Ecto.Changeset{}} = Characters.update_character(character, @invalid_attrs)
-      assert _character = Characters.get_character!(character.id)
+      assert_structs_equal character, Characters.get_character!(character.id), [:eveid, :name, :owner_hash]
     end
 
     test "change_character/1 returns a character changeset" do
