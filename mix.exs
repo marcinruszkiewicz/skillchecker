@@ -9,7 +9,14 @@ defmodule Skillchecker.MixProject do
       elixirc_paths: elixirc_paths(Mix.env()),
       start_permanent: Mix.env() == :prod,
       aliases: aliases(),
-      deps: deps()
+      deps: deps(),
+      test_coverage: [tool: ExCoveralls],
+      preferred_cli_env: [
+        coveralls: :test,
+        "coveralls.detail": :test,
+        "coveralls.post": :test,
+        "coveralls.html": :test
+      ]
     ]
   end
 
@@ -61,7 +68,8 @@ defmodule Skillchecker.MixProject do
       {:number, "~> 1.0"},
       {:ex_utils, "~> 0.1.7"},
       {:credo, "~> 1.7", only: [:dev, :test], runtime: false},
-      {:assertions, "~> 0.20.1", only: :test}
+      {:assertions, "~> 0.20.1", only: :test},
+      {:excoveralls, "~> 0.10", only: :test}
     ]
   end
 

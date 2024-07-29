@@ -10,14 +10,24 @@ defmodule Skillchecker.Static do
   alias Skillchecker.Static.Group
 
   def get_item_name(item_id) do
-    result = Repo.get_by!(Item, eveid: item_id)
-    result.name
+    case Repo.get_by(Item, eveid: item_id) do
+      nil ->
+        ""
+      result ->
+        result.name
+    end
   end
 
   def get_group_name(item_id) do
-    item = Repo.get_by!(Item, eveid: item_id)
-    result = Repo.get_by!(Group, groupid: item.groupid)
-    result.name
+    case Repo.get_by(Item, eveid: item_id) do
+      nil ->
+        ""
+      item ->
+        case Repo.get_by(Group, groupid: item.groupid) do
+          nil -> ""
+          result -> result.name
+        end
+    end
   end
 
   def find_item_eveid(name) do
@@ -33,8 +43,10 @@ defmodule Skillchecker.Static do
   end
 
   def get_skill_multiplier(skill_id) do
-    result = Repo.get_by!(Item, eveid: skill_id)
-    result.skill_multiplier
+    case Repo.get_by(Item, eveid: skill_id) do
+      nil -> nil
+      result -> result.skill_multiplier
+    end
   end
 
   @doc """

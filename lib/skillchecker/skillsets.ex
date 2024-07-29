@@ -47,6 +47,8 @@ defmodule Skillchecker.Skillsets do
   """
   def get_skillset!(id), do: Repo.get!(Skillset, id)
 
+  def get_skillset(id), do: Repo.get(Skillset, id)
+
   @doc """
   Creates a skillset.
 
@@ -120,31 +122,31 @@ defmodule Skillchecker.Skillsets do
     Skillset.changeset(skillset, attrs)
   end
 
+
   def compare_with_character(id, character_id) do
-    character = Characters.get_character!(character_id)
-
-    {trained_skills, required_skills} =
-      if id do
-        get_trained_skills(character.skills, id)
-      else
+    case Characters.get_character(character_id) do
+      nil ->
         {[], []}
-      end
-
-    {trained_skills, required_skills}
+      character ->
+        get_trained_skills(character.skills, id)
+    end
   end
 
   defp get_trained_skills(trained_skills, skillset_id) do
-    skillset = get_skillset!(skillset_id)
+    case get_skillset(skillset_id) do
+      nil ->
+        {[], []}
+      skillset ->
+        trained =
+          skillset.skills
+          |> Enum.filter(fn s -> trained_enough?(trained_skills, s) end)
 
-    trained =
-      skillset.skills
-      |> Enum.filter(fn s -> trained_enough?(trained_skills, s) end)
+        required =
+          skillset.skills
+          |> Enum.reject(fn s -> trained_enough?(trained_skills, s) end)
 
-    required =
-      skillset.skills
-      |> Enum.reject(fn s -> trained_enough?(trained_skills, s) end)
-
-    {trained, required}
+        {trained, required}
+    end
   end
 
   defp trained_enough?(trained_skills, skill) do

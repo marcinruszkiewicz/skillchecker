@@ -5,14 +5,14 @@ defmodule SkillcheckerWeb.SkillHelpers do
   alias Skillchecker.{Cldr, Skillsets, Static}
 
   def non_gsf?(character) do
-    # magic number of GSF in the ESI data
+    # magic number of GSF in the ESI data. This is saved in the Eve Online data and will never change.
     character.data.alliance_id != 1_354_830_081
   end
 
   def display_skillset_name(nil), do: ""
   def display_skillset_name(skillset), do: skillset.name
 
-  def display_skillset_completion(nil, character_id), do: ""
+  def display_skillset_completion(nil, _), do: ""
   def display_skillset_completion(skillset, character_id) do
     {trained_skills, _} = Skillsets.compare_with_character(skillset.id, character_id)
     max_skills = Enum.count(skillset.skills)
@@ -21,13 +21,11 @@ defmodule SkillcheckerWeb.SkillHelpers do
     "#{completed_skills} / #{max_skills}"
   end
 
-  def display_skill_points(num) do
-    Number.Human.number_to_human(num)
-  end
+  def display_skill_points(num) when is_number(num), do: Number.Human.number_to_human(num)
+  def display_skill_points(_), do: ""
 
-  def display_skill_points_exact(num) do
-    Number.Delimit.number_to_delimited(num, precision: 0)
-  end
+  def display_skill_points_exact(num) when is_number(num), do: Number.Delimit.number_to_delimited(num, precision: 0)
+  def display_skill_points_exact(_), do: ""
 
   def skill_training_disabled?(nil), do: true
   def skill_training_disabled?(skill) do
@@ -48,6 +46,7 @@ defmodule SkillcheckerWeb.SkillHelpers do
     "#{skill.name} #{RomanNumerals.convert(skill.finished_level)}"
   end
 
+  def display_skill_percent(nil), do: 0.0
   def display_skill_percent(skill) do
     sp_in_skill = skill.training_start_sp - skill.level_start_sp
 
@@ -55,31 +54,32 @@ defmodule SkillcheckerWeb.SkillHelpers do
     |> Float.round(2)
   end
 
+  def display_sp_left(nil), do: 0.0
   def display_sp_left(skill) do
     sp_in_skill = skill.training_start_sp - skill.level_start_sp
     skill.level_end_sp - sp_in_skill
     |> Number.Human.number_to_human
   end
 
+  def display_skill_time(nil), do: ""
+  def display_skill_time(skill) when is_nil(skill.finish_date), do: ""
   def display_skill_time(skill) do
-    if is_nil(skill.finish_date) do
-      ""
-    else
-      skill.finish_date
-      |> DateTime.diff(DateTime.utc_now(), :microsecond)
-      |> Cldr.Unit.new!(:microsecond)
-      |> Cldr.Unit.decompose([:day, :hour, :minute])
-      |> Cldr.Unit.to_string()
-      |> do_display_skill_time
-    end
+    skill.finish_date
+    |> DateTime.diff(DateTime.utc_now(), :microsecond)
+    |> Cldr.Unit.new!(:microsecond)
+    |> Cldr.Unit.decompose([:day, :hour, :minute])
+    |> Cldr.Unit.to_string()
+    |> do_display_skill_time
   end
 
   defp do_display_skill_time({:ok, string}), do: string
 
+  def display_skill_name(nil), do: ""
   def display_skill_name(skill) do
     "#{skill.name} #{RomanNumerals.convert(skill.trained_level)}"
   end
 
+  def display_skillset_skill_name(nil), do: ""
   def display_skillset_skill_name(skill) do
     "#{skill.name} #{RomanNumerals.convert(skill.required_level)}"
   end

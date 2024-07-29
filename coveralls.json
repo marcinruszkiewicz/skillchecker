@@ -1,0 +1,17 @@
+{
+  "skip_files": [
+    "lib/cldr.ex",
+    "lib/skillchecker.ex",
+    "lib/skillchecker/application.ex",
+    "lib/skillchecker/release.ex",
+    "lib/skillchecker/repo.ex",
+    "lib/skillchecker_web.ex",
+    "lib/skillchecker_web/endpoint.ex",
+    "lib/skillchecker_web/gettext.ex",
+    "lib/skillchecker_web/router.ex",
+    "lib/skillchecker_web/telemetry.ex",
+    "lib/skillchecker_web/channels/application_socket.ex",
+    "lib/mix/tasks",
+    "test"
+  ]
+}

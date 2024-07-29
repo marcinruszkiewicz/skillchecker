@@ -55,6 +55,8 @@ defmodule Skillchecker.Characters do
   """
   def get_character!(id), do: Repo.get!(Character, id)
 
+  def get_character(id), do: Repo.get(Character, id)
+
   @doc """
   Returns an `%Ecto.Changeset{}` for tracking character changes.
 
@@ -68,6 +70,9 @@ defmodule Skillchecker.Characters do
     Character.changeset(character, attrs)
   end
 
+  @doc """
+  Adds a character or returns an existing one.
+  """
   def add_character(%{owner_hash: owner_hash} = attrs \\ %{}) do
     existing = get_character_by_owner_hash(owner_hash)
 
@@ -79,6 +84,7 @@ defmodule Skillchecker.Characters do
     end
   end
 
+  def get_character_by_owner_hash(nil), do: nil
   def get_character_by_owner_hash(owner_hash) do
     Repo.get_by(Character, owner_hash: owner_hash)
   end
@@ -92,8 +98,8 @@ defmodule Skillchecker.Characters do
     case character do
       {:ok, character} ->
         character
-      {:error, reason} ->
-        raise reason
+      {:error, changeset} ->
+        {:error, changeset}
     end
   end
 

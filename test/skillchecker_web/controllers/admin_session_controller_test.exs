@@ -23,7 +23,7 @@ defmodule SkillcheckerWeb.AdminSessionControllerTest do
       # Now do a logged in request and assert on the menu
       conn = get(conn, ~p"/admin/dashboard")
       response = html_response(conn, 200)
-      # assert response =~ admin.name
+      assert response =~ accepted.name
       assert response =~ ~p"/admin/settings"
       assert response =~ ~p"/admin/log_out"
     end

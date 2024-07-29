@@ -9,7 +9,9 @@ defmodule Skillchecker.Skillsets.Skillset do
   schema "skillsets" do
     field :name, :string
 
-    has_many :characters, Skillchecker.Characters.Character
+    has_many :primaries, Skillchecker.Characters.Character, foreign_key: :primary_id
+    has_many :secondaries, Skillchecker.Characters.Character, foreign_key: :secondary_id
+    has_many :tertiaries, Skillchecker.Characters.Character, foreign_key: :tertiary_id
 
     embeds_many :skills, Skill, on_replace: :delete do
       field :skill_id, :integer
@@ -44,6 +46,8 @@ defmodule Skillchecker.Skillsets.Skillset do
       iex> Skillchecker.Skillsets.Manual.prepare_skill_list("Amarr   Frigate    3")
       [%{name: "Amarr Frigate", required_level: 3, skill_id: 1234}]
   """
+
+  def prepare_skill_list(nil), do: []
   def prepare_skill_list(skills_string) do
     skills_string
     |> String.replace("\r", "")

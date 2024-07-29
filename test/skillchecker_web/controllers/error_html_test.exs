@@ -11,4 +11,8 @@ defmodule SkillcheckerWeb.ErrorHTMLTest do
   test "renders 500.html" do
     assert render_to_string(SkillcheckerWeb.ErrorHTML, "500", "html", []) =~ "Something went wrong"
   end
+
+  test "renders 500.html for any other errors" do
+    assert render_to_string(SkillcheckerWeb.ErrorHTML, "403", "html", []) =~ "Something went wrong"
+  end
 end

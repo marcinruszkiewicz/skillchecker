@@ -36,6 +36,13 @@ defmodule SkillcheckerWeb.CharacterLiveTest do
       assert_patch(index_live, ~p"/admin/characters")
       assert character.accepted == true
     end
+
+    test "deletes character in listing", %{conn: conn, character: character} do
+      {:ok, index_live, _html} = live(conn, ~p"/admin/characters")
+
+      assert index_live |> element("#characters-#{character.id} a", "Delete") |> render_click()
+      refute has_element?(index_live, "#characters-#{character.id}")
+    end
   end
 
   describe "Show" do

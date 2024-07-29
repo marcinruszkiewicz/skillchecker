@@ -77,8 +77,4 @@ defmodule Skillchecker.Accounts.AdminToken do
   def by_admin_and_contexts_query(admin, :all) do
     from t in AdminToken, where: t.admin_id == ^admin.id
   end
-
-  def by_admin_and_contexts_query(admin, [_ | _] = contexts) do
-    from t in AdminToken, where: t.admin_id == ^admin.id and t.context in ^contexts
-  end
 end
