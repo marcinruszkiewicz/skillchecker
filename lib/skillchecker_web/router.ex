@@ -1,5 +1,6 @@
 defmodule SkillcheckerWeb.Router do
   use SkillcheckerWeb, :router
+  use Honeybadger.Plug
 
   import SkillcheckerWeb.AdminAuth
   alias SkillcheckerWeb.RequireAcceptedAdmin
