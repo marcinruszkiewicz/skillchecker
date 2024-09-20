@@ -1,4 +1,5 @@
 defmodule SkillcheckerWeb.Endpoint do
+  use Sentry.PlugCapture
   use Phoenix.Endpoint, otp_app: :skillchecker
 
   # The session will be stored in the cookie and signed,
@@ -48,4 +49,5 @@ defmodule SkillcheckerWeb.Endpoint do
   plug Plug.Head
   plug Plug.Session, @session_options
   plug SkillcheckerWeb.Router
+  plug Sentry.PlugContext
 end

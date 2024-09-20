@@ -36,3 +36,5 @@ skillchecker-*.tar
 npm-debug.log
 /assets/node_modules/
 
+*.md
+!README.md
