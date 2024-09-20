@@ -21,9 +21,9 @@ defmodule SkillcheckerWeb.CharacterLive.FormComponent do
       >
         <.input field={@form[:accepted]} type="checkbox" label="Accepted" />
 
-        <.input field={@form[:primary_id]} type="select" label="Primary" options={@skillsets} />
-        <.input field={@form[:secondary_id]} type="select" label="Secondary" options={@skillsets} />
-        <.input field={@form[:tertiary_id]} type="select" label="Tertiary" options={@skillsets} />
+        <.input field={@form[:primary_id]} type="select" label="Primary" options={@skillsets} prompt="-- None --" />
+        <.input field={@form[:secondary_id]} type="select" label="Secondary" options={@skillsets} prompt="-- None --" />
+        <.input field={@form[:tertiary_id]} type="select" label="Tertiary" options={@skillsets} prompt="-- None --" />
 
         <:actions>
           <.button phx-disable-with="Saving...">Save Character</.button>

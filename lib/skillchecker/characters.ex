@@ -21,7 +21,7 @@ defmodule Skillchecker.Characters do
     Character
     |> order_by(asc: :name)
     |> Repo.all()
-    |> Repo.preload([:primary, :secondary, :tertiary])
+    |> Repo.preload([:primary, :secondary, :tertiary], force: true)
   end
 
   @doc """
@@ -118,6 +118,10 @@ defmodule Skillchecker.Characters do
     character
     |> Character.changeset(attrs)
     |> Repo.update()
+    |> case do
+      {:ok, char} -> {:ok, Repo.preload(char, [:primary, :secondary, :tertiary], force: true)}
+      error -> error
+    end
   end
 
   @doc """

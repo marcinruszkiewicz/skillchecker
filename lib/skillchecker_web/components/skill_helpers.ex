@@ -10,15 +10,27 @@ defmodule SkillcheckerWeb.SkillHelpers do
   end
 
   def display_skillset_name(nil), do: ""
-  def display_skillset_name(skillset), do: skillset.name
+  def display_skillset_name(skillset) do
+    case Ecto.assoc_loaded?(skillset) do
+      true ->
+        skillset.name
+      false ->
+        ""
+    end
+  end
 
   def display_skillset_completion(nil, _), do: ""
   def display_skillset_completion(skillset, character_id) do
-    {trained_skills, _} = Skillsets.compare_with_character(skillset.id, character_id)
-    max_skills = Enum.count(skillset.skills)
-    completed_skills = Enum.count(trained_skills)
+    case Ecto.assoc_loaded?(skillset) do
+      true ->
+        {trained_skills, _} = Skillsets.compare_with_character(skillset.id, character_id)
+        max_skills = Enum.count(skillset.skills)
+        completed_skills = Enum.count(trained_skills)
 
-    "#{completed_skills} / #{max_skills}"
+        "#{completed_skills} / #{max_skills}"
+      false ->
+        ""
+    end
   end
 
   def display_skill_points(num) when is_number(num), do: Number.Human.number_to_human(num)
