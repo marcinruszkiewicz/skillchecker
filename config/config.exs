@@ -65,11 +65,7 @@ config :ueberauth, Ueberauth.Strategy.EVESSO.OAuth,
 config :skillchecker, :ex_cldr_units,
   default_backend: Skillchecker.Cldr
 
-config :honeybadger,
-  api_key: System.get_env("ATS_HONEYBADGER"),
-  ecto_repos: [Skillchecker.Repo],
-  use_logging: true,
-  breadcrumbs_enabled: true
+config :oauth2, debug: true
 
 # Import environment specific config. This must remain at the bottom
 # of this file so it overrides the configuration defined above.

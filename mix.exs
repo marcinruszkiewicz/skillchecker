@@ -69,8 +69,7 @@ defmodule Skillchecker.MixProject do
       {:ex_utils, "~> 0.1.7"},
       {:credo, "~> 1.7", only: [:dev, :test], runtime: false},
       {:assertions, "~> 0.20.1", only: :test},
-      {:excoveralls, "~> 0.10", only: :test},
-      {:honeybadger, "~> 0.16"}
+      {:excoveralls, "~> 0.10", only: :test}
     ]
   end
 
