@@ -58,7 +58,7 @@ defmodule Skillchecker.MixProject do
       {:jason, "~> 1.2"},
       {:plug_cowboy, "~> 2.5"},
       {:plug_clacks, git: "https://github.com/hauleth/plug_clacks.git"},
-      {:ueberauth, "~> 0.10.5"},
+      {:ueberauth, "~> 0.10"},
       {:ueberauth_eve_sso, git: "https://github.com/marcinruszkiewicz/ueberauth_eve_sso.git"},
       # {:ueberauth_eve_sso, path: "/Volumes/Projects/Aevi/ueberauth_eve_sso"},
       {:esi, git: "https://github.com/marcinruszkiewicz/esi.git"},
