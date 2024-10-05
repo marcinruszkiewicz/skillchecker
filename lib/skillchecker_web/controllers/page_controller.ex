@@ -23,6 +23,16 @@ defmodule SkillcheckerWeb.PageController do
     render conn, :user_waiting, layout: false, id: id
   end
 
+
+  defp redirect_to_character(conn, nil) do
+    conn =
+      conn
+      |> configure_session(renew: true)
+      |> clear_session()
+
+    render conn, :user_landing, layout: false
+  end
+
   defp redirect_to_character(conn, character) do
     case character.accepted do
       false ->
