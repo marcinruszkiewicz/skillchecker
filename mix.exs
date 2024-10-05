@@ -26,7 +26,7 @@ defmodule Skillchecker.MixProject do
   def application do
     [
       mod: {Skillchecker.Application, []},
-      extra_applications: [:logger, :runtime_tools]
+      extra_applications: [:logger, :runtime_tools, :logger_file_backend]
     ]
   end
 
@@ -69,7 +69,8 @@ defmodule Skillchecker.MixProject do
       {:ex_utils, "~> 0.1.7"},
       {:credo, "~> 1.7", only: [:dev, :test], runtime: false},
       {:assertions, "~> 0.20.1", only: :test},
-      {:excoveralls, "~> 0.10", only: :test}
+      {:excoveralls, "~> 0.10", only: :test},
+      {:logger_file_backend, "~> 0.0.14"}
     ]
   end
 

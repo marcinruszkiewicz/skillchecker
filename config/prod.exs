@@ -9,7 +9,12 @@ config :skillchecker, SkillcheckerWeb.Endpoint, cache_static_manifest: "priv/sta
 
 # Do not print debug messages in production
 # config :logger, level: :info
-config :logger, level: :debug
+config :logger, :console, level: :info
+
+# Configures Elixir's Logger
+config :logger, :debug_log,
+  path: "/www/skillchecker/tmp/log/skillchecker_debug.log",
+  level: :debug
 
 # Runtime production configuration, including reading
 # of environment variables, is done on config/runtime.exs.
