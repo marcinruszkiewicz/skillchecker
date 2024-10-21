@@ -70,7 +70,10 @@ defmodule Skillchecker.MixProject do
       {:credo, "~> 1.7", only: [:dev, :test], runtime: false},
       {:assertions, "~> 0.20.1", only: :test},
       {:excoveralls, "~> 0.10", only: :test},
-      {:logger_file_backend, "~> 0.0.14"}
+      {:logger_file_backend, "~> 0.0.14"},
+      {:goth, "~> 1.4"},
+      {:google_api_sheets, "~> 0.33"},
+      {:timex, "~> 3.7"}
     ]
   end
 
