@@ -20,6 +20,7 @@ defmodule SkillcheckerWeb.ConnCase do
   using do
     quote do
       use SkillcheckerWeb, :verified_routes
+
       import Phoenix.ConnTest
       import Plug.Conn
       import SkillcheckerWeb.ConnCase

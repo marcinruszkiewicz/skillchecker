@@ -1,4 +1,4 @@
-defmodule Mix.Tasks.Sde.Import do
+defmodule Mix.Tasks.Import.Sde do
   @shortdoc "import EVE SDE yaml files from priv/"
 
   @moduledoc """

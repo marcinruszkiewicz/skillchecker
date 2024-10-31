@@ -1,4 +1,4 @@
-defmodule Mix.Tasks.Attendance.Import do
+defmodule Mix.Tasks.Import.Attendance do
   @shortdoc "import attendance from google sheets"
 
   @moduledoc """

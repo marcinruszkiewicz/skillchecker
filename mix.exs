@@ -71,10 +71,11 @@ defmodule Skillchecker.MixProject do
       {:phoenix_live_reload, "~> 1.2", only: :dev},
       {:credo, "~> 1.7", only: [:dev, :test], runtime: false},
       {:styler, "~> 1.1", only: [:dev, :test], runtime: false},
-      {:doctor, "~> 0.21.0", only: [:dev, :test], runtime: false},
+      {:doctor, "~> 0.22.0", only: [:dev, :test], runtime: false},
       {:floki, ">= 0.30.0", only: :test},
       {:assertions, "~> 0.20.1", only: :test},
       {:excoveralls, "~> 0.10", only: :test},
+      {:ex_machina, "~> 2.8", only: :test},
       {:phoenix_test, "~> 0.4.2", only: :test}
     ]
   end
