@@ -17,7 +17,7 @@ defmodule SkillcheckerWeb.CoreComponents do
   use Phoenix.Component
 
   alias Phoenix.LiveView.JS
-  import SkillcheckerWeb.Gettext
+  use Gettext, backend: SkillcheckerWeb.Gettext
 
   @doc """
   Renders a modal.

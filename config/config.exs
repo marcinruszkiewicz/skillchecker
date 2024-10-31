@@ -12,6 +12,7 @@ config :skillchecker,
 
 # Configures the endpoint
 config :skillchecker, SkillcheckerWeb.Endpoint,
+  adapter: Bandit.PhoenixAdapter,
   url: [host: "localhost"],
   render_errors: [
     formats: [html: SkillcheckerWeb.ErrorHTML, json: SkillcheckerWeb.ErrorJSON],
@@ -41,9 +42,6 @@ config :tailwind,
     ),
     cd: Path.expand("../assets", __DIR__)
   ]
-
-config :logger,
-  backends: [{LoggerFileBackend, :debug_log}, :console]
 
 config :logger, :console,
   format: "$time $metadata[$level] $message\n",

@@ -43,7 +43,7 @@ defmodule SkillcheckerWeb do
         layouts: [html: SkillcheckerWeb.Layouts]
 
       import Plug.Conn
-      import SkillcheckerWeb.Gettext
+      use Gettext, backend: SkillcheckerWeb.Gettext
 
       unquote(verified_routes())
     end
@@ -85,7 +85,7 @@ defmodule SkillcheckerWeb do
       import Phoenix.HTML
       # Core UI components and translation
       import SkillcheckerWeb.CoreComponents
-      import SkillcheckerWeb.Gettext
+      use Gettext, backend: SkillcheckerWeb.Gettext
 
       # Shortcut for generating JS commands
       alias Phoenix.LiveView.JS

@@ -26,7 +26,7 @@ defmodule Skillchecker.MixProject do
   def application do
     [
       mod: {Skillchecker.Application, []},
-      extra_applications: [:logger, :runtime_tools, :logger_file_backend]
+      extra_applications: [:logger, :runtime_tools]
     ]
   end
 
@@ -41,39 +41,41 @@ defmodule Skillchecker.MixProject do
     [
       {:bcrypt_elixir, "~> 3.0"},
       {:phoenix, "~> 1.7.14"},
-      {:phoenix_ecto, "~> 4.4"},
+      {:phoenix_ecto, "~> 4.5"},
       {:ecto_sql, "~> 3.10"},
       {:postgrex, ">= 0.0.0"},
-      {:phoenix_html, "~> 3.3"},
-      {:phoenix_live_reload, "~> 1.2", only: :dev},
-      {:phoenix_live_view, "~> 0.19.0"},
-      {:floki, ">= 0.30.0", only: :test},
-      {:phoenix_live_dashboard, "~> 0.8.0"},
-      {:esbuild, "~> 0.7", runtime: Mix.env() == :dev},
-      {:tailwind, "~> 0.2.0", runtime: Mix.env() == :dev},
+      {:phoenix_html, "~> 4.1"},
+      {:phoenix_live_view, "~> 1.0.0-rc.1", override: true},
+      {:phoenix_live_dashboard, "~> 0.8.3"},
       {:finch, "~> 0.13"},
-      {:telemetry_metrics, "~> 0.6"},
+      {:telemetry_metrics, "~> 1.0"},
       {:telemetry_poller, "~> 1.0"},
-      {:gettext, "~> 0.20"},
+      {:gettext, "~> 0.26.1"},
       {:jason, "~> 1.2"},
-      {:plug_cowboy, "~> 2.5"},
+      {:bandit, "~> 1.5"},
       {:plug_clacks, git: "https://github.com/hauleth/plug_clacks.git"},
       {:ueberauth, "~> 0.10"},
       {:ueberauth_eve_sso, git: "https://github.com/marcinruszkiewicz/ueberauth_eve_sso.git"},
       # {:ueberauth_eve_sso, path: "/Volumes/Projects/Aevi/ueberauth_eve_sso"},
       {:esi, git: "https://github.com/marcinruszkiewicz/esi.git"},
-      {:httpoison, "~> 1.6"},
+      {:httpoison, "~> 2.2"},
       {:yaml_elixir, "~> 2.9"},
       {:ex_cldr_units, "~> 3.16"},
       {:number, "~> 1.0"},
       {:ex_utils, "~> 0.1.7"},
-      {:credo, "~> 1.7", only: [:dev, :test], runtime: false},
-      {:assertions, "~> 0.20.1", only: :test},
-      {:excoveralls, "~> 0.10", only: :test},
-      {:logger_file_backend, "~> 0.0.14"},
       {:goth, "~> 1.4"},
       {:google_api_sheets, "~> 0.33"},
-      {:timex, "~> 3.7"}
+      {:timex, "~> 3.7"},
+      {:esbuild, "~> 0.8", runtime: Mix.env() == :dev},
+      {:tailwind, "~> 0.2", runtime: Mix.env() == :dev},
+      {:phoenix_live_reload, "~> 1.2", only: :dev},
+      {:credo, "~> 1.7", only: [:dev, :test], runtime: false},
+      {:styler, "~> 1.1", only: [:dev, :test], runtime: false},
+      {:doctor, "~> 0.21.0", only: [:dev, :test], runtime: false},
+      {:floki, ">= 0.30.0", only: :test},
+      {:assertions, "~> 0.20.1", only: :test},
+      {:excoveralls, "~> 0.10", only: :test},
+      {:phoenix_test, "~> 0.4.2", only: :test}
     ]
   end
 
