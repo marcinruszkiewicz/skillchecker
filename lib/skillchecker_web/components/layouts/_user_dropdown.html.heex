@@ -54,12 +54,21 @@
     class="absolute end-0 z-10 mt-2 w-40 rounded-lg shadow-xl ltr:origin-top-right rtl:origin-top-left"
   >
     <div class="rounded-lg bg-white py-2.5 ring-1 ring-black/5">
-      <.link href={~p"/admin/settings"} role="menuitem" class="group flex items-center justify-between gap-1.5 px-4 py-1.5 text-sm font-medium text-neutral-700 hover:bg-neutral-100 hover:text-neutral-950">
+      <.link
+        href={~p"/admin/settings"}
+        role="menuitem"
+        class="group flex items-center justify-between gap-1.5 px-4 py-1.5 text-sm font-medium text-neutral-700 hover:bg-neutral-100 hover:text-neutral-950"
+      >
         <span class="grow">Settings</span>
       </.link>
       <hr class="my-2.5 border-neutral-100" />
 
-      <.link href={~p"/admin/log_out"} method="delete" role="menuitem" class="group flex w-full items-center justify-between gap-1.5 px-4 py-1.5 text-start text-sm font-medium text-neutral-700 hover:bg-neutral-100 hover:text-neutral-950">
+      <.link
+        href={~p"/admin/log_out"}
+        method="delete"
+        role="menuitem"
+        class="group flex w-full items-center justify-between gap-1.5 px-4 py-1.5 text-start text-sm font-medium text-neutral-700 hover:bg-neutral-100 hover:text-neutral-950"
+      >
         <span class="grow">Sign out</span>
       </.link>
     </div>

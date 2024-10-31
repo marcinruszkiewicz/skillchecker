@@ -1,5 +1,7 @@
 defmodule SkillcheckerWeb.SkillsetLive.Show do
+  @moduledoc false
   use SkillcheckerWeb, :live_view
+
   import SkillcheckerWeb.SkillHelpers
 
   alias Skillchecker.Skillsets

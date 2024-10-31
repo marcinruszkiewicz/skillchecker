@@ -1,13 +1,14 @@
 defmodule Skillchecker.SkillsetsTest do
   use Skillchecker.DataCase
-  alias Skillchecker.Skillsets
-  alias Skillchecker.Characters
-  alias Skillchecker.Skillsets.Skillset
-  alias Skillchecker.Skillsets.Skillset.Skill
 
+  import Skillchecker.CharactersFixtures
   import Skillchecker.SkillsetsFixtures
   import Skillchecker.StaticFixtures
-  import Skillchecker.CharactersFixtures
+
+  alias Skillchecker.Characters
+  alias Skillchecker.Skillsets
+  alias Skillchecker.Skillsets.Skillset
+  alias Skillchecker.Skillsets.Skillset.Skill
 
   setup do
     %{
@@ -22,14 +23,14 @@ defmodule Skillchecker.SkillsetsTest do
   describe "list_skillsets/0" do
     test "returns all skillsets" do
       skillset = skillset_fixture()
-      assert_struct_in_list skillset, Skillsets.list_skillsets(), [:name, :skills]
+      assert_struct_in_list(skillset, Skillsets.list_skillsets(), [:name, :skills])
     end
   end
 
   describe "get_skillset!/1" do
     test "returns the skillset with given id" do
       skillset = skillset_fixture()
-      assert_structs_equal skillset, Skillsets.get_skillset!(skillset.id), [:name, :skills]
+      assert_structs_equal(skillset, Skillsets.get_skillset!(skillset.id), [:name, :skills])
     end
   end
 
@@ -39,10 +40,11 @@ defmodule Skillchecker.SkillsetsTest do
 
       assert {:ok, %Skillset{} = skillset} = Skillsets.create_skillset(valid_attrs)
       assert skillset.name == "some name"
+
       assert [
-        %Skill{name: "Amarr Battleship", required_level: 5},
-        %Skill{name: "Caldari Battleship", required_level: 5}
-      ] = skillset.skills
+               %Skill{name: "Amarr Battleship", required_level: 5},
+               %Skill{name: "Caldari Battleship", required_level: 5}
+             ] = skillset.skills
     end
 
     test "with invalid data returns error changeset" do
@@ -104,6 +106,7 @@ defmodule Skillchecker.SkillsetsTest do
     test "with both existing returns missing skills" do
       character = character_fixture()
       skillset = skillset_fixture()
+
       trained = [
         %{skill_id: 1, name: "Caldari Battleship", trained_level: 5, active_level: 5}
       ]
@@ -112,12 +115,12 @@ defmodule Skillchecker.SkillsetsTest do
         character
         |> Characters.change_character()
         |> Ecto.Changeset.put_embed(:skills, trained, [])
-        |> Repo.update
+        |> Repo.update()
 
       assert {trained, missing} = Skillsets.compare_with_character(skillset.id, character.id)
 
-      assert_struct_in_list %Skill{name: "Amarr Battleship", required_level: 5}, missing, [:name, :required_level]
-      assert_struct_in_list %Skill{name: "Caldari Battleship", required_level: 5}, trained, [:name, :required_level]
+      assert_struct_in_list(%Skill{name: "Amarr Battleship", required_level: 5}, missing, [:name, :required_level])
+      assert_struct_in_list(%Skill{name: "Caldari Battleship", required_level: 5}, trained, [:name, :required_level])
     end
   end
 end

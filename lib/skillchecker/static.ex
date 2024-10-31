@@ -4,15 +4,16 @@ defmodule Skillchecker.Static do
   """
 
   import Ecto.Query, warn: false
-  alias Skillchecker.Repo
 
-  alias Skillchecker.Static.Item
+  alias Skillchecker.Repo
   alias Skillchecker.Static.Group
+  alias Skillchecker.Static.Item
 
   def get_item_name(item_id) do
     case Repo.get_by(Item, eveid: item_id) do
       nil ->
         ""
+
       result ->
         result.name
     end
@@ -22,6 +23,7 @@ defmodule Skillchecker.Static do
     case Repo.get_by(Item, eveid: item_id) do
       nil ->
         ""
+
       item ->
         case Repo.get_by(Group, groupid: item.groupid) do
           nil -> ""
@@ -35,7 +37,7 @@ defmodule Skillchecker.Static do
       Item
       |> where(name: ^name)
       |> where(fragment("skill_multiplier IS NOT NULL"))
-      |> Repo.one
+      |> Repo.one()
 
     if result do
       result.eveid
@@ -142,8 +144,6 @@ defmodule Skillchecker.Static do
   def change_item(%Item{} = item, attrs \\ %{}) do
     Item.changeset(item, attrs)
   end
-
-  alias Skillchecker.Static.Group
 
   @doc """
   Returns the list of static_groups.

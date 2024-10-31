@@ -1,4 +1,5 @@
 defmodule SkillcheckerWeb.StatsLive.Attendance do
+  @moduledoc false
   use SkillcheckerWeb, :live_view
 
   alias Skillchecker.Stats

@@ -54,18 +54,18 @@ defmodule SkillcheckerWeb.SkillsetLiveTest do
       {:ok, index_live, _html} = live(conn, ~p"/admin/skillsets")
 
       assert index_live
-        |> element("#skillsets-#{skillset.id} a", "Edit")
-        |> render_click() =~ "Edit Skillset"
+             |> element("#skillsets-#{skillset.id} a", "Edit")
+             |> render_click() =~ "Edit Skillset"
 
       assert_patch(index_live, ~p"/admin/skillsets/#{skillset}/edit")
 
       assert index_live
-       |> form("#skillset-form", skillset: @invalid_attrs)
-       |> render_change() =~ "can&#39;t be blank"
+             |> form("#skillset-form", skillset: @invalid_attrs)
+             |> render_change() =~ "can&#39;t be blank"
 
       assert index_live
-       |> form("#skillset-form", skillset: @update_attrs)
-       |> render_submit()
+             |> form("#skillset-form", skillset: @update_attrs)
+             |> render_submit()
 
       assert_patch(index_live, ~p"/admin/skillsets")
 
@@ -95,18 +95,18 @@ defmodule SkillcheckerWeb.SkillsetLiveTest do
       {:ok, show_live, _html} = live(conn, ~p"/admin/skillsets/#{skillset}")
 
       assert show_live
-        |> element("a", "Edit")
-        |> render_click() =~ "Edit Skillset"
+             |> element("a", "Edit")
+             |> render_click() =~ "Edit Skillset"
 
       assert_patch(show_live, ~p"/admin/skillsets/#{skillset}/show/edit")
 
       assert show_live
-       |> form("#skillset-form", skillset: @invalid_attrs)
-       |> render_change() =~ "can&#39;t be blank"
+             |> form("#skillset-form", skillset: @invalid_attrs)
+             |> render_change() =~ "can&#39;t be blank"
 
       assert show_live
-       |> form("#skillset-form", skillset: @update_attrs)
-       |> render_submit()
+             |> form("#skillset-form", skillset: @update_attrs)
+             |> render_submit()
 
       assert_patch(show_live, ~p"/admin/skillsets/#{skillset}")
 

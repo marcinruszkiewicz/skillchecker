@@ -1,4 +1,5 @@
 defmodule SkillcheckerWeb.DashboardLive.CharacterFormComponent do
+  @moduledoc false
   use SkillcheckerWeb, :live_component
 
   alias Skillchecker.Characters

@@ -18,7 +18,12 @@
 
   <.back navigate={~p"/admin/skillsets"}>Back to skillsets</.back>
 
-  <.modal :if={@live_action == :edit} id="skillset-modal" show on_cancel={JS.patch(~p"/admin/skillsets/#{@skillset}")}>
+  <.modal
+    :if={@live_action == :edit}
+    id="skillset-modal"
+    show
+    on_cancel={JS.patch(~p"/admin/skillsets/#{@skillset}")}
+  >
     <.live_component
       module={SkillcheckerWeb.SkillsetLive.FormComponent}
       id={@skillset.id}

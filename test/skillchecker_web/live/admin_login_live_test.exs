@@ -43,9 +43,7 @@ defmodule SkillcheckerWeb.AdminLoginLiveTest do
       {:ok, lv, _html} = live(conn, ~p"/admin/log_in")
 
       form =
-        form(lv, "#login_form",
-          admin: %{name: "wrong", password: "123456", remember_me: true}
-        )
+        form(lv, "#login_form", admin: %{name: "wrong", password: "123456", remember_me: true})
 
       conn = submit_form(form, conn)
 

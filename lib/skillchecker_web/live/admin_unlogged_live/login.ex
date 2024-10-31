@@ -1,4 +1,5 @@
 defmodule SkillcheckerWeb.AdminUnloggedLive.Login do
+  @moduledoc false
   use SkillcheckerWeb, :live_view
 
   def mount(_params, _session, socket) do

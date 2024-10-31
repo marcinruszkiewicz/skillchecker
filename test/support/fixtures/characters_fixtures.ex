@@ -4,8 +4,8 @@ defmodule Skillchecker.CharactersFixtures do
   entities via the `Skillchecker.Characters` context.
   """
 
-  alias Skillchecker.Repo
   alias Skillchecker.Characters
+  alias Skillchecker.Repo
 
   @doc """
   Generate a character.
@@ -19,14 +19,14 @@ defmodule Skillchecker.CharactersFixtures do
         accepted: true,
         eveid: 42,
         name: "Test Goon",
-        owner_hash: "42zxc",
+        owner_hash: "42zxc"
       })
       |> Characters.add_character()
 
-      character
-      |> Characters.change_character()
-      |> Ecto.Changeset.put_embed(:data, data, [])
-      |> Repo.update
+    character
+    |> Characters.change_character()
+    |> Ecto.Changeset.put_embed(:data, data, [])
+    |> Repo.update()
 
     character
   end
@@ -40,14 +40,14 @@ defmodule Skillchecker.CharactersFixtures do
         accepted: false,
         eveid: 42,
         name: "Pending Goon",
-        owner_hash: "42zxc42",
+        owner_hash: "42zxc42"
       })
       |> Characters.add_character()
 
-      character
-      |> Characters.change_character()
-      |> Ecto.Changeset.put_embed(:data, data, [])
-      |> Repo.update
+    character
+    |> Characters.change_character()
+    |> Ecto.Changeset.put_embed(:data, data, [])
+    |> Repo.update()
 
     character
   end
@@ -63,16 +63,16 @@ defmodule Skillchecker.CharactersFixtures do
         accepted: true,
         eveid: 42,
         name: "Test Goon",
-        owner_hash: "42zxc",
+        owner_hash: "42zxc"
       })
       |> Characters.add_character()
 
-      character
-      |> Characters.change_character()
-      |> Ecto.Changeset.put_embed(:data, data, [])
-      |> Ecto.Changeset.put_embed(:skill_queue, queued, [])
-      |> Ecto.Changeset.put_embed(:skills, trained, [])
-      |> Repo.update
+    character
+    |> Characters.change_character()
+    |> Ecto.Changeset.put_embed(:data, data, [])
+    |> Ecto.Changeset.put_embed(:skill_queue, queued, [])
+    |> Ecto.Changeset.put_embed(:skills, trained, [])
+    |> Repo.update()
 
     character
   end

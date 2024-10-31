@@ -3,7 +3,10 @@ defmodule Skillchecker.Characters.Character do
   Character imported from EVE API
   """
   use Ecto.Schema
+
   import Ecto.Changeset
+
+  alias Skillchecker.Skillsets.Skillset
 
   schema "characters" do
     field :accepted, :boolean
@@ -17,9 +20,9 @@ defmodule Skillchecker.Characters.Character do
     field :refresh_token, :string
     field :expires_at, :utc_datetime
 
-    belongs_to :primary, Skillchecker.Skillsets.Skillset
-    belongs_to :secondary, Skillchecker.Skillsets.Skillset
-    belongs_to :tertiary, Skillchecker.Skillsets.Skillset
+    belongs_to :primary, Skillset
+    belongs_to :secondary, Skillset
+    belongs_to :tertiary, Skillset
 
     embeds_one :data, Data, on_replace: :update do
       field :bio, :string
@@ -60,12 +63,25 @@ defmodule Skillchecker.Characters.Character do
   @doc false
   def changeset(character, attrs) do
     character
-    |> cast(attrs, [:accepted, :name, :thumbnail_url, :picture_url, :owner_hash, :eveid, :expires_at, :token, :refresh_token, :primary_id, :secondary_id, :tertiary_id])
+    |> cast(attrs, [
+      :accepted,
+      :name,
+      :thumbnail_url,
+      :picture_url,
+      :owner_hash,
+      :eveid,
+      :expires_at,
+      :token,
+      :refresh_token,
+      :primary_id,
+      :secondary_id,
+      :tertiary_id
+    ])
     |> cast_embed(:data)
     |> validate_required([:name, :owner_hash, :eveid])
   end
 
   def token_expired?(character) do
-    DateTime.diff(character.expires_at, DateTime.utc_now) <= 0
+    DateTime.diff(character.expires_at, DateTime.utc_now()) <= 0
   end
 end

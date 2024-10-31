@@ -15,9 +15,10 @@ defmodule SkillcheckerWeb.CoreComponents do
   Icons are provided by [heroicons](https://heroicons.com). See `icon/1` for usage.
   """
   use Phoenix.Component
-
-  alias Phoenix.LiveView.JS
   use Gettext, backend: SkillcheckerWeb.Gettext
+
+  alias Phoenix.HTML.FormField
+  alias Phoenix.LiveView.JS
 
   @doc """
   Renders a modal.
@@ -271,8 +272,7 @@ defmodule SkillcheckerWeb.CoreComponents do
     values: ~w(checkbox color date datetime-local email file hidden month number password
                range radio search select tel text textarea time url week)
 
-  attr :field, Phoenix.HTML.FormField,
-    doc: "a form field struct retrieved from the form, for example: @form[:email]"
+  attr :field, FormField, doc: "a form field struct retrieved from the form, for example: @form[:email]"
 
   attr :errors, :list, default: []
   attr :checked, :boolean, doc: "the checked flag for checkbox inputs"
@@ -280,13 +280,12 @@ defmodule SkillcheckerWeb.CoreComponents do
   attr :options, :list, doc: "the options to pass to Phoenix.HTML.Form.options_for_select/2"
   attr :multiple, :boolean, default: false, doc: "the multiple flag for select inputs"
 
-  attr :rest, :global,
-    include: ~w(accept autocomplete capture cols disabled form list max maxlength min minlength
+  attr :rest, :global, include: ~w(accept autocomplete capture cols disabled form list max maxlength min minlength
                 multiple pattern placeholder readonly required rows size step)
 
   slot :inner_block
 
-  def input(%{field: %Phoenix.HTML.FormField{} = field} = assigns) do
+  def input(%{field: %FormField{} = field} = assigns) do
     assigns
     |> assign(field: nil, id: assigns.id || field.id)
     |> assign(:errors, Enum.map(field.errors, &translate_error(&1)))
@@ -500,16 +499,33 @@ defmodule SkillcheckerWeb.CoreComponents do
       <table class="min-w-full align-middle text-sm">
         <thead class="border-b-2 border-neutral-100">
           <tr>
-            <th :for={col <- @col} class="px-3 py-2 text-start text-sm font-semibold uppercase tracking-wider text-neutral-700"><%= col[:label] %></th>
-            <th class="min-w-[300px] p-3 py-2 text-end text-sm font-semibold uppercase tracking-wider text-neutral-700"><span class="sr-only"><%= gettext("Actions") %></span></th>
+            <th
+              :for={col <- @col}
+              class="px-3 py-2 text-start text-sm font-semibold uppercase tracking-wider text-neutral-700"
+            >
+              <%= col[:label] %>
+            </th>
+            <th class="min-w-[300px] p-3 py-2 text-end text-sm font-semibold uppercase tracking-wider text-neutral-700">
+              <span class="sr-only"><%= gettext("Actions") %></span>
+            </th>
           </tr>
         </thead>
-        <tbody id={@id} phx-update={match?(%Phoenix.LiveView.LiveStream{}, @rows) && "stream"} >
-          <tr :for={row <- @rows} id={@row_id && @row_id.(row)} class={["border-b border-neutral-100 hover:bg-neutral-50", @row_class && @row_class.(row) && "bg-rose-50"]}>
+        <tbody id={@id} phx-update={match?(%Phoenix.LiveView.LiveStream{}, @rows) && "stream"}>
+          <tr
+            :for={row <- @rows}
+            id={@row_id && @row_id.(row)}
+            class={[
+              "border-b border-neutral-100 hover:bg-neutral-50",
+              @row_class && @row_class.(row) && "bg-rose-50"
+            ]}
+          >
             <td
               :for={col <- @col}
               phx-click={@row_click && @row_click.(row)}
-              class={["p-3 text-start font-semibold text-neutral-600", @row_click && "hover:cursor-pointer"]}
+              class={[
+                "p-3 text-start font-semibold text-neutral-600",
+                @row_click && "hover:cursor-pointer"
+              ]}
             >
               <%= render_slot(col, @row_item.(row)) %>
             </td>
@@ -614,8 +630,7 @@ defmodule SkillcheckerWeb.CoreComponents do
     JS.show(js,
       to: selector,
       transition:
-        {"transition-all transform ease-out duration-300",
-         "opacity-0 translate-y-4 sm:translate-y-0 sm:scale-95",
+        {"transition-all transform ease-out duration-300", "opacity-0 translate-y-4 sm:translate-y-0 sm:scale-95",
          "opacity-100 translate-y-0 sm:scale-100"}
     )
   end
@@ -625,8 +640,7 @@ defmodule SkillcheckerWeb.CoreComponents do
       to: selector,
       time: 200,
       transition:
-        {"transition-all transform ease-in duration-200",
-         "opacity-100 translate-y-0 sm:scale-100",
+        {"transition-all transform ease-in duration-200", "opacity-100 translate-y-0 sm:scale-100",
          "opacity-0 translate-y-4 sm:translate-y-0 sm:scale-95"}
     )
   end

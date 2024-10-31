@@ -1,10 +1,10 @@
 defmodule SkillcheckerWeb.RequireAcceptedAdminTest do
   use SkillcheckerWeb.ConnCase, async: true
 
-  alias SkillcheckerWeb.RequireAcceptedAdmin
-  alias Skillchecker.Accounts
-
   import Skillchecker.AccountsFixtures
+
+  alias Skillchecker.Accounts
+  alias SkillcheckerWeb.RequireAcceptedAdmin
 
   setup %{conn: conn} do
     conn =
@@ -20,8 +20,7 @@ defmodule SkillcheckerWeb.RequireAcceptedAdminTest do
       admin_token = Accounts.generate_admin_session_token(accepted)
 
       conn =
-        conn
-        |> put_session(:admin_token, admin_token)
+        put_session(conn, :admin_token, admin_token)
 
       assert conn == RequireAcceptedAdmin.call(conn, %{})
     end

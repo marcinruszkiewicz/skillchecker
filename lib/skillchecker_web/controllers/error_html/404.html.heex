@@ -7,20 +7,31 @@
     <.live_title suffix=" · SkillChecker">
       404
     </.live_title>
-    <script src="https://cdn.jsdelivr.net/gh/alpinejs/alpine@v2.x.x/dist/alpine.min.js" defer ></script>
+    <script src="https://cdn.jsdelivr.net/gh/alpinejs/alpine@v2.x.x/dist/alpine.min.js" defer>
+    </script>
     <link rel="preconnect" href="https://fonts.bunny.net" />
-    <link href="https://fonts.bunny.net/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet" />
+    <link
+      href="https://fonts.bunny.net/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap"
+      rel="stylesheet"
+    />
     <link phx-track-static rel="stylesheet" href={~p"/assets/app.css"} />
-    <script defer phx-track-static type="text/javascript" src={~p"/assets/app.js"}></script>
-    <script phx-track-static type="text/javascript" src={~p"/assets/init-alpine.js"}></script>
+    <script defer phx-track-static type="text/javascript" src={~p"/assets/app.js"}>
+    </script>
+    <script phx-track-static type="text/javascript" src={~p"/assets/init-alpine.js"}>
+    </script>
   </head>
   <body>
     <div x-data="{ userDropdownOpen: false, notificationsDropdownOpen: false, mobileNavOpen: false }">
-      <div id="page-container" class="mx-auto flex min-h-screen w-full min-w-[320px] flex-col bg-white">
+      <div
+        id="page-container"
+        class="mx-auto flex min-h-screen w-full min-w-[320px] flex-col bg-white"
+      >
         <main id="page-content" class="flex max-w-full flex-auto flex-col">
           <.admin_header class="text-center">
             Record Not Found
-            <:subtitle>Something that you were looking for is not here. Try looking for something that is here instead.</:subtitle>
+            <:subtitle>
+              Something that you were looking for is not here. Try looking for something that is here instead.
+            </:subtitle>
           </.admin_header>
         </main>
       </div>

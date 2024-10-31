@@ -31,11 +31,21 @@
           <.link patch={~p"/admin/characters/#{character}/edit"}>Edit</.link>
         </:action>
         <:action :let={{id, character}}>
-          <.link phx-click={JS.push("delete", value: %{id: character.id}) |> hide("##{id}")} data-confirm="Are you sure?">Delete</.link>
+          <.link
+            phx-click={JS.push("delete", value: %{id: character.id}) |> hide("##{id}")}
+            data-confirm="Are you sure?"
+          >
+            Delete
+          </.link>
         </:action>
       </.table>
 
-      <.modal :if={@live_action in [:new, :edit]} id="character-modal" show on_cancel={JS.patch(~p"/admin/characters")}>
+      <.modal
+        :if={@live_action in [:new, :edit]}
+        id="character-modal"
+        show
+        on_cancel={JS.patch(~p"/admin/characters")}
+      >
         <.live_component
           module={SkillcheckerWeb.CharacterLive.FormComponent}
           id={@character.id || :new}

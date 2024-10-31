@@ -13,20 +13,22 @@ defmodule Skillchecker.Characters.RefreshToken do
 
   def refresh_token(character) do
     character.refresh_token
-    |> get_token
-    |> parse_response
+    |> get_token()
+    |> parse_response()
     |> update_token(character)
   end
 
   def get_token(refresh_token) do
     data = %{grant_type: "refresh_token", refresh_token: refresh_token}
     postdata = URI.encode_query(data)
+
     headers = [
-      "Accept": "application/json",
+      Accept: "application/json",
       "Content-Type": "application/x-www-form-urlencoded",
       Host: "login.eveonline.com",
       Authorization: auth_header()
     ]
+
     url = "https://login.eveonline.com/v2/oauth/token"
 
     response = HTTPoison.post(url, postdata, headers)
@@ -35,13 +37,14 @@ defmodule Skillchecker.Characters.RefreshToken do
 
   def parse_response({:error, _reason}), do: %{}
   def parse_response({:ok, %HTTPoison.Response{status_code: 400}}), do: %{}
+
   def parse_response({:ok, %HTTPoison.Response{status_code: 200, body: body}}) do
     %{
       "access_token" => token,
       "expires_in" => expiry_seconds
-      } = Poison.decode!(body)
+    } = Poison.decode!(body)
 
-    expires_at = DateTime.utc_now |> DateTime.add(expiry_seconds, :second)
+    expires_at = DateTime.add(DateTime.utc_now(), expiry_seconds, :second)
 
     %{token: token, expires_at: expires_at}
   end
@@ -49,6 +52,6 @@ defmodule Skillchecker.Characters.RefreshToken do
   def update_token(attrs, character) do
     character
     |> Character.changeset(attrs)
-    |> Repo.update
+    |> Repo.update()
   end
 end

@@ -1,4 +1,5 @@
 defmodule SkillcheckerWeb.SkillsetLive.FormComponent do
+  @moduledoc false
   use SkillcheckerWeb, :live_component
 
   alias Skillchecker.Skillsets
@@ -35,6 +36,7 @@ defmodule SkillcheckerWeb.SkillsetLive.FormComponent do
     skills = Skillset.export_skill_list(skillset.skills)
 
     changeset = Skillsets.change_skillset(skillset, %{skill_list: skills})
+
     {:ok,
      socket
      |> assign(assigns)

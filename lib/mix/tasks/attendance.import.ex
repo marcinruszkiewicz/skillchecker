@@ -1,10 +1,12 @@
 defmodule Mix.Tasks.Attendance.Import do
+  @shortdoc "import attendance from google sheets"
+
   @moduledoc """
   Console task for importing the attendance data.
   """
   use Mix.Task
 
-  @shortdoc "import attendance from google sheets"
+  alias GoogleApi.Sheets.V4.Api.Spreadsheets
 
   def run(_) do
     Mix.Task.run("app.start")
@@ -17,12 +19,13 @@ defmodule Mix.Tasks.Attendance.Import do
     {:ok, token} = Goth.Token.for_scope("https://www.googleapis.com/auth/spreadsheets")
     conn = GoogleApi.Sheets.V4.Connection.new(token.token)
 
-    {:ok, response} = GoogleApi.Sheets.V4.Api.Spreadsheets.sheets_spreadsheets_get(conn, practice_tracker_id)
+    {:ok, response} = Spreadsheets.sheets_spreadsheets_get(conn, practice_tracker_id)
 
     response.sheets
     |> get_practice_names()
     |> Enum.each(fn name ->
-      get_practice_data(name, conn, practice_tracker_id)
+      name
+      |> get_practice_data(conn, practice_tracker_id)
       |> Enum.each(fn att ->
         Skillchecker.Repo.insert!(att)
       end)
@@ -40,7 +43,7 @@ defmodule Mix.Tasks.Attendance.Import do
   defp practice_date(sheet_name) do
     sheet_name
     |> String.split(" -")
-    |> List.first
+    |> List.first()
     |> Timex.parse!("{D} {Mfull}")
     |> Timex.set(year: 2024)
     |> Timex.to_date()
@@ -50,8 +53,8 @@ defmodule Mix.Tasks.Attendance.Import do
     range = practice_attendance_range(sheet_name)
     date = practice_date(sheet_name)
 
-    {:ok, response}
-      = GoogleApi.Sheets.V4.Api.Spreadsheets.sheets_spreadsheets_values_get(conn, practice_tracker_id, range)
+    {:ok, response} =
+      Spreadsheets.sheets_spreadsheets_values_get(conn, practice_tracker_id, range)
 
     response.values
     |> Enum.reject(&Enum.empty?/1)
@@ -59,7 +62,7 @@ defmodule Mix.Tasks.Attendance.Import do
     |> Enum.map(fn row ->
       %Skillchecker.Stats.Attendance{
         name: List.first(row),
-        times_flown: List.last(row) |> String.to_integer(),
+        times_flown: row |> List.last() |> String.to_integer(),
         practice_date: date,
         sheet_name: sheet_name
       }

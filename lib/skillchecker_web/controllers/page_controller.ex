@@ -7,22 +7,21 @@ defmodule SkillcheckerWeb.PageController do
 
       redirect_to_character(conn, character)
     else
-      render conn, :user_landing, layout: false
+      render(conn, :user_landing, layout: false)
     end
   end
 
   def admin_landing(conn, _params) do
-    render conn, :admin_landing, layout: false
+    render(conn, :admin_landing, layout: false)
   end
 
   def admin_waiting(conn, _params) do
-    render conn, :admin_waiting, layout: false
+    render(conn, :admin_waiting, layout: false)
   end
 
   def user_waiting(conn, %{"id" => id} = _params) do
-    render conn, :user_waiting, layout: false, id: id
+    render(conn, :user_waiting, layout: false, id: id)
   end
-
 
   defp redirect_to_character(conn, nil) do
     conn =
@@ -30,17 +29,14 @@ defmodule SkillcheckerWeb.PageController do
       |> configure_session(renew: true)
       |> clear_session()
 
-    render conn, :user_landing, layout: false
+    render(conn, :user_landing, layout: false)
   end
 
   defp redirect_to_character(conn, character) do
-    case character.accepted do
-      false ->
-        conn
-        |> redirect(to: ~p"/waiting/#{character}")
-      true ->
-        conn
-        |> redirect(to: ~p"/characters/#{character}")
+    if character.accepted do
+      redirect(conn, to: ~p"/characters/#{character}")
+    else
+      redirect(conn, to: ~p"/waiting/#{character}")
     end
   end
 end

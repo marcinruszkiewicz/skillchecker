@@ -4,9 +4,10 @@ defmodule Skillchecker.Accounts do
   """
 
   import Ecto.Query, warn: false
-  alias Skillchecker.Repo
 
-  alias Skillchecker.Accounts.{Admin, AdminToken}
+  alias Skillchecker.Accounts.Admin
+  alias Skillchecker.Accounts.AdminToken
+  alias Skillchecker.Repo
 
   ## Database getters
 

@@ -1,14 +1,14 @@
 defmodule SkillcheckerWeb.SkillHelpersTest do
   use Skillchecker.DataCase
 
+  import Skillchecker.CharactersFixtures
+  import Skillchecker.SkillsetsFixtures
+  import Skillchecker.StaticFixtures
+
   alias Skillchecker.Characters
   alias Skillchecker.Characters.Character
   alias Skillchecker.Skillsets.Skillset
   alias SkillcheckerWeb.SkillHelpers
-
-  import Skillchecker.CharactersFixtures
-  import Skillchecker.SkillsetsFixtures
-  import Skillchecker.StaticFixtures
 
   setup do
     %{
@@ -27,20 +27,20 @@ defmodule SkillcheckerWeb.SkillHelpersTest do
         character
         |> Characters.change_character()
         |> Ecto.Changeset.put_embed(:data, data, [])
-        |> Repo.update
+        |> Repo.update()
 
       assert SkillHelpers.non_gsf?(character) == false
     end
 
     test "other character returns false" do
-      data = %{corporation: "Testwaffe", alliance: "GSF", alliance_id: 98786}
+      data = %{corporation: "Testwaffe", alliance: "GSF", alliance_id: 98_786}
       character = character_fixture()
 
       {:ok, character} =
         character
         |> Characters.change_character()
         |> Ecto.Changeset.put_embed(:data, data, [])
-        |> Repo.update
+        |> Repo.update()
 
       assert SkillHelpers.non_gsf?(character) == true
     end
@@ -75,7 +75,7 @@ defmodule SkillcheckerWeb.SkillHelpersTest do
 
   describe "display_skill_points/1" do
     test "it humanizes the number" do
-      assert SkillHelpers.display_skill_points(1234567890) == "1.23 Billion"
+      assert SkillHelpers.display_skill_points(1_234_567_890) == "1.23 Billion"
     end
 
     test "it returns empty string if non-number passed" do
@@ -85,7 +85,7 @@ defmodule SkillcheckerWeb.SkillHelpersTest do
 
   describe "display_skill_points_exact/1" do
     test "it delimits the number" do
-      assert SkillHelpers.display_skill_points_exact(1234567890) == "1,234,567,890"
+      assert SkillHelpers.display_skill_points_exact(1_234_567_890) == "1,234,567,890"
     end
 
     test "it returns empty string if non-number passed" do
@@ -105,15 +105,15 @@ defmodule SkillcheckerWeb.SkillHelpersTest do
     end
 
     test "returns true if skill finished before now" do
-      last_week = DateTime.utc_now |> DateTime.add(-7, :day)
-      skill = %Character.QueuedSkill{finish_date: last_week }
+      last_week = DateTime.add(DateTime.utc_now(), -7, :day)
+      skill = %Character.QueuedSkill{finish_date: last_week}
 
       assert SkillHelpers.skill_training_disabled?(skill) == true
     end
 
     test "returns false if skill is training" do
-      next_week = DateTime.utc_now |> DateTime.add(7, :day)
-      skill = %Character.QueuedSkill{finish_date: next_week }
+      next_week = DateTime.add(DateTime.utc_now(), 7, :day)
+      skill = %Character.QueuedSkill{finish_date: next_week}
 
       assert SkillHelpers.skill_training_disabled?(skill) == false
     end
@@ -157,7 +157,13 @@ defmodule SkillcheckerWeb.SkillHelpersTest do
 
   describe "display_skill_percent/1" do
     test "returns % of skill trained" do
-      skill = %Character.QueuedSkill{finished_level: nil, name: "Test Skill", training_start_sp: 50, level_start_sp: 0, level_end_sp: 100}
+      skill = %Character.QueuedSkill{
+        finished_level: nil,
+        name: "Test Skill",
+        training_start_sp: 50,
+        level_start_sp: 0,
+        level_end_sp: 100
+      }
 
       assert SkillHelpers.display_skill_percent(skill) == 50.0
     end
@@ -169,7 +175,13 @@ defmodule SkillcheckerWeb.SkillHelpersTest do
 
   describe "display_sp_left/1" do
     test "returns % of skill trained" do
-      skill = %Character.QueuedSkill{finished_level: nil, name: "Test Skill", training_start_sp: 50, level_start_sp: 0, level_end_sp: 1000}
+      skill = %Character.QueuedSkill{
+        finished_level: nil,
+        name: "Test Skill",
+        training_start_sp: 50,
+        level_start_sp: 0,
+        level_end_sp: 1000
+      }
 
       assert SkillHelpers.display_sp_left(skill) == "950.00"
     end
@@ -181,7 +193,7 @@ defmodule SkillcheckerWeb.SkillHelpersTest do
 
   describe "display_skill_time/1" do
     test "returns % of skill trained" do
-      next_week = DateTime.utc_now |> DateTime.add(7, :day)
+      next_week = DateTime.add(DateTime.utc_now(), 7, :day)
       skill = %Character.QueuedSkill{finish_date: next_week}
 
       assert SkillHelpers.display_skill_time(skill) == "6 days, 23 hours, and 60 minutes"
@@ -201,20 +213,20 @@ defmodule SkillcheckerWeb.SkillHelpersTest do
     test "shows how many sp the character still needs" do
       character = character_fixture()
       skills = [%Character.Skill{skill_id: 1, skill_points: 100}]
-      skill = %Skillset.Skill{skill_id: 1, required_level: 3 }
+      skill = %Skillset.Skill{skill_id: 1, required_level: 3}
 
       {:ok, character} =
         character
         |> Characters.change_character()
         |> Ecto.Changeset.put_embed(:skills, skills, [])
-        |> Repo.update
+        |> Repo.update()
 
       assert SkillHelpers.required_skill_sp(character, skill) == 23_900
     end
 
     test "character doesn't have the skill" do
       character = character_fixture()
-      skill = %Skillset.Skill{skill_id: 1, required_level: 3 }
+      skill = %Skillset.Skill{skill_id: 1, required_level: 3}
 
       assert SkillHelpers.required_skill_sp(character, skill) == 24_000
     end
@@ -224,13 +236,13 @@ defmodule SkillcheckerWeb.SkillHelpersTest do
     test "shows how many sp the character still needs" do
       character = character_fixture()
       skills = [%Character.Skill{skill_id: 1, skill_points: 100}]
-      skill = %Skillset.Skill{skill_id: 1, required_level: 3 }
+      skill = %Skillset.Skill{skill_id: 1, required_level: 3}
 
       {:ok, character} =
         character
         |> Characters.change_character()
         |> Ecto.Changeset.put_embed(:skills, skills, [])
-        |> Repo.update
+        |> Repo.update()
 
       assert SkillHelpers.display_skillset_required_sp(character, skill) == "23 900"
     end
@@ -240,20 +252,20 @@ defmodule SkillcheckerWeb.SkillHelpersTest do
     test "shows how many sp the character still needs" do
       character = character_fixture()
       skills = [%Character.Skill{skill_id: 1, trained_level: 4}]
-      skill = %Skillset.Skill{skill_id: 1, required_level: 5 }
+      skill = %Skillset.Skill{skill_id: 1, required_level: 5}
 
       {:ok, character} =
         character
         |> Characters.change_character()
         |> Ecto.Changeset.put_embed(:skills, skills, [])
-        |> Repo.update
+        |> Repo.update()
 
       assert SkillHelpers.display_skillset_trained_level(character, skill) == "Trained level: IV"
     end
 
     test "character doesn't have the skill" do
       character = character_fixture()
-      skill = %Skillset.Skill{skill_id: 1, required_level: 3 }
+      skill = %Skillset.Skill{skill_id: 1, required_level: 3}
 
       assert SkillHelpers.display_skillset_trained_level(character, skill) == "Not trained"
     end

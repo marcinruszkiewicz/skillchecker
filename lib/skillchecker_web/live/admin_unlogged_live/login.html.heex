@@ -2,8 +2,18 @@
   <div class="flex-1 h-full max-w-4xl mx-auto overflow-hidden bg-white rounded-lg shadow-xl dark:bg-gray-800">
     <div class="flex flex-col overflow-y-auto md:flex-row">
       <div class="h-32 md:h-auto md:w-1/2">
-        <img aria-hidden="true" class="object-cover w-full h-full dark:hidden" src="/images/login-office.jpeg" alt="Office" />
-        <img aria-hidden="true" class="hidden object-cover w-full h-full dark:block" src="/images/login-office-dark.jpeg" alt="Office" />
+        <img
+          aria-hidden="true"
+          class="object-cover w-full h-full dark:hidden"
+          src="/images/login-office.jpeg"
+          alt="Office"
+        />
+        <img
+          aria-hidden="true"
+          class="hidden object-cover w-full h-full dark:block"
+          src="/images/login-office-dark.jpeg"
+          alt="Office"
+        />
       </div>
       <div class="flex items-center justify-center p-6 sm:p-12 md:w-1/2">
         <div class="w-full">
@@ -11,12 +21,23 @@
             Log in to account
           </h1>
 
-          <p>Don't have an account? <.link navigate={~p"/admin/register"} class="font-semibold text-brand hover:underline">Sign up</.link> for an account now.</p>
+          <p>
+            Don't have an account?
+            <.link navigate={~p"/admin/register"} class="font-semibold text-brand hover:underline">
+              Sign up
+            </.link>
+            for an account now.
+          </p>
 
           <hr class="my-8" />
 
           <div class="mt-4">
-            <.simple_form for={@form} id="login_form" action={~p"/admin/log_in"} phx-update="ignore">
+            <.simple_form
+              for={@form}
+              id="login_form"
+              action={~p"/admin/log_in"}
+              phx-update="ignore"
+            >
               <.input field={@form[:name]} type="text" label="Name" required />
               <.input field={@form[:password]} type="password" label="Password" required />
 

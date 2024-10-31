@@ -59,13 +59,9 @@ defmodule SkillcheckerWeb.AdminSessionControllerTest do
 
     test "login following registration", %{conn: conn, admin: admin} do
       conn =
-        conn
-        |> post(~p"/admin/log_in", %{
+        post(conn, ~p"/admin/log_in", %{
           "_action" => "registered",
-          "admin" => %{
-            "name" => admin.name,
-            "password" => valid_admin_password()
-          }
+          "admin" => %{"name" => admin.name, "password" => valid_admin_password()}
         })
 
       assert redirected_to(conn) == ~p"/admin/dashboard"
@@ -74,13 +70,9 @@ defmodule SkillcheckerWeb.AdminSessionControllerTest do
 
     test "login following password update", %{conn: conn, admin: admin} do
       conn =
-        conn
-        |> post(~p"/admin/log_in", %{
+        post(conn, ~p"/admin/log_in", %{
           "_action" => "password_updated",
-          "admin" => %{
-            "name" => admin.name,
-            "password" => valid_admin_password()
-          }
+          "admin" => %{"name" => admin.name, "password" => valid_admin_password()}
         })
 
       assert redirected_to(conn) == ~p"/admin/settings"

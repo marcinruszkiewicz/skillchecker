@@ -4,9 +4,9 @@ defmodule Skillchecker.Characters do
   """
 
   import Ecto.Query, warn: false
-  alias Skillchecker.Repo
 
   alias Skillchecker.Characters.Character
+  alias Skillchecker.Repo
 
   @doc """
   Returns the list of characters.
@@ -79,12 +79,14 @@ defmodule Skillchecker.Characters do
     case existing do
       nil ->
         insert_character(attrs)
+
       %Character{} ->
         existing
     end
   end
 
   def get_character_by_owner_hash(nil), do: nil
+
   def get_character_by_owner_hash(owner_hash) do
     Repo.get_by(Character, owner_hash: owner_hash)
   end
@@ -98,6 +100,7 @@ defmodule Skillchecker.Characters do
     case character do
       {:ok, character} ->
         character
+
       {:error, changeset} ->
         {:error, changeset}
     end

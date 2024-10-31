@@ -1,8 +1,11 @@
 defmodule SkillcheckerWeb.CharacterLive.Show do
+  @moduledoc false
   use SkillcheckerWeb, :live_view
+
   import SkillcheckerWeb.SkillHelpers
 
-  alias Skillchecker.{Characters, Skillsets}
+  alias Skillchecker.Characters
+  alias Skillchecker.Skillsets
 
   @impl true
   def mount(_params, _session, socket) do
@@ -18,7 +21,6 @@ defmodule SkillcheckerWeb.CharacterLive.Show do
       |> assign(:character, Characters.get_character!(id))
       |> assign(:skillsets, Skillsets.list_skillsets())
     }
-
   end
 
   defp page_title(:show), do: "Show Character"

@@ -1,10 +1,16 @@
 <div x-cloak x-show="mobileNavOpen" class="lg:hidden">
   <nav class="flex flex-col gap-2 border-t border-neutral-200 py-4">
-    <.link href={~p"/admin/dashboard"} class="group flex items-center gap-2 rounded-lg bg-neutral-100 px-3 py-1.5 text-sm font-medium text-neutral-950">
+    <.link
+      href={~p"/admin/dashboard"}
+      class="group flex items-center gap-2 rounded-lg bg-neutral-100 px-3 py-1.5 text-sm font-medium text-neutral-950"
+    >
       <span>Dashboard</span>
     </.link>
 
-    <.link href={~p"/admin/admins"} class="group flex items-center gap-2 rounded-lg px-3 py-1.5 text-sm font-medium text-neutral-800 hover:bg-neutral-100 hover:text-neutral-950 active:bg-neutral-50">
+    <.link
+      href={~p"/admin/admins"}
+      class="group flex items-center gap-2 rounded-lg px-3 py-1.5 text-sm font-medium text-neutral-800 hover:bg-neutral-100 hover:text-neutral-950 active:bg-neutral-50"
+    >
       <span>Administrators</span>
     </.link>
   </nav>

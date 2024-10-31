@@ -53,18 +53,18 @@ config :phoenix, :json_library, Jason
 
 config :ueberauth, Ueberauth,
   providers: [
-    evesso: {Ueberauth.Strategy.EVESSO, [
-        default_scope: "publicData esi-skills.read_skills.v1 esi-skills.read_skillqueue.v1"
-      ]
-    }
+    evesso:
+      {Ueberauth.Strategy.EVESSO,
+       [
+         default_scope: "publicData esi-skills.read_skills.v1 esi-skills.read_skillqueue.v1"
+       ]}
   ]
 
 config :ueberauth, Ueberauth.Strategy.EVESSO.OAuth,
   client_id: System.get_env("ATS_ESI_CLIENT_ID"),
   client_secret: System.get_env("ATS_ESI_CLIENT_SECRET")
 
-config :skillchecker, :ex_cldr_units,
-  default_backend: Skillchecker.Cldr
+config :skillchecker, :ex_cldr_units, default_backend: Skillchecker.Cldr
 
 config :oauth2, debug: true
 

@@ -2,6 +2,7 @@ defmodule SkillcheckerWeb.Router do
   use SkillcheckerWeb, :router
 
   import SkillcheckerWeb.AdminAuth
+
   alias SkillcheckerWeb.RequireAcceptedAdmin
 
   pipeline :browser do
@@ -89,7 +90,6 @@ defmodule SkillcheckerWeb.Router do
 
     live_session :require_authenticated_admin,
       on_mount: [{SkillcheckerWeb.AdminAuth, :ensure_authenticated}] do
-
       live "/dashboard", DashboardLive.Dashboard, :dashboard
       live "/dashboard/characters/:id/edit", DashboardLive.Dashboard, :edit_character
       live "/dashboard/admins/:id/edit", DashboardLive.Dashboard, :edit_admin
@@ -120,7 +120,6 @@ defmodule SkillcheckerWeb.Router do
 
       live "/stats/attendance", StatsLive.Attendance, :attendance
     end
-
   end
 
   scope "/", SkillcheckerWeb do

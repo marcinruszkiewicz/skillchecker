@@ -4,9 +4,9 @@ defmodule Skillchecker.Skillsets do
   """
 
   import Ecto.Query, warn: false
-  alias Skillchecker.Repo
 
   alias Skillchecker.Characters
+  alias Skillchecker.Repo
   alias Skillchecker.Skillsets.Skillset
 
   @doc """
@@ -122,11 +122,11 @@ defmodule Skillchecker.Skillsets do
     Skillset.changeset(skillset, attrs)
   end
 
-
   def compare_with_character(id, character_id) do
     case Characters.get_character(character_id) do
       nil ->
         {[], []}
+
       character ->
         get_trained_skills(character.skills, id)
     end
@@ -136,14 +136,13 @@ defmodule Skillchecker.Skillsets do
     case get_skillset(skillset_id) do
       nil ->
         {[], []}
+
       skillset ->
         trained =
-          skillset.skills
-          |> Enum.filter(fn s -> trained_enough?(trained_skills, s) end)
+          Enum.filter(skillset.skills, fn s -> trained_enough?(trained_skills, s) end)
 
         required =
-          skillset.skills
-          |> Enum.reject(fn s -> trained_enough?(trained_skills, s) end)
+          Enum.reject(skillset.skills, fn s -> trained_enough?(trained_skills, s) end)
 
         {trained, required}
     end
@@ -151,8 +150,7 @@ defmodule Skillchecker.Skillsets do
 
   defp trained_enough?(trained_skills, skill) do
     trained_skill =
-      trained_skills
-      |> Enum.find(fn m -> m.skill_id == skill.skill_id end)
+      Enum.find(trained_skills, fn m -> m.skill_id == skill.skill_id end)
 
     if trained_skill do
       trained_skill.trained_level >= skill.required_level

@@ -1,16 +1,17 @@
 defmodule Skillchecker.CharactersTest do
   use Skillchecker.DataCase
 
+  import Skillchecker.CharactersFixtures
+
   alias Skillchecker.Characters
   alias Skillchecker.Characters.Character
-  import Skillchecker.CharactersFixtures
 
   @invalid_attrs %{name: nil, eveid: nil, accepted: nil, owner_hash: nil}
 
   describe "list_characters/0" do
     test "returns all characters" do
       character = character_fixture()
-      assert_struct_in_list character, Characters.list_characters, [:eveid, :name, :owner_hash]
+      assert_struct_in_list(character, Characters.list_characters(), [:eveid, :name, :owner_hash])
     end
   end
 
@@ -19,18 +20,19 @@ defmodule Skillchecker.CharactersTest do
       character = character_fixture()
       pending = pending_character_fixture()
 
-      assert_struct_in_list pending, Characters.list_pending_characters, [:eveid, :name, :owner_hash]
+      assert_struct_in_list(pending, Characters.list_pending_characters(), [:eveid, :name, :owner_hash])
+
       refute Enum.any?(
-        Characters.list_pending_characters,
-        fn(x) -> x.owner_hash == character.owner_hash end
-      )
+               Characters.list_pending_characters(),
+               fn x -> x.owner_hash == character.owner_hash end
+             )
     end
   end
 
   describe "get_character!/1" do
     test "returns the character with given id" do
       character = character_fixture()
-      assert_structs_equal character, Characters.get_character!(character.id), [:eveid, :name, :owner_hash]
+      assert_structs_equal(character, Characters.get_character!(character.id), [:eveid, :name, :owner_hash])
     end
   end
 
@@ -76,7 +78,7 @@ defmodule Skillchecker.CharactersTest do
     test "with invalid data returns error changeset" do
       character = character_fixture()
       assert {:error, %Ecto.Changeset{}} = Characters.update_character(character, @invalid_attrs)
-      assert_structs_equal character, Characters.get_character!(character.id), [:eveid, :name, :owner_hash]
+      assert_structs_equal(character, Characters.get_character!(character.id), [:eveid, :name, :owner_hash])
     end
   end
 

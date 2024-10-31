@@ -1,10 +1,11 @@
 defmodule SkillcheckerWeb.AdminAuthTest do
   use SkillcheckerWeb.ConnCase, async: true
 
+  import Skillchecker.AccountsFixtures
+
   alias Phoenix.LiveView
   alias Skillchecker.Accounts
   alias SkillcheckerWeb.AdminAuth
-  import Skillchecker.AccountsFixtures
 
   @remember_me_cookie "_skillchecker_web_admin_remember_me"
 
@@ -154,7 +155,7 @@ defmodule SkillcheckerWeb.AdminAuthTest do
     end
 
     test "assigns nil to current_admin assign if there isn't a admin_token", %{conn: conn} do
-      session = conn |> get_session()
+      session = get_session(conn)
 
       {:cont, updated_socket} =
         AdminAuth.on_mount(:mount_current_admin, %{}, session, %LiveView.Socket{})
@@ -188,7 +189,7 @@ defmodule SkillcheckerWeb.AdminAuthTest do
     end
 
     test "redirects to login page if there isn't a admin_token", %{conn: conn} do
-      session = conn |> get_session()
+      session = get_session(conn)
 
       socket = %LiveView.Socket{
         endpoint: SkillcheckerWeb.Endpoint,
@@ -206,24 +207,24 @@ defmodule SkillcheckerWeb.AdminAuthTest do
       session = conn |> put_session(:admin_token, admin_token) |> get_session()
 
       assert {:halt, _updated_socket} =
-        AdminAuth.on_mount(
-          :redirect_if_admin_is_authenticated,
-          %{},
-          session,
-          %LiveView.Socket{}
-        )
+               AdminAuth.on_mount(
+                 :redirect_if_admin_is_authenticated,
+                 %{},
+                 session,
+                 %LiveView.Socket{}
+               )
     end
 
     test "doesn't redirect if there is no authenticated admin", %{conn: conn} do
-      session = conn |> get_session()
+      session = get_session(conn)
 
       assert {:cont, _updated_socket} =
-        AdminAuth.on_mount(
-          :redirect_if_admin_is_authenticated,
-          %{},
-          session,
-          %LiveView.Socket{}
-        )
+               AdminAuth.on_mount(
+                 :redirect_if_admin_is_authenticated,
+                 %{},
+                 session,
+                 %LiveView.Socket{}
+               )
     end
   end
 

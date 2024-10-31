@@ -8,7 +8,9 @@ defmodule SkillcheckerWeb.CharacterControllerTest do
       conn = get(conn, ~p"/characters/1234")
 
       assert redirected_to(conn, 302) == ~p"/"
-      assert Phoenix.Flash.get(conn.assigns.flash, :error) =~ "To see this character's skills you need to login through EVE API with that character."
+
+      assert Phoenix.Flash.get(conn.assigns.flash, :error) =~
+               "To see this character's skills you need to login through EVE API with that character."
     end
 
     test "with eve login but someone elses character", %{conn: conn} do
@@ -20,7 +22,9 @@ defmodule SkillcheckerWeb.CharacterControllerTest do
         |> get(~p"/characters/#{character.id}")
 
       assert redirected_to(conn, 302) == ~p"/"
-      assert Phoenix.Flash.get(conn.assigns.flash, :error) =~ "To see this character's skills you need to login through EVE API with that character."
+
+      assert Phoenix.Flash.get(conn.assigns.flash, :error) =~
+               "To see this character's skills you need to login through EVE API with that character."
     end
 
     test "if character is logged in but not accepted it redirects to waiting page", %{conn: conn} do

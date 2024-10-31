@@ -1,5 +1,7 @@
 defmodule Skillchecker.Stats.Attendance do
+  @moduledoc false
   use Ecto.Schema
+
   import Ecto.Changeset
 
   schema "attendances" do

@@ -1,4 +1,5 @@
 defmodule SkillcheckerWeb.AdminLive.Settings do
+  @moduledoc false
   use SkillcheckerWeb, :live_view
 
   alias Skillchecker.Accounts

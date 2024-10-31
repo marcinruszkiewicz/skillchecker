@@ -1,8 +1,12 @@
 defmodule SkillcheckerWeb.CharacterLive.Refresh do
+  @moduledoc false
   use SkillcheckerWeb, :live_view
 
   alias Skillchecker.Characters
-  alias Skillchecker.Characters.{Character, CharacterSkills, CharacterData, RefreshToken}
+  alias Skillchecker.Characters.Character
+  alias Skillchecker.Characters.CharacterData
+  alias Skillchecker.Characters.CharacterSkills
+  alias Skillchecker.Characters.RefreshToken
 
   @impl true
   def render(_) do
@@ -18,12 +22,13 @@ defmodule SkillcheckerWeb.CharacterLive.Refresh do
   def handle_params(%{"id" => id}, _, socket) do
     character = Characters.get_character!(id)
 
-    character = if Character.token_expired?(character) do
-      {:ok, refreshed} = do_token_refresh(character)
-      refreshed
-    else
-      character
-    end
+    character =
+      if Character.token_expired?(character) do
+        {:ok, refreshed} = do_token_refresh(character)
+        refreshed
+      else
+        character
+      end
 
     do_character_refresh(socket, character)
   end
@@ -40,7 +45,6 @@ defmodule SkillcheckerWeb.CharacterLive.Refresh do
   end
 
   defp do_token_refresh(character) do
-    character
-    |> RefreshToken.refresh_token
+    RefreshToken.refresh_token(character)
   end
 end

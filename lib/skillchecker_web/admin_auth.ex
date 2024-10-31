@@ -5,8 +5,8 @@ defmodule SkillcheckerWeb.AdminAuth do
 
   use SkillcheckerWeb, :verified_routes
 
-  import Plug.Conn
   import Phoenix.Controller
+  import Plug.Conn
 
   alias Skillchecker.Accounts
 

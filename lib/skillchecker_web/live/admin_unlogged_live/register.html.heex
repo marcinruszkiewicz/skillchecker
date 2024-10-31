@@ -2,8 +2,18 @@
   <div class="flex-1 h-full max-w-4xl mx-auto overflow-hidden bg-white rounded-lg shadow-xl dark:bg-gray-800">
     <div class="flex flex-col overflow-y-auto md:flex-row">
       <div class="h-32 md:h-auto md:w-1/2">
-        <img aria-hidden="true" class="object-cover w-full h-full dark:hidden" src="/images/create-account-office.jpeg" alt="Office" />
-        <img aria-hidden="true" class="hidden object-cover w-full h-full dark:block" src="/images/create-account-office-dark.jpeg" alt="Office" />
+        <img
+          aria-hidden="true"
+          class="object-cover w-full h-full dark:hidden"
+          src="/images/create-account-office.jpeg"
+          alt="Office"
+        />
+        <img
+          aria-hidden="true"
+          class="hidden object-cover w-full h-full dark:block"
+          src="/images/create-account-office-dark.jpeg"
+          alt="Office"
+        />
       </div>
       <div class="flex items-center justify-center p-6 sm:p-12 md:w-1/2">
         <div class="w-full">
@@ -11,7 +21,13 @@
             Register for an account
           </h1>
 
-          <p>Already registered? <.link navigate={~p"/admin/log_in"} class="font-semibold text-brand hover:underline">Log in</.link> to your account now.</p>
+          <p>
+            Already registered?
+            <.link navigate={~p"/admin/log_in"} class="font-semibold text-brand hover:underline">
+              Log in
+            </.link>
+            to your account now.
+          </p>
 
           <hr class="my-8" />
 
@@ -23,8 +39,8 @@
               phx-change="validate"
               phx-trigger-action={@trigger_submit}
               action={~p"/admin/log_in?_action=registered"}
-              method="post">
-
+              method="post"
+            >
               <.error :if={@check_errors}>
                 Oops, something went wrong! Please check the errors below.
               </.error>
@@ -33,7 +49,9 @@
               <.input field={@form[:password]} type="password" label="Password" required />
 
               <:actions>
-                <.button phx-disable-with="Creating account..." class="w-full">Create an account</.button>
+                <.button phx-disable-with="Creating account..." class="w-full">
+                  Create an account
+                </.button>
               </:actions>
             </.simple_form>
           </div>

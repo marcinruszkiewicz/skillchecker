@@ -24,14 +24,14 @@ defmodule SkillcheckerWeb.CharacterLiveTest do
       {:ok, index_live, _html} = live(conn, ~p"/admin/characters")
 
       assert index_live
-        |> element("#characters-#{character.id} a", "Edit")
-        |> render_click() =~ "Edit Character"
+             |> element("#characters-#{character.id} a", "Edit")
+             |> render_click() =~ "Edit Character"
 
       assert_patch(index_live, ~p"/admin/characters/#{character}/edit")
 
       assert index_live
-        |> form("#character-form", character: @update_attrs)
-        |> render_submit()
+             |> form("#character-form", character: @update_attrs)
+             |> render_submit()
 
       assert_patch(index_live, ~p"/admin/characters")
       assert character.accepted == true
@@ -59,14 +59,14 @@ defmodule SkillcheckerWeb.CharacterLiveTest do
       {:ok, show_live, _html} = live(conn, ~p"/admin/characters/#{character}")
 
       assert show_live
-        |> element("a", "Edit")
-        |> render_click() =~ "Edit Character"
+             |> element("a", "Edit")
+             |> render_click() =~ "Edit Character"
 
       assert_patch(show_live, ~p"/admin/characters/#{character}/show/edit")
 
       assert show_live
-        |> form("#character-form", character: @update_attrs)
-        |> render_submit()
+             |> form("#character-form", character: @update_attrs)
+             |> render_submit()
 
       assert_patch(show_live, ~p"/admin/characters/#{character}")
 

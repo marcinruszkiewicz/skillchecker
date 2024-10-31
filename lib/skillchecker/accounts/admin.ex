@@ -4,6 +4,7 @@ defmodule Skillchecker.Accounts.Admin do
   """
 
   use Ecto.Schema
+
   import Ecto.Changeset
 
   schema "admins" do

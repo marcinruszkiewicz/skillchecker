@@ -4,14 +4,17 @@ defmodule Skillchecker.Skillsets.Skillset do
   """
 
   use Ecto.Schema
+
   import Ecto.Changeset
+
+  alias Skillchecker.Characters.Character
 
   schema "skillsets" do
     field :name, :string
 
-    has_many :primaries, Skillchecker.Characters.Character, foreign_key: :primary_id
-    has_many :secondaries, Skillchecker.Characters.Character, foreign_key: :secondary_id
-    has_many :tertiaries, Skillchecker.Characters.Character, foreign_key: :tertiary_id
+    has_many :primaries, Character, foreign_key: :primary_id
+    has_many :secondaries, Character, foreign_key: :secondary_id
+    has_many :tertiaries, Character, foreign_key: :tertiary_id
 
     embeds_many :skills, Skill, on_replace: :delete do
       field :skill_id, :integer
@@ -48,12 +51,17 @@ defmodule Skillchecker.Skillsets.Skillset do
   """
 
   def prepare_skill_list(nil), do: []
+
   def prepare_skill_list(skills_string) do
     skills_string
     |> String.replace("\r", "")
     |> String.split("\n")
-    |> Enum.uniq
-    |> Enum.filter(fn x -> if x != "" do x end end)
+    |> Enum.uniq()
+    |> Enum.filter(fn x ->
+      if x != "" do
+        x
+      end
+    end)
     |> Enum.map(&prepare_skill_struct/1)
   end
 
@@ -66,8 +74,8 @@ defmodule Skillchecker.Skillsets.Skillset do
     name =
       name_list
       |> Enum.join(" ")
-      |> String.trim_leading
-      |> String.trim_trailing
+      |> String.trim_leading()
+      |> String.trim_trailing()
 
     id = Skillchecker.Static.find_item_eveid(name)
 
@@ -81,18 +89,19 @@ defmodule Skillchecker.Skillsets.Skillset do
   end
 
   defp decode_level(nil), do: nil
+
   defp decode_level(string) do
     case Integer.parse(string) do
       :error ->
         RomanNumerals.to_num(string)
+
       {num, _} ->
         num
     end
   end
 
   def export_skill_list(skills_map) do
-    skills_map
-    |> Enum.map_join("\r\n", &join_skill_name/1)
+    Enum.map_join(skills_map, "\r\n", &join_skill_name/1)
   end
 
   defp join_skill_name(skill) do

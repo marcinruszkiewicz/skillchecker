@@ -1,9 +1,11 @@
 defmodule SkillcheckerWeb.DashboardLive.Dashboard do
+  @moduledoc false
   use SkillcheckerWeb, :live_view
+
   import SkillcheckerWeb.SkillHelpers
 
-  alias Skillchecker.Characters
   alias Skillchecker.Accounts
+  alias Skillchecker.Characters
 
   @impl true
   def mount(_params, _session, socket) do
@@ -43,8 +45,7 @@ defmodule SkillcheckerWeb.DashboardLive.Dashboard do
   end
 
   defp apply_action(socket, :dashboard, _params) do
-    socket
-    |> assign(:page_title, "Dashboard")
+    assign(socket, :page_title, "Dashboard")
   end
 
   @impl true

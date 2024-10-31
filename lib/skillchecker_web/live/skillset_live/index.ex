@@ -1,4 +1,5 @@
 defmodule SkillcheckerWeb.SkillsetLive.Index do
+  @moduledoc false
   use SkillcheckerWeb, :live_view
 
   alias Skillchecker.Skillsets

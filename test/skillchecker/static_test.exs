@@ -1,9 +1,11 @@
 defmodule Skillchecker.StaticTest do
   use Skillchecker.DataCase
-  alias Skillchecker.Static
-  alias Skillchecker.Static.{Item, Group}
 
   import Skillchecker.StaticFixtures
+
+  alias Skillchecker.Static
+  alias Skillchecker.Static.Group
+  alias Skillchecker.Static.Item
 
   @invalid_attrs %{name: nil, eveid: nil}
   @invalid_group_attrs %{name: nil, groupid: nil}
@@ -16,7 +18,7 @@ defmodule Skillchecker.StaticTest do
     end
 
     test "returns empty string if item doesn't exist" do
-      assert Static.get_item_name(48484) == ""
+      assert Static.get_item_name(48_484) == ""
     end
   end
 
@@ -29,7 +31,7 @@ defmodule Skillchecker.StaticTest do
     end
 
     test "returns empty string if item doesn't exist" do
-      assert Static.get_group_name(48484) == ""
+      assert Static.get_group_name(48_484) == ""
     end
 
     test "returns empty string if group doesn't exist" do
@@ -65,17 +67,17 @@ defmodule Skillchecker.StaticTest do
       s2 = item_fixture(%{name: "Cool Skill 2", eveid: 2})
       s3 = item_fixture(%{name: "Cool Skill 3", eveid: 3})
 
-      list = Static.list_static_items
-      assert_struct_in_list s1, list, [:name, :eveid]
-      assert_struct_in_list s2, list, [:name, :eveid]
-      assert_struct_in_list s3, list, [:name, :eveid]
+      list = Static.list_static_items()
+      assert_struct_in_list(s1, list, [:name, :eveid])
+      assert_struct_in_list(s2, list, [:name, :eveid])
+      assert_struct_in_list(s3, list, [:name, :eveid])
     end
   end
 
   describe "get_item!/1" do
     test "returns the item with given id" do
       item = item_fixture()
-      assert_structs_equal item, Static.get_item!(item.id), [:eveid, :name]
+      assert_structs_equal(item, Static.get_item!(item.id), [:eveid, :name])
     end
   end
 
@@ -117,17 +119,17 @@ defmodule Skillchecker.StaticTest do
       s2 = group_fixture(%{name: "Cool Skill 2", groupid: 2})
       s3 = group_fixture(%{name: "Cool Skill 3", groupid: 3})
 
-      list = Static.list_static_groups
-      assert_struct_in_list s1, list, [:name, :groupid]
-      assert_struct_in_list s2, list, [:name, :groupid]
-      assert_struct_in_list s3, list, [:name, :groupid]
+      list = Static.list_static_groups()
+      assert_struct_in_list(s1, list, [:name, :groupid])
+      assert_struct_in_list(s2, list, [:name, :groupid])
+      assert_struct_in_list(s3, list, [:name, :groupid])
     end
   end
 
   describe "get_group!/1" do
     test "returns the group with given id" do
       group = group_fixture()
-      assert_structs_equal group, Static.get_group!(group.id), [:groupid, :name]
+      assert_structs_equal(group, Static.get_group!(group.id), [:groupid, :name])
     end
   end
 

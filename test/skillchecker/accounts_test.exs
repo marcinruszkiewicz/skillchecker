@@ -1,9 +1,11 @@
 defmodule Skillchecker.AccountsTest do
   use Skillchecker.DataCase
+
   import Skillchecker.AccountsFixtures
 
   alias Skillchecker.Accounts
-  alias Skillchecker.Accounts.{Admin, AdminToken}
+  alias Skillchecker.Accounts.Admin
+  alias Skillchecker.Accounts.AdminToken
 
   describe "get_admin_by_name/1" do
     test "does not return the admin if the name does not exist" do
@@ -51,17 +53,17 @@ defmodule Skillchecker.AccountsTest do
       {:error, changeset} = Accounts.register_admin(%{})
 
       assert %{
-        password: ["can't be blank"],
-        name: ["can't be blank"]
-      } = errors_on(changeset)
+               password: ["can't be blank"],
+               name: ["can't be blank"]
+             } = errors_on(changeset)
     end
 
     test "validates name and password when given" do
       {:error, changeset} = Accounts.register_admin(%{name: "no", password: "not"})
 
       assert %{
-        password: ["should be at least 6 character(s)"]
-      } = errors_on(changeset)
+               password: ["should be at least 6 character(s)"]
+             } = errors_on(changeset)
     end
 
     test "validates maximum values for name and password for security" do
@@ -135,9 +137,9 @@ defmodule Skillchecker.AccountsTest do
         })
 
       assert %{
-        password: ["should be at least 6 character(s)"],
-        password_confirmation: ["does not match password"]
-      } = errors_on(changeset)
+               password: ["should be at least 6 character(s)"],
+               password_confirmation: ["does not match password"]
+             } = errors_on(changeset)
     end
 
     test "validates maximum values for password for security", %{admin: admin} do
@@ -247,7 +249,7 @@ defmodule Skillchecker.AccountsTest do
     @invalid_attrs %{name: nil}
 
     test "list_admins/0 returns all admins", %{admin: admin} do
-      assert_struct_in_list admin, Accounts.list_admins(), [:id, :name]
+      assert_struct_in_list(admin, Accounts.list_admins(), [:id, :name])
     end
 
     test "change_admin/1 returns a admin changeset" do
@@ -267,7 +269,7 @@ defmodule Skillchecker.AccountsTest do
       admin = admin_fixture()
       assert {:error, %Ecto.Changeset{}} = Accounts.update_admin(admin, @invalid_attrs)
 
-      assert_structs_equal admin, Accounts.get_admin!(admin.id), [:id, :name]
+      assert_structs_equal(admin, Accounts.get_admin!(admin.id), [:id, :name])
     end
   end
 end

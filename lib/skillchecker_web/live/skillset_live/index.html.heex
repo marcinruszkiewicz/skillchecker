@@ -32,7 +32,12 @@
         </:action>
       </.table>
 
-      <.modal :if={@live_action in [:new, :edit]} id="skillset-modal" show on_cancel={JS.patch(~p"/admin/skillsets")}>
+      <.modal
+        :if={@live_action in [:new, :edit]}
+        id="skillset-modal"
+        show
+        on_cancel={JS.patch(~p"/admin/skillsets")}
+      >
         <.live_component
           module={SkillcheckerWeb.SkillsetLive.FormComponent}
           id={@skillset.id || :new}

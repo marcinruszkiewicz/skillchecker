@@ -18,9 +18,7 @@
       </div>
       <div class="flex items-center justify-center p-6 sm:p-12 md:w-1/2">
         <div class="w-full">
-          <h1
-            class="mb-4 text-xl font-semibold text-gray-700 dark:text-gray-200"
-          >
+          <h1 class="mb-4 text-xl font-semibold text-gray-700 dark:text-gray-200">
             GSF Alliance Tournament Skill Checker
           </h1>
 
@@ -28,7 +26,10 @@
 
           <p class="mt-4">
             Your character needs to be accepted by the admins first. Once it is,
-            <.link href={~p"/characters/#{@id}"} class="text-sm font-medium text-purple-600 dark:text-purple-400 hover:underline">
+            <.link
+              href={~p"/characters/#{@id}"}
+              class="text-sm font-medium text-purple-600 dark:text-purple-400 hover:underline"
+            >
               try again.
             </.link>
           </p>

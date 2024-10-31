@@ -1,9 +1,10 @@
 defmodule SkillcheckerWeb.AdminSettingsLiveTest do
   use SkillcheckerWeb.ConnCase, async: true
 
-  alias Skillchecker.Accounts
   import Phoenix.LiveViewTest
   import Skillchecker.AccountsFixtures
+
+  alias Skillchecker.Accounts
 
   describe "Settings page" do
     test "renders settings page", %{conn: conn} do

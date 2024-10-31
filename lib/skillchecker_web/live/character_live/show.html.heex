@@ -21,19 +21,29 @@
       <div class="flex-1 px-6 py-4">
         <ul class="">
           <li class="">
-            <em>Skill points:</em><br />
-            <span title={display_skill_points_exact(@character.data.total_sp)} data-toggle="tooltip" data-placement="right">
+            <em>Skill points:</em>
+            <br />
+            <span
+              title={display_skill_points_exact(@character.data.total_sp)}
+              data-toggle="tooltip"
+              data-placement="right"
+            >
               <%= display_skill_points(@character.data.total_sp) %>
             </span>
             <%= if @character.data.unallocated_sp do %>
-            <br /><em>Unallocated:</em><br />
-            <span title={display_skill_points_exact(@character.data.unallocated_sp)} data-toggle="tooltip" data-placement="right">
-              <%= display_skill_points(@character.data.unallocated_sp) %>
-            </span>
+              <br /><em>Unallocated:</em>
+              <br />
+              <span
+                title={display_skill_points_exact(@character.data.unallocated_sp)}
+                data-toggle="tooltip"
+                data-placement="right"
+              >
+                <%= display_skill_points(@character.data.unallocated_sp) %>
+              </span>
             <% end %>
           </li>
 
-          <% skill = @character.skill_queue |> List.first %>
+          <% skill = @character.skill_queue |> List.first() %>
           <% disabled_class = if skill_training_disabled?(skill), do: "disabled", else: "" %>
           <li class="" class={disabled_class}>
             <%= if skill_training_disabled?(skill) do %>
@@ -44,12 +54,21 @@
               <% percent = display_skill_percent(skill) %>
               <%= if percent > 0 do %>
                 <div class="progress">
-                  <div class="progress-bar progress-bar-striped" role="progressbar" style="width: {percent}%" aria-valuenow={percent} aria-valuemin="0" aria-valuemax="100">
+                  <div
+                    class="progress-bar progress-bar-striped"
+                    role="progressbar"
+                    style="width: {percent}%"
+                    aria-valuenow={percent}
+                    aria-valuemin="0"
+                    aria-valuemax="100"
+                  >
                     <%= percent %> %
                   </div>
                 </div>
               <% end %>
-              <p class="mt-2" title={skill.finish_date} data-toggle="tooltip" data-placement="top">Training finishes in <%= display_skill_time(skill) %></p>
+              <p class="mt-2" title={skill.finish_date} data-toggle="tooltip" data-placement="top">
+                Training finishes in <%= display_skill_time(skill) %>
+              </p>
             <% end %>
           </li>
         </ul>
@@ -61,7 +80,8 @@
     <h2 class="font-semibold"><%= skillset.name %></h2>
     <div class="grid grid-cols-2">
       <div class="my-6 w-full max-w-lg overflow-hidden rounded-lg shadow-lg sm:flex p-4">
-        <% {trained_skills, required_skills} = Skillchecker.Skillsets.compare_with_character(skillset.id, @character.id) %>
+        <% {trained_skills, required_skills} =
+          Skillchecker.Skillsets.compare_with_character(skillset.id, @character.id) %>
 
         <%= if length(required_skills) > 0 || length(trained_skills) > 0 do %>
           <div class="card character-skills-card mt-2">
@@ -71,18 +91,20 @@
               <ul class="w-full">
                 <%= for skill <- required_skills do %>
                   <li class="flex justify-between w-full">
-                      <div class="mr-3">
-                        <%= display_skillset_skill_name(skill) %>
-                      </div>
-                      <div class="">
-                        <%= display_skillset_trained_level(@character, skill) %>
-                      </div>
+                    <div class="mr-3">
+                      <%= display_skillset_skill_name(skill) %>
+                    </div>
+                    <div class="">
+                      <%= display_skillset_trained_level(@character, skill) %>
+                    </div>
                   </li>
                 <% end %>
               </ul>
 
               <div x-data="{ isExpanded: false }">
-                <.button @click="isExpanded = ! isExpanded" class="my-6">Toggle Completed Skills</.button>
+                <.button @click="isExpanded = ! isExpanded" class="my-6">
+                  Toggle Completed Skills
+                </.button>
 
                 <div x-show="isExpanded" x-collapse x-cloak>
                   <h3 class="mb-2">Completed skills:</h3>
@@ -94,15 +116,13 @@
                           <div class="col-6">
                             <%= display_skillset_skill_name(skill) %>
                           </div>
-                          <div class="col-6 text-right">
-                          </div>
+                          <div class="col-6 text-right"></div>
                         </div>
                       </li>
                     <% end %>
                   </ul>
                 </div>
               </div>
-
             </div>
           </div>
         <% end %>
@@ -120,7 +140,12 @@
 
   <.back navigate={~p"/admin/characters"}>Back to characters</.back>
 
-  <.modal :if={@live_action == :edit} id="character-modal" show on_cancel={JS.patch(~p"/admin/characters/#{@character}")}>
+  <.modal
+    :if={@live_action == :edit}
+    id="character-modal"
+    show
+    on_cancel={JS.patch(~p"/admin/characters/#{@character}")}
+  >
     <.live_component
       module={SkillcheckerWeb.CharacterLive.FormComponent}
       id={@character.id}

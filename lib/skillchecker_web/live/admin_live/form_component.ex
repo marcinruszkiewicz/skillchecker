@@ -1,4 +1,5 @@
 defmodule SkillcheckerWeb.AdminLive.FormComponent do
+  @moduledoc false
   use SkillcheckerWeb, :live_component
 
   alias Skillchecker.Accounts

@@ -17,7 +17,7 @@ defmodule RomanNumerals do
   end
 
   def to_num(string) do
-    {_, num} = Enum.find(@decode, fn {k, _v} -> k == string |> String.upcase end)
+    {_, num} = Enum.find(@decode, fn {k, _v} -> k == String.upcase(string) end)
 
     num
   end
