@@ -2,6 +2,7 @@ defmodule SkillcheckerWeb.SkillsetLiveTest do
   use SkillcheckerWeb.ConnCase, async: true
 
   import Phoenix.LiveViewTest
+  import Skillchecker.Factory
   import Skillchecker.SkillsetsFixtures
   import Skillchecker.StaticFixtures
 
@@ -9,7 +10,14 @@ defmodule SkillcheckerWeb.SkillsetLiveTest do
   @update_attrs %{name: "some updated name", skill_list: "Gallente Battleship V"}
   @invalid_attrs %{name: nil, skill_list: nil}
 
-  setup do
+  defp setup_admin(%{conn: conn}) do
+    admin = insert(:admin, accepted: true)
+    conn = log_in_admin(conn, admin)
+
+    %{admin: admin, conn: conn}
+  end
+
+  defp setup_skills(_) do
     %{
       calbs5: item_fixture(name: "Caldari Battleship", eveid: 1),
       ambs5: item_fixture(name: "Amarr Battleship", eveid: 2),
@@ -19,7 +27,7 @@ defmodule SkillcheckerWeb.SkillsetLiveTest do
   end
 
   describe "Index" do
-    setup :register_and_log_in_admin
+    setup [:setup_admin, :setup_skills]
 
     test "lists all skillsets", %{conn: conn, skillset: skillset} do
       {:ok, _index_live, html} = live(conn, ~p"/admin/skillsets")
@@ -82,7 +90,7 @@ defmodule SkillcheckerWeb.SkillsetLiveTest do
   end
 
   describe "Show" do
-    setup :register_and_log_in_admin
+    setup [:setup_admin, :setup_skills]
 
     test "displays skillset", %{conn: conn, skillset: skillset} do
       {:ok, _show_live, html} = live(conn, ~p"/admin/skillsets/#{skillset}")

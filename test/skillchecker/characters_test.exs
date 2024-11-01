@@ -6,8 +6,6 @@ defmodule Skillchecker.CharactersTest do
   alias Skillchecker.Characters
   alias Skillchecker.Characters.Character
 
-  @invalid_attrs %{name: nil, eveid: nil, accepted: nil, owner_hash: nil}
-
   describe "list_characters/0" do
     test "returns all characters" do
       character = character_fixture()
@@ -48,7 +46,10 @@ defmodule Skillchecker.CharactersTest do
 
     test "with invalid data returns error changeset" do
       other_invalid_attrs = %{name: nil, eveid: nil, accepted: nil, owner_hash: "1234xx"}
-      assert {:error, %Ecto.Changeset{}} = Characters.add_character(@invalid_attrs)
+
+      assert {:error, %Ecto.Changeset{}} =
+               Characters.add_character(%{name: nil, eveid: nil, accepted: nil, owner_hash: nil})
+
       assert {:error, %Ecto.Changeset{}} = Characters.add_character(other_invalid_attrs)
     end
 
@@ -77,7 +78,10 @@ defmodule Skillchecker.CharactersTest do
 
     test "with invalid data returns error changeset" do
       character = character_fixture()
-      assert {:error, %Ecto.Changeset{}} = Characters.update_character(character, @invalid_attrs)
+
+      assert {:error, %Ecto.Changeset{}} =
+               Characters.update_character(character, %{name: nil, eveid: nil, accepted: nil, owner_hash: nil})
+
       assert_structs_equal(character, Characters.get_character!(character.id), [:eveid, :name, :owner_hash])
     end
   end

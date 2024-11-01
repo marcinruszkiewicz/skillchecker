@@ -1,50 +1,59 @@
 defmodule Skillchecker.AccountsTest do
   use Skillchecker.DataCase
 
-  import Skillchecker.AccountsFixtures
+  import Assertions
+  import Skillchecker.Factory
 
   alias Skillchecker.Accounts
   alias Skillchecker.Accounts.Admin
   alias Skillchecker.Accounts.AdminToken
 
+  defp setup_admin(_) do
+    admin = insert(:admin, name: "Cool Admin")
+    token = Accounts.generate_admin_session_token(admin)
+
+    %{admin: admin, token: token}
+  end
+
   describe "get_admin_by_name/1" do
+    setup [:setup_admin]
+
     test "does not return the admin if the name does not exist" do
       refute Accounts.get_admin_by_name("AwfulPlayer")
     end
 
-    test "returns the admin if the name exists" do
-      %{id: id} = admin = admin_fixture()
-      assert %Admin{id: ^id} = Accounts.get_admin_by_name(admin.name)
+    test "returns the admin if the name exists", %{admin: admin} do
+      assert_structs_equal(admin, Accounts.get_admin_by_name(admin.name), [:id, :name])
     end
   end
 
   describe "get_admin_by_name_and_password/2" do
+    setup [:setup_admin]
+
     test "does not return the admin if the name does not exist" do
       refute Accounts.get_admin_by_name_and_password("unknown@example.com", "hello world!")
     end
 
-    test "does not return the admin if the password is not valid" do
-      admin = admin_fixture()
+    test "does not return the admin if the password is not valid", %{admin: admin} do
       refute Accounts.get_admin_by_name_and_password(admin.name, "invalid")
     end
 
-    test "returns the admin if the name and password are valid" do
-      %{id: id} = admin = admin_fixture()
-
-      assert %Admin{id: ^id} = Accounts.get_admin_by_name_and_password(admin.name, valid_admin_password())
+    test "returns the admin if the name and password are valid", %{admin: admin} do
+      assert_structs_equal(admin, Accounts.get_admin_by_name_and_password(admin.name, "greatest password!"), [:id, :name])
     end
   end
 
   describe "get_admin!/1" do
+    setup [:setup_admin]
+
     test "raises if id is invalid" do
       assert_raise Ecto.NoResultsError, fn ->
         Accounts.get_admin!(-1)
       end
     end
 
-    test "returns the admin with the given id" do
-      %{id: id} = admin = admin_fixture()
-      assert %Admin{id: ^id} = Accounts.get_admin!(admin.id)
+    test "returns the admin with the given id", %{admin: admin} do
+      assert_structs_equal(admin, Accounts.get_admin!(admin.id), [:id, :name])
     end
   end
 
@@ -74,8 +83,8 @@ defmodule Skillchecker.AccountsTest do
     end
 
     test "registers admins with a hashed password" do
-      name = unique_admin_name()
-      {:ok, admin} = Accounts.register_admin(valid_admin_attributes(name: name))
+      name = Faker.Person.name()
+      {:ok, admin} = Accounts.register_admin(%{name: name, password: "hello world!"})
 
       assert admin.name == name
       assert is_binary(admin.hashed_password)
@@ -90,13 +99,13 @@ defmodule Skillchecker.AccountsTest do
     end
 
     test "allows fields to be set" do
-      name = unique_admin_name()
-      password = valid_admin_password()
+      name = Faker.Person.name()
+      password = "greatest password!"
 
       changeset =
         Accounts.change_admin_registration(
           %Admin{},
-          valid_admin_attributes(name: name, password: password)
+          %{name: name, password: password}
         )
 
       assert changeset.valid?
@@ -125,13 +134,11 @@ defmodule Skillchecker.AccountsTest do
   end
 
   describe "update_admin_password/3" do
-    setup do
-      %{admin: admin_fixture()}
-    end
+    setup [:setup_admin]
 
     test "validates password", %{admin: admin} do
       {:error, changeset} =
-        Accounts.update_admin_password(admin, valid_admin_password(), %{
+        Accounts.update_admin_password(admin, "greatest password!", %{
           password: "not",
           password_confirmation: "another"
         })
@@ -146,21 +153,21 @@ defmodule Skillchecker.AccountsTest do
       too_long = String.duplicate("db", 100)
 
       {:error, changeset} =
-        Accounts.update_admin_password(admin, valid_admin_password(), %{password: too_long})
+        Accounts.update_admin_password(admin, "greatest password!", %{password: too_long})
 
       assert "should be at most 72 character(s)" in errors_on(changeset).password
     end
 
     test "validates current password", %{admin: admin} do
       {:error, changeset} =
-        Accounts.update_admin_password(admin, "invalid", %{password: valid_admin_password()})
+        Accounts.update_admin_password(admin, "invalid", %{password: "greatest password!"})
 
       assert %{current_password: ["is not valid"]} = errors_on(changeset)
     end
 
     test "updates the password", %{admin: admin} do
       {:ok, admin} =
-        Accounts.update_admin_password(admin, valid_admin_password(), %{
+        Accounts.update_admin_password(admin, "greatest password!", %{
           password: "new valid password"
         })
 
@@ -172,7 +179,7 @@ defmodule Skillchecker.AccountsTest do
       _ = Accounts.generate_admin_session_token(admin)
 
       {:ok, _} =
-        Accounts.update_admin_password(admin, valid_admin_password(), %{
+        Accounts.update_admin_password(admin, "greatest password!", %{
           password: "new valid password"
         })
 
@@ -181,9 +188,7 @@ defmodule Skillchecker.AccountsTest do
   end
 
   describe "generate_admin_session_token/1" do
-    setup do
-      %{admin: admin_fixture()}
-    end
+    setup [:setup_admin]
 
     test "generates a token", %{admin: admin} do
       token = Accounts.generate_admin_session_token(admin)
@@ -194,7 +199,7 @@ defmodule Skillchecker.AccountsTest do
       assert_raise Ecto.ConstraintError, fn ->
         Repo.insert!(%AdminToken{
           token: admin_token.token,
-          admin_id: admin_fixture().id,
+          admin_id: admin.id,
           context: "session"
         })
       end
@@ -202,12 +207,7 @@ defmodule Skillchecker.AccountsTest do
   end
 
   describe "get_admin_by_session_token/1" do
-    setup do
-      admin = admin_fixture()
-      token = Accounts.generate_admin_session_token(admin)
-
-      %{admin: admin, token: token}
-    end
+    setup [:setup_admin]
 
     test "returns admin by token", %{admin: admin, token: token} do
       assert session_admin = Accounts.get_admin_by_session_token(token)
@@ -226,8 +226,9 @@ defmodule Skillchecker.AccountsTest do
   end
 
   describe "delete_admin_session_token/1" do
-    test "deletes the token" do
-      admin = admin_fixture()
+    setup [:setup_admin]
+
+    test "deletes the token", %{admin: admin} do
       token = Accounts.generate_admin_session_token(admin)
 
       assert Accounts.delete_admin_session_token(token) == :ok
@@ -242,32 +243,25 @@ defmodule Skillchecker.AccountsTest do
   end
 
   describe "admins" do
-    setup do
-      %{admin: admin_fixture()}
-    end
-
-    @invalid_attrs %{name: nil}
+    setup [:setup_admin]
 
     test "list_admins/0 returns all admins", %{admin: admin} do
       assert_struct_in_list(admin, Accounts.list_admins(), [:id, :name])
     end
 
-    test "change_admin/1 returns a admin changeset" do
-      admin = admin_fixture()
+    test "change_admin/1 returns a admin changeset", %{admin: admin} do
       assert %Ecto.Changeset{} = Accounts.change_admin(admin)
     end
 
-    test "update_admin/2 with valid data updates the admin" do
-      admin = admin_fixture()
+    test "update_admin/2 with valid data updates the admin", %{admin: admin} do
       update_attrs = %{accepted: true}
 
       assert {:ok, %Admin{} = admin} = Accounts.update_admin(admin, update_attrs)
       assert admin.accepted == true
     end
 
-    test "update_admin/2 with invalid data returns error changeset" do
-      admin = admin_fixture()
-      assert {:error, %Ecto.Changeset{}} = Accounts.update_admin(admin, @invalid_attrs)
+    test "update_admin/2 with invalid data returns error changeset", %{admin: admin} do
+      assert {:error, %Ecto.Changeset{}} = Accounts.update_admin(admin, %{accepted: nil})
 
       assert_structs_equal(admin, Accounts.get_admin!(admin.id), [:id, :name])
     end

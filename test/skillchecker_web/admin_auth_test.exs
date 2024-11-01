@@ -1,7 +1,7 @@
 defmodule SkillcheckerWeb.AdminAuthTest do
   use SkillcheckerWeb.ConnCase, async: true
 
-  import Skillchecker.AccountsFixtures
+  import Skillchecker.Factory
 
   alias Phoenix.LiveView
   alias Skillchecker.Accounts
@@ -10,12 +10,15 @@ defmodule SkillcheckerWeb.AdminAuthTest do
   @remember_me_cookie "_skillchecker_web_admin_remember_me"
 
   setup %{conn: conn} do
+    admin = insert(:admin, accepted: false)
+    accepted = insert(:admin, accepted: true)
+
     conn =
       conn
       |> Map.replace!(:secret_key_base, SkillcheckerWeb.Endpoint.config(:secret_key_base))
       |> init_test_session(%{})
 
-    %{accepted: accepted_admin_fixture(), admin: admin_fixture(), conn: conn}
+    %{accepted: accepted, admin: admin, conn: conn}
   end
 
   describe "log_in_admin/3" do

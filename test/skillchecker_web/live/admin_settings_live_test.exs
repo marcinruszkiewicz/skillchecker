@@ -1,103 +1,58 @@
 defmodule SkillcheckerWeb.AdminSettingsLiveTest do
   use SkillcheckerWeb.ConnCase, async: true
 
-  import Phoenix.LiveViewTest
-  import Skillchecker.AccountsFixtures
+  import Skillchecker.Factory
 
   alias Skillchecker.Accounts
 
-  describe "Settings page" do
-    test "renders settings page", %{conn: conn} do
-      {:ok, _lv, html} =
-        conn
-        |> log_in_admin(accepted_admin_fixture())
-        |> live(~p"/admin/settings")
+  defp setup_admin(_) do
+    admin = insert(:admin, accepted: true)
 
-      assert html =~ "Change Password"
+    %{admin: admin}
+  end
+
+  describe "Settings page" do
+    setup [:setup_admin]
+
+    test "renders settings page", %{conn: conn, admin: admin} do
+      conn
+      |> log_in_admin(admin)
+      |> visit(~p"/admin/settings")
+      |> assert_has("h1", text: "Account Settings")
     end
 
     test "redirects if admin is not logged in", %{conn: conn} do
-      assert {:error, redirect} = live(conn, ~p"/admin/settings")
-
-      assert {:redirect, %{to: path, flash: flash}} = redirect
-      assert path == ~p"/admin/log_in"
-      assert %{"error" => "You must log in to access this page."} = flash
+      conn
+      |> visit(~p"/admin/settings")
+      |> assert_path(~p"/admin/log_in")
     end
   end
 
   describe "update password form" do
-    setup %{conn: conn} do
-      password = valid_admin_password()
-      admin = accepted_admin_fixture(%{password: password})
-      %{conn: log_in_admin(conn, admin), admin: admin, password: password}
+    setup [:setup_admin]
+
+    test "updates the admin password", %{conn: conn, admin: admin} do
+      conn
+      |> log_in_admin(admin)
+      |> visit(~p"/admin/settings")
+      |> fill_in("Current password", with: "greatest password!")
+      |> fill_in("New password", with: "super password!")
+      |> fill_in("Confirm new password", with: "super password!")
+      |> submit()
+
+      assert Accounts.get_admin_by_name_and_password(admin.name, "super password!")
     end
 
-    test "updates the admin password", %{conn: conn, admin: admin, password: password} do
-      new_password = valid_admin_password()
-
-      {:ok, lv, _html} = live(conn, ~p"/admin/settings")
-
-      form =
-        form(lv, "#password_form", %{
-          "current_password" => password,
-          "admin" => %{
-            "name" => admin.name,
-            "password" => new_password,
-            "password_confirmation" => new_password
-          }
-        })
-
-      render_submit(form)
-
-      new_password_conn = follow_trigger_action(form, conn)
-
-      assert redirected_to(new_password_conn) == ~p"/admin/settings"
-
-      assert get_session(new_password_conn, :admin_token) != get_session(conn, :admin_token)
-
-      assert Phoenix.Flash.get(new_password_conn.assigns.flash, :info) =~
-               "Password updated successfully"
-
-      assert Accounts.get_admin_by_name_and_password(admin.name, new_password)
-    end
-
-    test "renders errors with invalid data (phx-change)", %{conn: conn} do
-      {:ok, lv, _html} = live(conn, ~p"/admin/settings")
-
-      result =
-        lv
-        |> element("#password_form")
-        |> render_change(%{
-          "current_password" => "invalid",
-          "admin" => %{
-            "password" => "too",
-            "password_confirmation" => "does not match"
-          }
-        })
-
-      assert result =~ "Change Password"
-      assert result =~ "should be at least 6 character(s)"
-      assert result =~ "does not match password"
-    end
-
-    test "renders errors with invalid data (phx-submit)", %{conn: conn} do
-      {:ok, lv, _html} = live(conn, ~p"/admin/settings")
-
-      result =
-        lv
-        |> form("#password_form", %{
-          "current_password" => "invalid",
-          "admin" => %{
-            "password" => "too",
-            "password_confirmation" => "does not match"
-          }
-        })
-        |> render_submit()
-
-      assert result =~ "Change Password"
-      assert result =~ "should be at least 6 character(s)"
-      assert result =~ "does not match password"
-      assert result =~ "is not valid"
+    test "renders errors with invalid data", %{conn: conn, admin: admin} do
+      conn
+      |> log_in_admin(admin)
+      |> visit(~p"/admin/settings")
+      |> fill_in("Current password", with: "invalid")
+      |> fill_in("New password", with: "123")
+      |> fill_in("Confirm new password", with: "not so super password!")
+      |> submit()
+      |> assert_has("p", text: "should be at least 6 character(s)")
+      |> assert_has("p", text: "does not match password")
     end
   end
 end

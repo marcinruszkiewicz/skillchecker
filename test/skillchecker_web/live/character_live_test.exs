@@ -3,15 +3,23 @@ defmodule SkillcheckerWeb.CharacterLiveTest do
 
   import Phoenix.LiveViewTest
   import Skillchecker.CharactersFixtures
+  import Skillchecker.Factory
 
   @update_attrs %{accepted: true}
 
-  setup do
+  defp setup_admin(%{conn: conn}) do
+    admin = insert(:admin, accepted: true)
+    conn = log_in_admin(conn, admin)
+
+    %{admin: admin, conn: conn}
+  end
+
+  defp setup_character(_) do
     %{character: character_fixture()}
   end
 
   describe "Index" do
-    setup :register_and_log_in_admin
+    setup [:setup_admin, :setup_character]
 
     test "lists all characters", %{conn: conn, character: character} do
       {:ok, _index_live, html} = live(conn, ~p"/admin/characters")
@@ -46,7 +54,7 @@ defmodule SkillcheckerWeb.CharacterLiveTest do
   end
 
   describe "Show" do
-    setup :register_and_log_in_admin
+    setup [:setup_admin, :setup_character]
 
     test "displays character", %{conn: conn, character: character} do
       {:ok, _show_live, html} = live(conn, ~p"/admin/characters/#{character}")

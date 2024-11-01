@@ -31,7 +31,7 @@ defmodule Skillchecker.MixProject do
   end
 
   # Specifies which paths to compile per environment.
-  defp elixirc_paths(:test), do: ["lib", "test/support"]
+  defp elixirc_paths(:test), do: ["lib", "test/support", "test/factories"]
   defp elixirc_paths(_), do: ["lib"]
 
   # Specifies your project dependencies.
@@ -75,6 +75,7 @@ defmodule Skillchecker.MixProject do
       {:floki, ">= 0.30.0", only: :test},
       {:assertions, "~> 0.20.1", only: :test},
       {:excoveralls, "~> 0.10", only: :test},
+      {:faker, "~> 0.18.0", only: :test},
       {:ex_machina, "~> 2.8", only: :test},
       {:phoenix_test, "~> 0.4.2", only: :test}
     ]

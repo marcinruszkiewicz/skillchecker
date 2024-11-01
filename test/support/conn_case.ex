@@ -22,8 +22,10 @@ defmodule SkillcheckerWeb.ConnCase do
       use SkillcheckerWeb, :verified_routes
 
       import Phoenix.ConnTest
+      import PhoenixTest
       import Plug.Conn
       import SkillcheckerWeb.ConnCase
+
       # The default endpoint for testing
       @endpoint SkillcheckerWeb.Endpoint
 
@@ -34,19 +36,6 @@ defmodule SkillcheckerWeb.ConnCase do
   setup tags do
     Skillchecker.DataCase.setup_sandbox(tags)
     {:ok, conn: Phoenix.ConnTest.build_conn()}
-  end
-
-  @doc """
-  Setup helper that registers and logs in admins.
-
-      setup :register_and_log_in_admin
-
-  It stores an updated connection and a registered admin in the
-  test context.
-  """
-  def register_and_log_in_admin(%{conn: conn}) do
-    admin = Skillchecker.AccountsFixtures.accepted_admin_fixture()
-    %{conn: log_in_admin(conn, admin), admin: admin}
   end
 
   @doc """
