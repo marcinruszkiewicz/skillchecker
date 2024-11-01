@@ -4,7 +4,7 @@
 
 <div class="container mx-auto p-4 lg:p-8 xl:max-w-7xl">
   <div class="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-4 lg:gap-8">
-    <div class="flex flex-col rounded-lg border bg-white sm:col-span-2 lg:col-span-4">
+    <div class="flex flex-col rounded-lg bg-white sm:col-span-2 lg:col-span-4">
       <.table id="admins" rows={@streams.admins}>
         <:col :let={{_id, admin}} label="Name"><%= admin.name %></:col>
         <:col :let={{_id, admin}} label="Accepted"><%= admin.accepted %></:col>

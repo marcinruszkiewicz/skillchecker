@@ -14,7 +14,7 @@
 
 <div class="container mx-auto p-4 lg:p-8 xl:max-w-7xl">
   <div class="grid gap-6 mb-8 grid-cols-2">
-    <div class="w-full max-w-lg overflow-hidden rounded-lg shadow-lg sm:flex">
+    <div class="w-full max-w-lg overflow-hidden rounded-lg shadow-lg sm:flex dark:bg-sky-800">
       <div class="w-full sm:w-1/3">
         <img class="object-cover w-full h-48" src={@character.picture_url} alt={@character.name} />
       </div>
@@ -79,7 +79,7 @@
   <%= for skillset <- @skillsets do %>
     <h2 class="font-semibold"><%= skillset.name %></h2>
     <div class="grid grid-cols-2">
-      <div class="my-6 w-full max-w-lg overflow-hidden rounded-lg shadow-lg sm:flex p-4">
+      <div class="my-6 w-full max-w-lg overflow-hidden rounded-lg shadow-lg sm:flex p-4  dark:bg-sky-800">
         <% {trained_skills, required_skills} =
           Skillchecker.Skillsets.compare_with_character(skillset.id, @character.id) %>
 
@@ -128,7 +128,7 @@
         <% end %>
       </div>
 
-      <div class="my-6 w-full max-w-lg overflow-hidden rounded-lg shadow-lg p-4">
+      <div class="my-6 w-full max-w-lg overflow-hidden rounded-lg shadow-lg p-4  dark:bg-sky-800">
         <h3 class="w-full">Missing skills:</h3>
 
         <pre class="w-full my-6">

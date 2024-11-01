@@ -5,7 +5,7 @@
     x-bind:aria-expanded="userDropdownOpen"
     type="button"
     id="dropdown-user"
-    class="inline-flex items-center justify-center gap-1 rounded-lg border border-neutral-200 bg-white px-3 py-2 text-sm font-semibold leading-5 text-neutral-800 hover:border-neutral-300 hover:text-neutral-950 active:border-neutral-200"
+    class="inline-flex items-center justify-center gap-1 rounded-lg border border-neutral-200 bg-white px-3 py-2 text-sm font-semibold leading-5 text-neutral-800 hover:border-neutral-300 hover:text-neutral-950 active:border-neutral-200 dark:bg-sky-400 dark:border-sky-700 dark:hover:border-sky-400"
     aria-haspopup="true"
   >
     <svg
@@ -53,21 +53,21 @@
     aria-labelledby="dropdown-user"
     class="absolute end-0 z-10 mt-2 w-40 rounded-lg shadow-xl ltr:origin-top-right rtl:origin-top-left"
   >
-    <div class="rounded-lg bg-white py-2.5 ring-1 ring-black/5">
+    <div class="rounded-lg bg-white py-2.5 ring-1 ring-black/5 dark:bg-sky-400 dark:border-sky-700 dark:hover:border-sky-400">
       <.link
         href={~p"/admin/settings"}
         role="menuitem"
-        class="group flex items-center justify-between gap-1.5 px-4 py-1.5 text-sm font-medium text-neutral-700 hover:bg-neutral-100 hover:text-neutral-950"
+        class="group flex items-center justify-between gap-1.5 px-4 py-1.5 text-sm font-medium text-neutral-700 hover:bg-neutral-100 hover:text-neutral-950 dark:bg-sky-400 dark:hover:bg-sky-300 dark:text-black"
       >
         <span class="grow">Settings</span>
       </.link>
-      <hr class="my-2.5 border-neutral-100" />
+      <hr class="my-2.5 border-neutral-100 dark:border-sky-700" />
 
       <.link
         href={~p"/admin/log_out"}
         method="delete"
         role="menuitem"
-        class="group flex w-full items-center justify-between gap-1.5 px-4 py-1.5 text-start text-sm font-medium text-neutral-700 hover:bg-neutral-100 hover:text-neutral-950"
+        class="group flex w-full items-center justify-between gap-1.5 px-4 py-1.5 text-start text-sm font-medium text-neutral-700 hover:bg-neutral-100 hover:text-neutral-950 dark:bg-sky-400 dark:hover:bg-sky-300  dark:text-black"
       >
         <span class="grow">Sign out</span>
       </.link>

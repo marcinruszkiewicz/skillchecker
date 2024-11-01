@@ -51,7 +51,11 @@ defmodule SkillcheckerWeb.CoreComponents do
       data-cancel={JS.exec(@on_cancel, "phx-remove")}
       class="relative z-50 hidden"
     >
-      <div id={"#{@id}-bg"} class="bg-zinc-50/90 fixed inset-0 transition-opacity" aria-hidden="true" />
+      <div
+        id={"#{@id}-bg"}
+        class="bg-zinc-50/90 fixed inset-0 transition-opacity dark:bg-black/80"
+        aria-hidden="true"
+      />
       <div
         class="fixed inset-0 overflow-y-auto"
         aria-labelledby={"#{@id}-title"}
@@ -67,13 +71,13 @@ defmodule SkillcheckerWeb.CoreComponents do
               phx-window-keydown={JS.exec("data-cancel", to: "##{@id}")}
               phx-key="escape"
               phx-click-away={JS.exec("data-cancel", to: "##{@id}")}
-              class="shadow-zinc-700/10 ring-zinc-700/10 relative hidden rounded-2xl bg-white p-14 shadow-lg ring-1 transition"
+              class="shadow-zinc-700/10 ring-zinc-700/10 relative hidden rounded-2xl bg-white p-14 shadow-lg ring-1 transition dark:bg-sky-900"
             >
               <div class="absolute top-6 right-5">
                 <button
                   phx-click={JS.exec("data-cancel", to: "##{@id}")}
                   type="button"
-                  class="-m-3 flex-none p-3 opacity-20 hover:opacity-40"
+                  class="-m-3 flex-none p-3 opacity-20 hover:opacity-40 dark:text-slate-100 dark:opacity-100"
                   aria-label={gettext("close")}
                 >
                   <.icon name="hero-x-mark-solid" class="h-5 w-5" />
@@ -197,7 +201,7 @@ defmodule SkillcheckerWeb.CoreComponents do
   def simple_form(assigns) do
     ~H"""
     <.form :let={f} for={@for} as={@as} {@rest}>
-      <div class="mt-10 space-y-8 bg-white dark:bg-gray-800">
+      <div class="mt-10 space-y-8">
         <%= render_slot(@inner_block, f) %>
         <div :for={action <- @actions} class="mt-2 flex items-center justify-between gap-6">
           <%= render_slot(action, f) %>
@@ -227,7 +231,7 @@ defmodule SkillcheckerWeb.CoreComponents do
       type={@type}
       class={[
         "phx-submit-loading:opacity-75 rounded-lg bg-zinc-900 hover:bg-zinc-700 py-2 px-3",
-        "text-sm font-semibold leading-6 text-white active:text-white/80",
+        "text-sm font-semibold leading-6 text-black active:text-black/80 dark:bg-sky-300 dark:hover:bg-sky-600",
         @class
       ]}
       {@rest}
@@ -325,7 +329,7 @@ defmodule SkillcheckerWeb.CoreComponents do
       <select
         id={@id}
         name={@name}
-        class="mt-2 block w-full rounded-md border border-gray-300 bg-white shadow-sm focus:border-zinc-400 focus:ring-0 sm:text-sm"
+        class="mt-2 block w-full rounded-md border border-gray-300 bg-white shadow-sm focus:border-zinc-400 focus:ring-0 sm:text-sm dark:bg-sky-600 dark:border-slate-100 dark:text-slate-100"
         multiple={@multiple}
         {@rest}
       >
@@ -346,7 +350,7 @@ defmodule SkillcheckerWeb.CoreComponents do
         name={@name}
         class={[
           "mt-2 block w-full rounded-lg text-zinc-900 focus:ring-0 sm:text-sm sm:leading-6",
-          "min-h-[6rem] phx-no-feedback:border-zinc-300 phx-no-feedback:focus:border-zinc-400",
+          "min-h-[6rem] phx-no-feedback:border-zinc-300 phx-no-feedback:focus:border-zinc-400  dark:bg-sky-600 dark:border-slate-100 dark:text-slate-100",
           @errors == [] && "border-zinc-300 focus:border-zinc-400",
           @errors != [] && "border-rose-400 focus:border-rose-400"
         ]}
@@ -369,7 +373,7 @@ defmodule SkillcheckerWeb.CoreComponents do
         value={Phoenix.HTML.Form.normalize_value(@type, @value)}
         class={[
           "mt-2 block w-full rounded-lg text-zinc-900 dark:text-zinc-100 focus:ring-0 sm:text-sm sm:leading-6",
-          "phx-no-feedback:border-zinc-300 phx-no-feedback:focus:border-zinc-400 bg-white dark:bg-gray-600",
+          "phx-no-feedback:border-zinc-300 phx-no-feedback:focus:border-zinc-400 bg-white dark:bg-sky-600 dark:border-slate-100 dark:text-slate-100",
           @errors == [] && "border-zinc-300 focus:border-zinc-400",
           @errors != [] && "border-rose-400 focus:border-rose-400"
         ]}
@@ -421,10 +425,10 @@ defmodule SkillcheckerWeb.CoreComponents do
     ~H"""
     <header class={[@actions != [] && "flex items-center justify-between gap-6", @class]}>
       <div>
-        <h1 class="text-lg font-semibold leading-8 text-zinc-800">
+        <h1 class="text-lg font-semibold leading-8 text-zinc-800 dark:text-slate-100">
           <%= render_slot(@inner_block) %>
         </h1>
-        <p :if={@subtitle != []} class="mt-2 text-sm leading-6 text-zinc-600">
+        <p :if={@subtitle != []} class="mt-2 text-sm leading-6 text-zinc-600 dark:text-slate-300">
           <%= render_slot(@subtitle) %>
         </p>
       </div>
@@ -448,7 +452,7 @@ defmodule SkillcheckerWeb.CoreComponents do
       <div class="flex flex-col gap-2 text-center sm:flex-row sm:items-center sm:justify-between sm:text-start">
         <div class="grow">
           <h1 class="mb-1 text-xl font-bold"><%= render_slot(@inner_block) %></h1>
-          <h2 :if={@subtitle != []} class="text-sm font-medium text-neutral-500">
+          <h2 :if={@subtitle != []} class="text-sm font-medium text-neutral-500 dark:text-slate-300">
             <%= render_slot(@subtitle) %>
           </h2>
         </div>
@@ -495,17 +499,17 @@ defmodule SkillcheckerWeb.CoreComponents do
       end
 
     ~H"""
-    <div class="min-w-full overflow-x-auto rounded">
-      <table class="min-w-full align-middle text-sm">
-        <thead class="border-b-2 border-neutral-100">
+    <div class="min-w-full overflow-x-auto rounded dark:border-sky-800">
+      <table class="min-w-full align-middle text-sm dark:border-sky-800">
+        <thead class="border-b-2 border-neutral-100 dark:bg-sky-600 dark:border-sky-800">
           <tr>
             <th
               :for={col <- @col}
-              class="px-3 py-2 text-start text-sm font-semibold uppercase tracking-wider text-neutral-700"
+              class="px-3 py-2 text-start text-sm font-semibold uppercase tracking-wider text-neutral-700 dark:bg-sky-600 dark:border-sky-800 dark:text-slate-100"
             >
               <%= col[:label] %>
             </th>
-            <th class="min-w-[300px] p-3 py-2 text-end text-sm font-semibold uppercase tracking-wider text-neutral-700">
+            <th :if={@action != []} class="relative p-0 pb-4">
               <span class="sr-only"><%= gettext("Actions") %></span>
             </th>
           </tr>
@@ -515,15 +519,15 @@ defmodule SkillcheckerWeb.CoreComponents do
             :for={row <- @rows}
             id={@row_id && @row_id.(row)}
             class={[
-              "border-b border-neutral-100 hover:bg-neutral-50",
-              @row_class && @row_class.(row) && "bg-rose-50"
+              "border-b border-neutral-100 hover:bg-neutral-50 dark:bg-sky-600 dark:border-sky-800 dark:hover:bg-sky-500 dark:border-sky-700",
+              @row_class && @row_class.(row) && "bg-rose-50 dark:bg-rose-800"
             ]}
           >
             <td
               :for={col <- @col}
               phx-click={@row_click && @row_click.(row)}
               class={[
-                "p-3 text-start font-semibold text-neutral-600",
+                "p-3 text-start font-semibold text-neutral-600 dark:text-slate-100 dark:border-sky-800",
                 @row_click && "hover:cursor-pointer"
               ]}
             >
@@ -533,7 +537,7 @@ defmodule SkillcheckerWeb.CoreComponents do
               <div class="relative whitespace-nowrap py-4 text-right text-sm font-medium">
                 <div
                   :for={action <- @action}
-                  class="mx-1 inline-flex items-center justify-center gap-2 rounded-lg border border-zinc-200 bg-white px-3 py-2 text-sm font-semibold leading-5 text-zinc-800 hover:bg-zinc-300 hover:border-zinc-300 hover:text-zinc-950 active:border-zinc-200"
+                  class="mx-1 inline-flex items-center justify-center gap-2 rounded-lg border border-zinc-200 bg-white px-3 py-2 text-sm font-semibold leading-5 text-zinc-800 hover:bg-zinc-300 hover:border-zinc-300 hover:text-zinc-950 active:border-zinc-200 dark:border-sky-800"
                 >
                   <%= render_slot(action, @row_item.(row)) %>
                 </div>
@@ -588,7 +592,7 @@ defmodule SkillcheckerWeb.CoreComponents do
     <div class="mt-16">
       <.link
         navigate={@navigate}
-        class="text-sm font-semibold leading-6 text-zinc-900 hover:text-zinc-700"
+        class="text-sm font-semibold leading-6 text-zinc-900 hover:text-zinc-700 dark:text-yellow-300 dark:hover:text-yellow-500"
       >
         <.icon name="hero-arrow-left-solid" class="h-3 w-3" />
         <%= render_slot(@inner_block) %>
