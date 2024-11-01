@@ -31,6 +31,13 @@ defmodule Skillchecker.Skillsets do
     |> Enum.map(&{&1.name, &1.id})
   end
 
+  def list_skillsets_for_character(character) do
+    list_skillsets()
+    |> Enum.sort_by(fn skillset -> skillset.id != character.tertiary_id end)
+    |> Enum.sort_by(fn skillset -> skillset.id != character.secondary_id end)
+    |> Enum.sort_by(fn skillset -> skillset.id != character.primary_id end)
+  end
+
   @doc """
   Gets a single skillset.
 

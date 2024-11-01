@@ -14,12 +14,13 @@ defmodule SkillcheckerWeb.CharacterLive.Show do
 
   @impl true
   def handle_params(%{"id" => id}, _, socket) do
+    character = Characters.get_character!(id)
     {
       :noreply,
       socket
       |> assign(:page_title, page_title(socket.assigns.live_action))
-      |> assign(:character, Characters.get_character!(id))
-      |> assign(:skillsets, Skillsets.list_skillsets())
+      |> assign(:character, character)
+      |> assign(:skillsets, Skillsets.list_skillsets_for_character(character))
     }
   end
 

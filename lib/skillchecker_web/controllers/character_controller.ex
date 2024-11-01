@@ -16,7 +16,7 @@ defmodule SkillcheckerWeb.CharacterController do
 
       character ->
         if owner_hash == character.owner_hash do
-          skillsets = Skillsets.list_skillsets()
+          skillsets = Skillsets.list_skillsets_for_character(character)
 
           if character.accepted do
             render(conn, :show, character: character, skillsets: skillsets)
