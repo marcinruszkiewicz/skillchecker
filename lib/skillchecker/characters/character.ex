@@ -61,7 +61,7 @@ defmodule Skillchecker.Characters.Character do
   end
 
   @doc false
-  def changeset(character, attrs) do
+  def changeset(character, attrs \\ %{}) do
     character
     |> cast(attrs, [
       :accepted,
@@ -78,6 +78,8 @@ defmodule Skillchecker.Characters.Character do
       :tertiary_id
     ])
     |> cast_embed(:data)
+    |> cast_embed(:skills)
+    |> cast_embed(:skill_queue)
     |> validate_required([:name, :owner_hash, :eveid])
   end
 

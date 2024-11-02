@@ -70,11 +70,9 @@ defmodule Skillchecker.Skillsets do
   """
   def create_skillset(attrs \\ %{}) do
     attrs = ExUtils.Map.symbolize_keys(attrs)
-    skills = Skillset.prepare_skill_list(attrs.skill_list)
 
     %Skillset{}
     |> Skillset.changeset(attrs)
-    |> Ecto.Changeset.put_embed(:skills, skills, [])
     |> Repo.insert()
   end
 
@@ -92,11 +90,9 @@ defmodule Skillchecker.Skillsets do
   """
   def update_skillset(%Skillset{} = skillset, attrs) do
     attrs = ExUtils.Map.symbolize_keys(attrs)
-    skills = Skillset.prepare_skill_list(attrs.skill_list)
 
     skillset
     |> Skillset.changeset(attrs)
-    |> Ecto.Changeset.put_embed(:skills, skills, [])
     |> Repo.update()
   end
 

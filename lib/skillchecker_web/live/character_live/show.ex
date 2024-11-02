@@ -15,6 +15,7 @@ defmodule SkillcheckerWeb.CharacterLive.Show do
   @impl true
   def handle_params(%{"id" => id}, _, socket) do
     character = Characters.get_character!(id)
+
     {
       :noreply,
       socket

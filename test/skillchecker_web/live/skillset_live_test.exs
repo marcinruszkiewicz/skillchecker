@@ -3,8 +3,6 @@ defmodule SkillcheckerWeb.SkillsetLiveTest do
 
   import Phoenix.LiveViewTest
   import Skillchecker.Factory
-  import Skillchecker.SkillsetsFixtures
-  import Skillchecker.StaticFixtures
 
   @create_attrs %{name: "some name", skill_list: "Amarr Battleship V\nCaldari Battleship V"}
   @update_attrs %{name: "some updated name", skill_list: "Gallente Battleship V"}
@@ -18,12 +16,12 @@ defmodule SkillcheckerWeb.SkillsetLiveTest do
   end
 
   defp setup_skills(_) do
-    %{
-      calbs5: item_fixture(name: "Caldari Battleship", eveid: 1),
-      ambs5: item_fixture(name: "Amarr Battleship", eveid: 2),
-      galbs5: item_fixture(name: "Gallente Battleship", eveid: 3),
-      skillset: skillset_fixture()
-    }
+    insert(:item, name: "Caldari Battleship", eveid: 1)
+    insert(:item, name: "Amarr Battleship", eveid: 2)
+    insert(:item, name: "Gallente Battleship", eveid: 3)
+    skillset = insert(:skillset)
+
+    %{skillset: skillset}
   end
 
   describe "Index" do

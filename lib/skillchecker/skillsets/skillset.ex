@@ -11,6 +11,7 @@ defmodule Skillchecker.Skillsets.Skillset do
 
   schema "skillsets" do
     field :name, :string
+    field :skill_list, :string, virtual: true
 
     has_many :primaries, Character, foreign_key: :primary_id
     has_many :secondaries, Character, foreign_key: :secondary_id
@@ -26,10 +27,19 @@ defmodule Skillchecker.Skillsets.Skillset do
   end
 
   @doc false
-  def changeset(skillset, attrs) do
+  def changeset(skillset, attrs \\ %{}) do
     skillset
     |> cast(attrs, [:name])
+    |> maybe_prepare_skills(attrs)
     |> validate_required([:name])
+  end
+
+  def maybe_prepare_skills(changeset, attrs) do
+    if Map.has_key?(attrs, :skill_list) do
+      put_embed(changeset, :skills, prepare_skill_list(attrs.skill_list))
+    else
+      changeset
+    end
   end
 
   @doc """

@@ -2,7 +2,6 @@ defmodule SkillcheckerWeb.CharacterLiveTest do
   use SkillcheckerWeb.ConnCase
 
   import Phoenix.LiveViewTest
-  import Skillchecker.CharactersFixtures
   import Skillchecker.Factory
 
   @update_attrs %{accepted: true}
@@ -15,7 +14,7 @@ defmodule SkillcheckerWeb.CharacterLiveTest do
   end
 
   defp setup_character(_) do
-    %{character: character_fixture()}
+    %{character: insert(:character)}
   end
 
   describe "Index" do

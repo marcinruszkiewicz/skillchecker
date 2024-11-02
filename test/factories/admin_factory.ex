@@ -12,12 +12,6 @@ defmodule Skillchecker.AdminFactory do
           accepted: true
         }
       end
-
-      def set_user_password(user, password) do
-        user
-        |> Admin.registration_changeset(%{password: password})
-        |> Ecto.Changeset.apply_changes()
-      end
     end
   end
 end

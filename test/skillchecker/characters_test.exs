@@ -1,23 +1,30 @@
 defmodule Skillchecker.CharactersTest do
   use Skillchecker.DataCase
 
-  import Skillchecker.CharactersFixtures
+  import Skillchecker.Factory
 
   alias Skillchecker.Characters
   alias Skillchecker.Characters.Character
 
+  defp setup_characters(_) do
+    character = insert(:character)
+    pending = insert(:character, accepted: false, eveid: 55)
+
+    %{character: character, pending: pending}
+  end
+
   describe "list_characters/0" do
-    test "returns all characters" do
-      character = character_fixture()
+    setup :setup_characters
+
+    test "returns all characters", %{character: character} do
       assert_struct_in_list(character, Characters.list_characters(), [:eveid, :name, :owner_hash])
     end
   end
 
   describe "list_pending_characters/0" do
-    test "returns only pending" do
-      character = character_fixture()
-      pending = pending_character_fixture()
+    setup :setup_characters
 
+    test "returns only pending", %{character: character, pending: pending} do
       assert_struct_in_list(pending, Characters.list_pending_characters(), [:eveid, :name, :owner_hash])
 
       refute Enum.any?(
@@ -28,8 +35,9 @@ defmodule Skillchecker.CharactersTest do
   end
 
   describe "get_character!/1" do
-    test "returns the character with given id" do
-      character = character_fixture()
+    setup :setup_characters
+
+    test "returns the character with given id", %{character: character} do
       assert_structs_equal(character, Characters.get_character!(character.id), [:eveid, :name, :owner_hash])
     end
   end
@@ -54,7 +62,7 @@ defmodule Skillchecker.CharactersTest do
     end
 
     test "with existing character with same owner hash returns that character" do
-      existing = character_fixture()
+      existing = insert(:character, name: "some updated name", eveid: 43, accepted: false, owner_hash: "42zxc")
       valid_attrs = %{name: "some updated name", eveid: 43, accepted: false, owner_hash: "42zxc"}
 
       assert %Character{} = character = Characters.add_character(valid_attrs)
@@ -66,8 +74,9 @@ defmodule Skillchecker.CharactersTest do
   end
 
   describe "update_character/2" do
-    test " with valid data updates the character" do
-      character = character_fixture()
+    setup :setup_characters
+
+    test " with valid data updates the character", %{character: character} do
       update_attrs = %{name: "some updated name", eveid: 43, accepted: false, owner_hash: "123"}
 
       assert {:ok, %Character{} = character} = Characters.update_character(character, update_attrs)
@@ -76,9 +85,7 @@ defmodule Skillchecker.CharactersTest do
       assert character.accepted == false
     end
 
-    test "with invalid data returns error changeset" do
-      character = character_fixture()
-
+    test "with invalid data returns error changeset", %{character: character} do
       assert {:error, %Ecto.Changeset{}} =
                Characters.update_character(character, %{name: nil, eveid: nil, accepted: nil, owner_hash: nil})
 
@@ -87,8 +94,9 @@ defmodule Skillchecker.CharactersTest do
   end
 
   describe "change_character/1" do
-    test "returns a character changeset" do
-      character = character_fixture()
+    setup :setup_characters
+
+    test "returns a character changeset", %{character: character} do
       assert %Ecto.Changeset{} = Characters.change_character(character)
     end
   end

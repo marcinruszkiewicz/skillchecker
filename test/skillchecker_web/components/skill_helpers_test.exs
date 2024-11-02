@@ -1,46 +1,31 @@
 defmodule SkillcheckerWeb.SkillHelpersTest do
   use Skillchecker.DataCase
 
-  import Skillchecker.CharactersFixtures
-  import Skillchecker.SkillsetsFixtures
-  import Skillchecker.StaticFixtures
+  import Skillchecker.Factory
 
-  alias Skillchecker.Characters
   alias Skillchecker.Characters.Character
+  alias Skillchecker.Skillsets
   alias Skillchecker.Skillsets.Skillset
   alias SkillcheckerWeb.SkillHelpers
 
-  setup do
-    %{
-      calbs5: item_fixture(name: "Caldari Battleship", eveid: 1, skill_multiplier: 3),
-      ambs5: item_fixture(name: "Amarr Battleship", eveid: 2),
-      galbs5: item_fixture(name: "Gallente Battleship", eveid: 3)
-    }
+  defp prepare_skills(_) do
+    insert(:item, name: "Caldari Battleship", eveid: 1)
+    insert(:item, name: "Amarr Battleship", eveid: 2)
+    insert(:item, name: "Gallente Battleship", eveid: 3)
+    insert(:item, eveid: 333, skill_multiplier: 3)
+
+    :ok
   end
 
   describe "non_gsf?/1" do
     test "GSF character returns false" do
-      data = %{corporation: "Testwaffe", alliance: "GSF", alliance_id: 1_354_830_081}
-      character = character_fixture()
-
-      {:ok, character} =
-        character
-        |> Characters.change_character()
-        |> Ecto.Changeset.put_embed(:data, data, [])
-        |> Repo.update()
+      character = insert(:character, data: %{corporation: "Testwaffe", alliance: "GSF", alliance_id: 1_354_830_081})
 
       assert SkillHelpers.non_gsf?(character) == false
     end
 
     test "other character returns false" do
-      data = %{corporation: "Testwaffe", alliance: "GSF", alliance_id: 98_786}
-      character = character_fixture()
-
-      {:ok, character} =
-        character
-        |> Characters.change_character()
-        |> Ecto.Changeset.put_embed(:data, data, [])
-        |> Repo.update()
+      character = insert(:character, data: %{corporation: "Testwaffe", alliance: "GSF", alliance_id: 98_786})
 
       assert SkillHelpers.non_gsf?(character) == true
     end
@@ -52,22 +37,25 @@ defmodule SkillcheckerWeb.SkillHelpersTest do
     end
 
     test "returns skillset's name if one is given" do
-      skillset = skillset_fixture()
+      skillset = insert(:skillset, name: "some name")
 
       assert SkillHelpers.display_skillset_name(skillset) == "some name"
     end
   end
 
   describe "display_skillset_completion/1" do
+    setup :prepare_skills
+
     test "returns empty string if no skillset given" do
-      character = character_fixture()
+      character = insert(:character)
 
       assert SkillHelpers.display_skillset_completion(nil, character.id) == ""
     end
 
     test "returns count if skillset and charater is given" do
-      skillset = skillset_fixture()
-      character = character_fixture()
+      skillset_params = params_for(:skillset)
+      {:ok, skillset} = Skillsets.create_skillset(skillset_params)
+      character = insert(:character)
 
       assert SkillHelpers.display_skillset_completion(skillset, character.id) == "0 / 2"
     end
@@ -210,62 +198,47 @@ defmodule SkillcheckerWeb.SkillHelpersTest do
   end
 
   describe "required_skill_sp/2" do
-    test "shows how many sp the character still needs" do
-      character = character_fixture()
-      skills = [%Character.Skill{skill_id: 1, skill_points: 100}]
-      skill = %Skillset.Skill{skill_id: 1, required_level: 3}
+    setup :prepare_skills
 
-      {:ok, character} =
-        character
-        |> Characters.change_character()
-        |> Ecto.Changeset.put_embed(:skills, skills, [])
-        |> Repo.update()
+    test "shows how many sp the character still needs" do
+      character = insert(:character, skills: [%Character.Skill{skill_id: 333, skill_points: 100}])
+      skill = %Skillset.Skill{skill_id: 333, required_level: 3}
 
       assert SkillHelpers.required_skill_sp(character, skill) == 23_900
     end
 
     test "character doesn't have the skill" do
-      character = character_fixture()
-      skill = %Skillset.Skill{skill_id: 1, required_level: 3}
+      character = insert(:character)
+      skill = %Skillset.Skill{skill_id: 333, required_level: 3}
 
       assert SkillHelpers.required_skill_sp(character, skill) == 24_000
     end
   end
 
   describe "display_skillset_required_sp/2" do
-    test "shows how many sp the character still needs" do
-      character = character_fixture()
-      skills = [%Character.Skill{skill_id: 1, skill_points: 100}]
-      skill = %Skillset.Skill{skill_id: 1, required_level: 3}
+    setup :prepare_skills
 
-      {:ok, character} =
-        character
-        |> Characters.change_character()
-        |> Ecto.Changeset.put_embed(:skills, skills, [])
-        |> Repo.update()
+    test "shows how many sp the character still needs" do
+      character = insert(:character, skills: [%Character.Skill{skill_id: 333, skill_points: 100}])
+      skill = %Skillset.Skill{skill_id: 333, required_level: 3}
 
       assert SkillHelpers.display_skillset_required_sp(character, skill) == "23 900"
     end
   end
 
   describe "display_skillset_trained_level/2" do
-    test "shows how many sp the character still needs" do
-      character = character_fixture()
-      skills = [%Character.Skill{skill_id: 1, trained_level: 4}]
-      skill = %Skillset.Skill{skill_id: 1, required_level: 5}
+    setup :prepare_skills
 
-      {:ok, character} =
-        character
-        |> Characters.change_character()
-        |> Ecto.Changeset.put_embed(:skills, skills, [])
-        |> Repo.update()
+    test "shows how many sp the character still needs" do
+      character = insert(:character, skills: [%Character.Skill{skill_id: 333, trained_level: 4}])
+      skill = %Skillset.Skill{skill_id: 333, required_level: 5}
 
       assert SkillHelpers.display_skillset_trained_level(character, skill) == "Trained level: IV"
     end
 
     test "character doesn't have the skill" do
-      character = character_fixture()
-      skill = %Skillset.Skill{skill_id: 1, required_level: 3}
+      character = insert(:character)
+      skill = %Skillset.Skill{skill_id: 333, required_level: 3}
 
       assert SkillHelpers.display_skillset_trained_level(character, skill) == "Not trained"
     end
