@@ -142,4 +142,10 @@ defmodule Skillchecker.Characters do
   def delete_character(%Character{} = character) do
     Repo.delete(character)
   end
+
+  def update_refreshed!(%Character{} = character) do
+    character
+    |> Character.changeset(%{refreshed_at: DateTime.utc_now()})
+    |> Repo.update!()
+  end
 end

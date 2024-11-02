@@ -9,6 +9,8 @@ defmodule Skillchecker.Characters.Character do
   alias Skillchecker.Skillsets.Skillset
 
   schema "characters" do
+    field :uuid, Ecto.UUID
+    field :refreshed_at, :utc_datetime
     field :accepted, :boolean
     field :eveid, :integer
     field :owner_hash, :string
@@ -75,7 +77,9 @@ defmodule Skillchecker.Characters.Character do
       :refresh_token,
       :primary_id,
       :secondary_id,
-      :tertiary_id
+      :tertiary_id,
+      :refreshed_at,
+      :uuid
     ])
     |> cast_embed(:data)
     |> cast_embed(:skills)

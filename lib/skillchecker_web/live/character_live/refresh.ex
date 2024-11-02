@@ -9,9 +9,7 @@ defmodule SkillcheckerWeb.CharacterLive.Refresh do
   alias Skillchecker.Characters.RefreshToken
 
   @impl true
-  def render(_) do
-    ""
-  end
+  def render(assigns), do: ~H""
 
   @impl true
   def mount(_params, _session, socket) do
@@ -35,6 +33,7 @@ defmodule SkillcheckerWeb.CharacterLive.Refresh do
 
   defp do_character_refresh(socket, character) do
     character
+    |> Characters.update_refreshed!()
     |> CharacterData.update_from_esi(character.token)
     |> CharacterSkills.update_from_esi(character.token)
 

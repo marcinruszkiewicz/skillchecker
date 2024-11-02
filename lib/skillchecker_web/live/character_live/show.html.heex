@@ -9,6 +9,7 @@
     <.link patch={~p"/admin/characters/#{@character}/refresh"} phx-click={JS.push_focus()}>
       <.button phx-disable-with="Refreshing...">Refresh</.button>
     </.link>
+    <.last_refreshed refreshed_at={@character.refreshed_at} />
   </:actions>
 </.admin_header>
 

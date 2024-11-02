@@ -1,6 +1,7 @@
 defmodule SkillcheckerWeb.AuthController do
   use SkillcheckerWeb, :controller
 
+  alias Skillchecker.Characters
   alias Skillchecker.Characters.CharacterData
   alias Skillchecker.Characters.CharacterSkills
 
@@ -25,6 +26,7 @@ defmodule SkillcheckerWeb.AuthController do
       character = Skillchecker.Characters.add_character(attrs)
 
       character
+      |> Characters.update_refreshed!()
       |> CharacterData.update_from_esi(conn.assigns.ueberauth_auth.credentials.token)
       |> CharacterSkills.update_from_esi(conn.assigns.ueberauth_auth.credentials.token)
 

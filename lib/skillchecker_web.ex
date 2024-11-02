@@ -88,6 +88,7 @@ defmodule SkillcheckerWeb do
       import Phoenix.HTML
       # Core UI components and translation
       import SkillcheckerWeb.CoreComponents
+      import SkillcheckerWeb.CustomComponents
 
       # Shortcut for generating JS commands
       alias Phoenix.LiveView.JS
