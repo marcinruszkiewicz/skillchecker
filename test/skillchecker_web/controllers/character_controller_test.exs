@@ -1,7 +1,7 @@
 defmodule SkillcheckerWeb.CharacterControllerTest do
   use SkillcheckerWeb.ConnCase, async: true
 
-  import Skillchecker.CharactersFixtures
+  import Skillchecker.Factory
 
   describe "GET /character/:id" do
     test "without eve login it redirects to root", %{conn: conn} do
@@ -14,7 +14,7 @@ defmodule SkillcheckerWeb.CharacterControllerTest do
     end
 
     test "with eve login but someone elses character", %{conn: conn} do
-      character = character_fixture()
+      character = insert(:character)
 
       conn =
         conn
@@ -28,7 +28,7 @@ defmodule SkillcheckerWeb.CharacterControllerTest do
     end
 
     test "if character is logged in but not accepted it redirects to waiting page", %{conn: conn} do
-      character = pending_character_fixture()
+      character = insert(:character, accepted: false)
 
       conn =
         conn
@@ -39,7 +39,7 @@ defmodule SkillcheckerWeb.CharacterControllerTest do
     end
 
     test "if character is logged in and accepted shows info", %{conn: conn} do
-      character = character_fixture()
+      character = insert(:character)
 
       conn =
         conn
