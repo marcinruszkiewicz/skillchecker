@@ -9,8 +9,6 @@ defmodule Skillchecker.Stats.Attendance do
     field :times_flown, :integer
     field :sheet_name, :string
     field :practice_date, :date
-
-    timestamps()
   end
 
   @doc false

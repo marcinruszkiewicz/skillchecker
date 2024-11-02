@@ -1,4 +1,5 @@
 defmodule SkillcheckerWeb.CustomComponents do
+  @moduledoc false
   use Phoenix.Component
   use Gettext, backend: SkillcheckerWeb.Gettext
 
@@ -8,7 +9,9 @@ defmodule SkillcheckerWeb.CustomComponents do
 
   def last_refreshed(assigns) do
     ~H"""
-    <p class="mt-2 text-sm font-medium text-neutral-500 dark:text-slate-300">Last refreshed: <%= Timex.format!(@refreshed_at, "{D}/{M}/{YYYY} {h24}:{m}") %></p>
+    <p class="mt-2 text-sm font-medium text-neutral-500 dark:text-slate-300">
+      Last refreshed: <%= Timex.format!(@refreshed_at, "{D}/{M}/{YYYY} {h24}:{m}") %>
+    </p>
     """
   end
 
